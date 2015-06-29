@@ -6,6 +6,18 @@
         name="for"
         classname="net.sf.antcontrib.logic.ForTask"
         onerror="ignore"/>
+    <typedef
+        name="isgreaterthan"
+        classname="net.sf.antcontrib.logic.condition.IsGreaterThan"/>
+    <typedef
+        name="islessthan"
+        classname="net.sf.antcontrib.logic.condition.IsLessThan"/>
+    <typedef
+        name="ispropertyfalse"
+        classname="net.sf.antcontrib.logic.condition.IsPropertyFalse"/>
+    <typedef
+        name="ispropertytrue"
+        classname="net.sf.antcontrib.logic.condition.IsPropertyTrue"/>
         
     <typedef
         name="httpState"
@@ -43,6 +55,6 @@
         classname="net.sf.antcontrib.net.httpclient.HeadMethodTask"
         onerror="ignore" />
     <taskdef name="importurl"
-             classname="net.sf.antcontrib.net.URLImportTask"
-             onerror="ignore"/>
+        classname="net.sf.antcontrib.net.URLImportTask"
+        onerror="ignore"/>
 </antlib>
