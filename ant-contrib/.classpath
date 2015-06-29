@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/taskdocs/java"/>
+	<classpathentry kind="src" path="test/resources/design/src"/>
+	<classpathentry kind="src" path="test/resources/walls/testA"/>
+	<classpathentry kind="src" path="test/resources/walls/testB"/>
+	<classpathentry kind="src" path="test/resources/walls/testC"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=ant-contrib&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
