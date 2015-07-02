@@ -30,6 +30,10 @@ import java.io.Serializable;
 public class Response
         implements Serializable
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = 586998774611927305L;
     private boolean succeeded;
     private String errorStackTrace;
     private String errorMessage;

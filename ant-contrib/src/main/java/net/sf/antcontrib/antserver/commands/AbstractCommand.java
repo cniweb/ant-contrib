@@ -34,6 +34,12 @@ import net.sf.antcontrib.antserver.Command;
 public abstract class AbstractCommand
         implements Command
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = 6316557943646204850L;
+
+
     public long getContentLength()
     {
         return 0;

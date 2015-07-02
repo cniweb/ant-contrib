@@ -38,6 +38,10 @@ public class SendFileCommand
         extends AbstractCommand
         implements Command
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -8628792564027507857L;
     private long contentLength;
     private String todir;
     private String tofile;

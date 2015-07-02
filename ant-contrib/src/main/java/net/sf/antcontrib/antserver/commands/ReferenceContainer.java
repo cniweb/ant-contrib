@@ -31,6 +31,10 @@ import java.io.Serializable;
 public class ReferenceContainer
         implements Serializable
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -8648025598456960491L;
     private String refId;
     private String toRefId;
 

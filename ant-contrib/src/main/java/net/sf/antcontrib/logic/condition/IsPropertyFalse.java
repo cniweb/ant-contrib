@@ -16,6 +16,7 @@
 package net.sf.antcontrib.logic.condition;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectComponent;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 
@@ -39,7 +40,8 @@ public final class IsPropertyFalse
         if (name == null)
             throw new BuildException("Property name must be set.");
         String value = getProject().getProperty(name);
-        return value == null || !getProject().toBoolean(value);
+        getProject();
+        return value == null || !Project.toBoolean(value);
     }
 
 }

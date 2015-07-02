@@ -344,6 +344,10 @@ public class CompileWithWalls extends Task {
     //until 1.3 is deprecated, this is a cheat to chain exceptions.
     private class ParsingWallsException extends RuntimeException {
 
+        /**
+       * 
+       */
+      private static final long serialVersionUID = 8680995723699337480L;
         private String message;
         
         public ParsingWallsException(String message, Throwable cause) {

@@ -36,6 +36,11 @@ public class ShutdownCommand
         extends AbstractCommand
         implements Command
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = 1136126908858206814L;
+
     public void validate(Project project)
     {
     }

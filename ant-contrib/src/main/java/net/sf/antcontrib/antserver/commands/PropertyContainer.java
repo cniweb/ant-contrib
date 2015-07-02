@@ -31,6 +31,10 @@ import java.io.Serializable;
 public class PropertyContainer
         implements Serializable
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -657169565072812175L;
     private String name;
     private String value;
 

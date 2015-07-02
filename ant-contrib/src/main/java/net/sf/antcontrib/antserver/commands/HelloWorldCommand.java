@@ -36,6 +36,11 @@ public class HelloWorldCommand
         extends AbstractCommand
         implements Command
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -7712225309558807617L;
+
     public void validate(Project project)
     {
     }

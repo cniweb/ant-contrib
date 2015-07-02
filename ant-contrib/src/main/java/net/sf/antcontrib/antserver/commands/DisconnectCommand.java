@@ -36,6 +36,10 @@ public class DisconnectCommand
         extends AbstractCommand
         implements Command
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -8597191685478632085L;
     public static Command DISCONNECT_COMMAND =
             new DisconnectCommand();
 

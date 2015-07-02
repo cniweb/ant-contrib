@@ -42,6 +42,10 @@ public class RunAntCommand
         implements Command
 {
 
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -3002623324458503226L;
     private String antFile;
     private String dir;
     private String target;

@@ -41,6 +41,10 @@ public class RunTargetCommand
         extends AbstractCommand
         implements Command
 {
+    /**
+   * 
+   */
+  private static final long serialVersionUID = -8043232025417127406L;
     private String target;
     private Vector properties;
     private Vector references;

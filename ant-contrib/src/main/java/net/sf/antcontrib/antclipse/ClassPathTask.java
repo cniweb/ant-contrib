@@ -187,13 +187,6 @@ public class ClassPathTask extends Task
 		private FileSet fileSet = null;
 
 		/**
-		 * nazi style, forbid default constructor
-		 */
-		private FileSetCustomHandler()
-		{
-		}
-
-		/**
 		 * @param fileSet
 		 */
 		public FileSetCustomHandler(FileSet fileSet)
@@ -341,13 +334,6 @@ public class ClassPathTask extends Task
 		{
 			super();
 			this.path = path;
-		}
-
-		/**
-		 * nazi style, forbid default constructor
-		 */
-		private PathCustomHandler()
-		{
 		}
 
 		public void startElement(String tag, AttributeList attrs) throws SAXParseException
