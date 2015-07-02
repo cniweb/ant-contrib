@@ -24,4 +24,9 @@ package mod.dummy;
  */
 public class DummyException extends Exception {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -6687192919539737174L;
+
 }
