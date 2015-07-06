@@ -29,10 +29,7 @@ import java.net.HttpURLConnection;
 
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-
-import java.rmi.server.UID;
 
 import java.util.*;
 
@@ -40,7 +37,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.TaskContainer;
 
 /**
  * This task does an http post. Name/value pairs for the post can be set in

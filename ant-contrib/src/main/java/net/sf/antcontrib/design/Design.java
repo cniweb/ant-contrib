@@ -21,10 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
-
-import net.sf.antcontrib.logic.ProjectDelegate;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Location;

@@ -16,16 +16,12 @@
 package net.sf.antcontrib.logic;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.sf.antcontrib.logic.condition.BooleanConditionBase;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectHelper;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.TaskContainer;
 import org.apache.tools.ant.taskdefs.Exit;
 import org.apache.tools.ant.taskdefs.Sequential;
 import org.apache.tools.ant.taskdefs.condition.Condition;
