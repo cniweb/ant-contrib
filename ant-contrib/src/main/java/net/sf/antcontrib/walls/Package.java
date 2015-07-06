@@ -41,8 +41,6 @@ public class Package {
     private String name;
     private String pack;
 
-    //signifies the package did not end with .* or .**
-    private boolean badPackage = false;
     private String failureReason = null;
     
     //holds the name attribute of the package element of each
@@ -152,7 +150,6 @@ public class Package {
         pack = pack.replace('.', File.separatorChar);
 
         String match;
-        String classMatch;
         if(pack.endsWith("**")) {
             match  = pack + File.separatorChar+"*"+postFix;
         }

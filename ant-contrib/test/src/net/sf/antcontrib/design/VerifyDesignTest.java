@@ -40,8 +40,6 @@ public class VerifyDesignTest extends BuildFileTest {
     private String baseDir = "test"+File.separator
         +"resources"+File.separator
         +"design"+File.separator;
-    private String c = File.separator;
-    
     public VerifyDesignTest(String name) {
         super(name);
     }
@@ -52,10 +50,7 @@ public class VerifyDesignTest extends BuildFileTest {
 //        project.log("ASFDSADF", Project.MSG_INFO);
     }
     
-    private static String s = "";
-    
     public static void log(String msg) {
-        s += msg+"\n";
     }
     
     public void tearDown() {

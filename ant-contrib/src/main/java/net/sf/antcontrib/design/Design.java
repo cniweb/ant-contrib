@@ -113,7 +113,7 @@ public class Design {
     
     public void addConfiguredPackage(Package p) {
         
-        String pack = p.getPackage();
+        p.getPackage();
         
         Depends[] depends = p.getDepends();
         
@@ -255,7 +255,7 @@ public class Design {
         //see if the name is a java.lang class....
         String tempTry = "java.lang."+dependsOn;
         try {
-            Class c = VerifyDesign.class.getClassLoader().loadClass(tempTry);
+            VerifyDesign.class.getClassLoader().loadClass(tempTry);
             return;
         } catch(ClassNotFoundException e) {
             //not found, continue on...

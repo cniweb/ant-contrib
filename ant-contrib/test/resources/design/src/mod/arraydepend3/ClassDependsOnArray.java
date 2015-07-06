@@ -18,8 +18,6 @@
  */
 package mod.arraydepend3;
 
-import mod.dummy.DummyClass;
-
 
 
 /** 
@@ -29,6 +27,5 @@ import mod.dummy.DummyClass;
 public class ClassDependsOnArray {
 
 	public void testArray() throws Exception {
-		Class c = DummyClass[].class;
 	}
 }

@@ -245,11 +245,6 @@ public class AntPerformanceListener implements BuildListener {
          */
         private long _start_time = 0;
         /**
-         * storage for stop time
-         */
-        private long _stop_time = 0;
-
-        /**
          * cumulative elapsed time
          */
         private long _total_time = 0;
@@ -280,7 +275,6 @@ public class AntPerformanceListener implements BuildListener {
             long stop_time = System.currentTimeMillis();
             _total_time += stop_time - _start_time;
             _start_time = 0;
-            _stop_time = 0;
             return stop_time;
         }
 

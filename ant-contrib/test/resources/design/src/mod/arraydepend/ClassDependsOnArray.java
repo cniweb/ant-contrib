@@ -18,8 +18,6 @@
  */
 package mod.arraydepend;
 
-import mod.dummy.DummyClass;
-
 /** 
  *
  * @author dhiller
@@ -27,6 +25,5 @@ import mod.dummy.DummyClass;
 public class ClassDependsOnArray {
 
 	public void something() {
-		Object[] o = new DummyClass[5];
 	}
 }

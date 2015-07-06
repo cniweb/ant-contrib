@@ -27,6 +27,5 @@ package mod.arraydepend2;
 public class ClassDependsOnArray {
 
 	public void testArray() throws Exception {
-		Class c = String[].class;
 	}
 }

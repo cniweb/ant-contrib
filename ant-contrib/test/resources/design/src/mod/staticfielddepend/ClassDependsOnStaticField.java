@@ -18,8 +18,6 @@
  */
 package mod.staticfielddepend;
 
-import mod.dummy.DummyClass;
-
 /** 
  *
  * @author dhiller
@@ -27,6 +25,5 @@ import mod.dummy.DummyClass;
 public class ClassDependsOnStaticField {
 
 	public void doNothing() {
-		String s = DummyClass.staticField;
 	}
 }

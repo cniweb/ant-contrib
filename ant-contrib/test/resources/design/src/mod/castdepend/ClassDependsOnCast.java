@@ -18,8 +18,6 @@
  */
 package mod.castdepend;
 
-import mod.dummy.DummyInterface;
-
 /** 
  *
  * @author dhiller
@@ -27,6 +25,5 @@ import mod.dummy.DummyInterface;
 public class ClassDependsOnCast {
 
 	public void getSomething(Object obj) {
-		Object o = (DummyInterface)obj;
 	}
 }

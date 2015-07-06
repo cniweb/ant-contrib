@@ -15,8 +15,6 @@
  */
 package net.sf.antcontrib.walls;
 
-import java.io.File;
-
 import org.apache.tools.ant.BuildFileTest;
 
 import junit.framework.TestSuite;
@@ -35,11 +33,6 @@ import junit.textui.TestRunner;
  */
 public class CompileWithWallsTest extends BuildFileTest {
 
-    private String baseDir = "test"+File.separator
-                            +"resources"+File.separator
-                            +"walls"+File.separator;
-    private String c = File.separator;
-    
     public CompileWithWallsTest(String name) {
         super(name);
     }
@@ -293,36 +286,6 @@ public class CompileWithWallsTest extends BuildFileTest {
 //        ensureClassFileExists("testC"+c+"mod"+c+"Module.class", true);
 //    }
 
-    private void ensureJavaFileExists(String file, boolean shouldExist) {
-        
-        //must test that it is testing the correct directory.
-        //It wasn't before.
-        String javaFile = baseDir+file;
-        File f1 = new File(javaFile);
-        if(shouldExist)
-            assertTrue("The java file="+f1.getAbsolutePath()+" didn't exist, we can't run this test.  It will pass with false results",
-                    f1.exists());        
-        else
-            assertTrue("The java file="+f1.getAbsolutePath()+" exists and shouldn't, we can't run this test.  It will pass with false results",
-                    !f1.exists());
-    }
-    
-    private void ensureClassFileExists(String file, boolean shouldExist) {
-        
-        String classFile = baseDir
-                            +"compilewithwalls"+File.separator
-                            +"classes"+File.separator
-                            +file;
-                               
-        File f1 = new File(classFile);
-        if(shouldExist)
-            assertTrue("The class file="+f1.getAbsolutePath()+" didn't get created, No build exception\nwas thrown, but the build failed because a class\nfile should have been created",
-                    f1.exists());                               
-        else
-            assertTrue("The class file="+f1.getAbsolutePath()+" exists and shouldn't\nTest may be inaccurate if this file already exists...correct the test",
-                        !f1.exists()); 
-    }
- 
     public static void main(String[] args) {
         TestSuite suite = new TestSuite(CompileWithWallsTest.class);
         TestRunner.run(suite);

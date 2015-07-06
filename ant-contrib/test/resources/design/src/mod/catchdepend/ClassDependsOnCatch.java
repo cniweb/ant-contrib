@@ -28,8 +28,6 @@ public class ClassDependsOnCatch {
 
 	public void doNothing() {
 		try {
-			int x = 0;
-			int y = x+4;
 		} catch(DummyRuntimeException e) {
 			
 		}

@@ -25,8 +25,6 @@ package mod.putstatic;
  */
 public class ClassDependsOnNothing {
 
-	private static String s;
 	public static void setJarLocator(String l) {
-		s = l;
 	}
 }

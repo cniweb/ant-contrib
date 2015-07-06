@@ -18,8 +18,6 @@
  */
 package mod.localvarrefdepend;
 
-import mod.dummy.DummyInterface;
-
 /** 
  *
  * @author dhiller
@@ -27,6 +25,5 @@ import mod.dummy.DummyInterface;
 public class ClassDependsOnLocalVariableReference {
 
 	public void doNothing() {
-		Class c = DummyInterface.class;
 	}
 }

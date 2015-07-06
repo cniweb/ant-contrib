@@ -38,7 +38,6 @@ import org.xml.sax.SAXParseException;
  */
 public class ClassPathTask extends Task
 {
-	private String project;
 	private String idContainer = "antclipse";
 	private boolean includeSource = false; //default, do not include source
 	private boolean includeOutput = false; //default, do not include output directory
@@ -142,7 +141,6 @@ public class ClassPathTask extends Task
 	 */
 	public void setProject(String project)
 	{
-		this.project = project;
 	}
 
 	/**

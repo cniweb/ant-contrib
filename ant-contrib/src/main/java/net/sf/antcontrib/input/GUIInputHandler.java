@@ -54,7 +54,6 @@ public class GUIInputHandler implements InputHandler {
             String prompt = request.getPrompt();
             String title = "Select Input";
             int optionType = JOptionPane.YES_NO_OPTION;
-            int messageType = JOptionPane.QUESTION_MESSAGE;
             Icon icon = null;
             Object[] choices = ( ( MultipleChoiceInputRequest ) request ).getChoices().toArray();
             Object initialChoice = null;

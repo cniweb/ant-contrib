@@ -168,7 +168,7 @@ class VisitorImpl extends EmptyVisitor {
 	}
 
 	public void visitCodeException(CodeException c) {
-		String s = c.toString(pool, false);
+		c.toString(pool, false);
 
 		int catch_type = c.getCatchType();
 

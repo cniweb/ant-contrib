@@ -260,10 +260,10 @@ public class PostTask extends Task {
 
                             // check if there are cookies to be included
                             for ( Iterator it = cookieStorage.keySet().iterator(); it.hasNext(); ) {
-                                StringBuffer sb = new StringBuffer();
+                                new StringBuffer();
                                 Object name = it.next();
                                 if ( name != null ) {
-                                    String key = name.toString();
+                                    name.toString();
                                     Cookie cookie = ( Cookie ) cookieStorage.get( name );
                                     if ( to.getPath().startsWith( cookie.getPath() ) ) {
                                         connection.addRequestProperty( "Cookie", cookie.toString() );
