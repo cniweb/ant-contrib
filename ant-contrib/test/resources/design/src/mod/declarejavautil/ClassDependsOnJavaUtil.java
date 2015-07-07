@@ -26,5 +26,5 @@ import java.util.List;
  */
 public class ClassDependsOnJavaUtil {
 
-	public List list;
+	public List<?> list;
 }
