@@ -15,7 +15,6 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks.ibm;
-import java.io.File;
 import java.util.Vector;
 
 import net.sf.antcontrib.cpptasks.compiler.LinkType;
@@ -43,8 +42,6 @@ public final class VisualAgeCCompiler extends GccCompatibleCCompiler {
     public static VisualAgeCCompiler getInstance() {
         return instance;
     }
-    private String identifier;
-    private File[] includePath;
     /**
      * Private constructor. Use getInstance() to get singleton instance of this
      * class.

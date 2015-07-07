@@ -25,11 +25,9 @@ public class TestCommandLineCompilerConfiguration
         extends
             TestCompilerConfiguration {
     private final CommandLineCompiler compiler;
-    private final String compilerId;
     public TestCommandLineCompilerConfiguration(String name) {
         super(name);
         compiler = (GccCCompiler) GccCCompiler.getInstance();
-        compilerId = compiler.getIdentifier();
     }
     protected CompilerConfiguration create() {
         return new CommandLineCompilerConfiguration(compiler, "dummy",

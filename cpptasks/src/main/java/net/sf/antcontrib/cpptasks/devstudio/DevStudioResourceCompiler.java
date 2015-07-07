@@ -39,7 +39,6 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
     public static DevStudioResourceCompiler getInstance() {
         return instance;
     }
-    private String identifier;
     private DevStudioResourceCompiler(boolean newEnvironment, Environment env) {
         super("rc", null, new String[]{".rc"}, new String[]{".h", ".hpp",
                 ".inl"}, ".res", false, null, newEnvironment, env);

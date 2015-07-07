@@ -44,7 +44,6 @@ public final class aCCCompiler extends GccCompatibleCCompiler {
     public static aCCCompiler getInstance() {
         return instance;
     }
-    private String identifier;
     private File[] includePath;
     /**
      * Private constructor. Use GccCCompiler.getInstance() to get singleton

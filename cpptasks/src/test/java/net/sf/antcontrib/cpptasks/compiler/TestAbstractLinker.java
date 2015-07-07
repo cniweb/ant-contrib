@@ -57,10 +57,6 @@ public class TestAbstractLinker extends TestAbstractProcessor {
         public String[] getOutputFileNames(String sourceFile, VersionInfo versionInfo) {
             return new String[0];
         }
-        public String[][] getRuntimeLibraries(boolean debug,
-                boolean multithreaded, boolean staticLink) {
-            return new String[2][0];
-        }
         public boolean isCaseSensitive() {
             return true;
         }

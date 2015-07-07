@@ -15,8 +15,6 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks.ibm;
-import java.util.Vector;
-
 import junit.framework.TestCase;
 
 import net.sf.antcontrib.cpptasks.compiler.AbstractProcessor;

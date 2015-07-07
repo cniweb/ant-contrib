@@ -30,7 +30,7 @@ public class TestDefineArgument extends TestCase {
         DefineArgument arg = new DefineArgument();
         Project project = new Project();
         try {
-            boolean isActive = arg.isActive(project);
+            arg.isActive(project);
         } catch (BuildException ex) {
             return;
         }
@@ -58,7 +58,7 @@ public class TestDefineArgument extends TestCase {
         project.setProperty("cond", "false");
         arg.setIf("cond");
         try {
-            boolean isActive = arg.isActive(project);
+            arg.isActive(project);
         } catch (BuildException ex) {
             return;
         }
@@ -86,7 +86,7 @@ public class TestDefineArgument extends TestCase {
         project.setProperty("cond", "false");
         arg.setUnless("cond");
         try {
-            boolean isActive = arg.isActive(project);
+            arg.isActive(project);
         } catch (BuildException ex) {
             return;
         }

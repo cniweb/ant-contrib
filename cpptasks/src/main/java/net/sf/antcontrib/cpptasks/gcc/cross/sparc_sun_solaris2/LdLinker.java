@@ -15,8 +15,6 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks.gcc.cross.sparc_sun_solaris2;
-import java.io.File;
-
 import net.sf.antcontrib.cpptasks.compiler.LinkType;
 import net.sf.antcontrib.cpptasks.compiler.Linker;
 import net.sf.antcontrib.cpptasks.gcc.AbstractLdLinker;
@@ -27,8 +25,6 @@ import net.sf.antcontrib.cpptasks.gcc.AbstractLdLinker;
  */
 public final class LdLinker extends AbstractLdLinker {
     private static final String[] discardFiles = new String[0];
-    private static final String[] libtoolObjFiles = new String[]{".fo", ".a",
-            ".lib", ".dll", ".so", ".sl"};
     private static final String[] objFiles = new String[]{".o", ".a", ".lib",
             ".dll", ".so", ".sl"};
     private static final LdLinker dllLinker = new LdLinker(
@@ -41,7 +37,6 @@ public final class LdLinker extends AbstractLdLinker {
     public static LdLinker getInstance() {
         return instance;
     }
-    private File[] libDirs;
     private LdLinker(String command, String[] extensions,
             String[] ignoredExtensions, String outputPrefix,
             String outputSuffix, boolean isLibtool, LdLinker libtoolLinker) {

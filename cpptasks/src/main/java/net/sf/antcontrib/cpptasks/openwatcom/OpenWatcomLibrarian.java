@@ -228,8 +228,6 @@ public final class OpenWatcomLibrarian
       execArgs.addElement(preargs[i]);
     }
 
-    int objBytes = 0;
-
     for (int i = 0; i < sourceFiles.length; i++) {
       String last4 = sourceFiles[i]
           .substring(sourceFiles[i].length() - 4).toLowerCase();
@@ -237,7 +235,7 @@ public final class OpenWatcomLibrarian
           && !last4.equals(".res")
           && !last4.equals(".lib")) {
             execArgs.addElement("+" + quoteFilename(buf, sourceFiles[i]));
-            objBytes += new File(sourceFiles[i]).length();
+            new File(sourceFiles[i]).length();
       }
     }
 

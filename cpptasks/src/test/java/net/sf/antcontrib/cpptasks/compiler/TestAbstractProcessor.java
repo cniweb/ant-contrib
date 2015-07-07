@@ -46,10 +46,6 @@ public class TestAbstractProcessor extends TestCase {
         public String[] getOutputFileNames(String sourceFile, VersionInfo versionInfo) {
             return new String[0];
         }
-        public String[][] getRuntimeLibraries(boolean debug,
-                boolean multithreaded, boolean staticLink) {
-            return new String[2][0];
-        }
     }
     public TestAbstractProcessor(String name) {
         super(name);

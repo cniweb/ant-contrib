@@ -388,7 +388,6 @@ public final class DependencyTable {
                 .getConfiguration();
         String includePathIdentifier = compiler.getIncludePathIdentifier();
         File[] sources = target.getSources();
-        DependencyInfo[] dependInfos = new DependencyInfo[sources.length];
         long outputLastModified = target.getOutput().lastModified();
         //
         //   try to solve problem using existing dependency info

@@ -15,8 +15,6 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks.gcc;
-import java.io.File;
-
 import net.sf.antcontrib.cpptasks.compiler.LinkType;
 import net.sf.antcontrib.cpptasks.compiler.Linker;
 /**
@@ -33,12 +31,9 @@ public final class LdLinker extends AbstractLdLinker {
                     discardFiles, "lib", ".so", true, null));
     private static final LdLinker instance = new LdLinker("ld", objFiles,
             discardFiles, "", "", false, null);
-    private static final String[] libtoolObjFiles = new String[]{".fo", ".a",
-            ".lib", ".dll", ".so", ".sl"};
     public static LdLinker getInstance() {
         return instance;
     }
-    private File[] libDirs;
     private LdLinker(String command, String[] extensions,
             String[] ignoredExtensions, String outputPrefix,
             String outputSuffix, boolean isLibtool, LdLinker libtoolLinker) {

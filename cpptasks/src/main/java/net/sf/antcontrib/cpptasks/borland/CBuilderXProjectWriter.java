@@ -314,7 +314,7 @@ public final class CBuilderXProjectWriter
     while (targetIter.hasNext()) {
       TargetInfo targetInfo = (TargetInfo) targetIter.next();
       ProcessorConfiguration config = targetInfo.getConfiguration();
-      String identifier = config.getIdentifier();
+      config.getIdentifier();
       //
       //   for the first gcc or bcc compiler
       //

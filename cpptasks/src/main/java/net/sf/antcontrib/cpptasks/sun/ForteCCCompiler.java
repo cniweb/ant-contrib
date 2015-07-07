@@ -42,7 +42,6 @@ public final class ForteCCCompiler extends GccCompatibleCCompiler {
     public static ForteCCCompiler getInstance() {
         return instance;
     }
-    private String identifier;
     private File[] includePath;
     /**
      * Private constructor. Use ForteCCCompiler.getInstance() to get singleton

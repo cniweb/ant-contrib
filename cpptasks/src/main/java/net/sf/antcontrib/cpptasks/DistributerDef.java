@@ -55,11 +55,6 @@ public final class DistributerDef
   private int tcpCork;
 
   /**
-   * user name.
-   */
-  private String user;
-
-  /**
    *  local to remote file name maps.
    */
   private final Vector maps = new Vector();
@@ -237,7 +232,6 @@ public final class DistributerDef
    * @param value user name
    */
   public void setUser(final String value) {
-    user = value;
   }
 
 }

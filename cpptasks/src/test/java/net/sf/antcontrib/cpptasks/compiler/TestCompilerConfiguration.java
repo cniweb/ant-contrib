@@ -48,7 +48,7 @@ public abstract class TestCompilerConfiguration extends TestCase {
         //  may cause IllegalStateException since
         //     setPlatformInfo has not been called
         try {
-            String[] output = compiler.getOutputFileNames(input, null);
+            compiler.getOutputFileNames(input, null);
         } catch (java.lang.IllegalStateException ex) {
         }
     }

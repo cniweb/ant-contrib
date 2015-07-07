@@ -30,8 +30,6 @@ public class GccLinker extends AbstractLdLinker {
     private static final String[] discardFiles = new String[0];
     private static final String[] objFiles = new String[]{".o", ".a", ".lib",
             ".dll", ".so", ".sl"};
-    private static final String[] libtoolObjFiles = new String[]{".fo", ".a",
-            ".lib", ".dll", ".so", ".sl"};
     private static String[] linkerOptions = new String[]{"-bundle",
             "-dynamiclib", "-nostartfiles", "-nostdlib", "-prebind", "-s",
             "-static", "-shared", "-symbolic", "-Xlinker", "-arch",
@@ -127,11 +125,7 @@ public class GccLinker extends AbstractLdLinker {
             buf.append(GccProcessor.getMachine());
             buf.append('/');
             buf.append(GccProcessor.getVersion());
-            //
-            //   build default path from gcc and system /lib and /lib/w32api
-            //
-            String[] impliedLibPath = new String[]{buf.toString(),
-                    "/lib/w32api", "/lib"};
+            buf.toString();
             //
             //     read gcc specs file for other library paths
             //

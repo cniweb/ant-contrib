@@ -49,7 +49,6 @@ public abstract class CommandLineLinker extends AbstractLinker
     private String identifier;
     private String identifierArg;
     private boolean isLibtool;
-    private String[] librarySets;
     private CommandLineLinker libtoolLinker;
     private boolean newEnvironment = false;
     private String outputSuffix;

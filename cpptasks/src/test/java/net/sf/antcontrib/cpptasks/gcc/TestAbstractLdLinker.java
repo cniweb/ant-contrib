@@ -122,7 +122,7 @@ public class TestAbstractLdLinker extends TestCase {
         Vector preargs = new Vector();
         Vector midargs = new Vector();
         Vector endargs = new Vector();
-        String[] rc = linker.addLibrarySets(task, sets, preargs, midargs,
+        linker.addLibrarySets(task, sets, preargs, midargs,
                 endargs);
         String libdirSwitch = (String) endargs.elementAt(0);
         assertEquals(libdirSwitch.substring(0, 2), "-L");
@@ -143,7 +143,7 @@ public class TestAbstractLdLinker extends TestCase {
         Vector preargs = new Vector();
         Vector midargs = new Vector();
         Vector endargs = new Vector();
-        String[] rc = linker.addLibrarySets(task, sets, preargs, midargs,
+        linker.addLibrarySets(task, sets, preargs, midargs,
                 endargs);
         assertEquals("-lbart", (String) endargs.elementAt(1));
         assertEquals("-lcart", (String) endargs.elementAt(2));
@@ -165,7 +165,7 @@ public class TestAbstractLdLinker extends TestCase {
         Vector preargs = new Vector();
         Vector midargs = new Vector();
         Vector endargs = new Vector();
-        String[] rc = linker.addLibrarySets(task, sets, preargs, midargs,
+        linker.addLibrarySets(task, sets, preargs, midargs,
                 endargs);
         assertEquals("-L", ((String) endargs.elementAt(0)).substring(0, 2));
         assertEquals("-Bdynamic", (String) endargs.elementAt(1));
@@ -189,7 +189,7 @@ public class TestAbstractLdLinker extends TestCase {
         Vector preargs = new Vector();
         Vector midargs = new Vector();
         Vector endargs = new Vector();
-        String[] rc = linker.addLibrarySets(task, sets, preargs, midargs,
+        linker.addLibrarySets(task, sets, preargs, midargs,
                 endargs);
         assertEquals("-F", ((String) endargs.elementAt(0)).substring(0, 2));
         assertEquals("-framework bart", (String) endargs.elementAt(1));
@@ -217,7 +217,7 @@ public class TestAbstractLdLinker extends TestCase {
         Vector preargs = new Vector();
         Vector midargs = new Vector();
         Vector endargs = new Vector();
-        String[] rc = linker.addLibrarySets(task, sets, preargs, midargs,
+        linker.addLibrarySets(task, sets, preargs, midargs,
                 endargs);
         assertEquals("-lbart", (String) endargs.elementAt(0));
         assertEquals("-Bstatic", (String) endargs.elementAt(1));

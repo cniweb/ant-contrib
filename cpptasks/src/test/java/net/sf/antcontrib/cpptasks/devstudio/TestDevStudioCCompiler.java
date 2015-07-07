@@ -18,8 +18,6 @@ package net.sf.antcontrib.cpptasks.devstudio;
 import java.util.Vector;
 
 import junit.framework.TestCase;
-
-import net.sf.antcontrib.cpptasks.compiler.AbstractProcessor;
 /**
  * Test Microsoft C/C++ compiler adapter
  *  

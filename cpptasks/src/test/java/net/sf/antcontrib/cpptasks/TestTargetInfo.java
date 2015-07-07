@@ -31,8 +31,6 @@ public class TestTargetInfo extends TestCase {
         public int bid(String filename) {
             return 1;
         }
-        public void close() {
-        }
         public void compile(CCTask task, File workingDir, String[] source,
                 boolean relentless, ProgressMonitor monitor)
                 throws BuildException {
@@ -44,9 +42,6 @@ public class TestTargetInfo extends TestCase {
         }
         public String getIdentifier() {
             return "dummy";
-        }
-        public String[] getIncludeDirectories() {
-            return new String[0];
         }
         public String getIncludePathIdentifier() {
             return "dummyIncludePath";

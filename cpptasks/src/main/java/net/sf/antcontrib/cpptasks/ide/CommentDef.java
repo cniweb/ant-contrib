@@ -16,12 +16,6 @@
  */
 package net.sf.antcontrib.cpptasks.ide;
 
-import org.apache.tools.ant.util.StringUtils;
-
-import java.io.File;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Defines a comment to place in the generated project files.
  *

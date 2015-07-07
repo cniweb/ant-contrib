@@ -23,8 +23,6 @@ import net.sf.antcontrib.cpptasks.ProcessorDef;
 import net.sf.antcontrib.cpptasks.parser.CParser;
 import net.sf.antcontrib.cpptasks.parser.Parser;
 import net.sf.antcontrib.cpptasks.VersionInfo;
-
-import org.apache.tools.ant.BuildException;
 /**
  * Test for abstract compiler class
  * 
@@ -35,10 +33,6 @@ public class TestAbstractCompiler extends TestAbstractProcessor {
         public DummyAbstractCompiler() {
             super(new String[]{".cpp", ".c"},
                     new String[]{".hpp", ".h", ".inl"}, ".o");
-        }
-        public void compile(CCTask task, File[] srcfile, File[] outputfile,
-                CompilerConfiguration config) throws BuildException {
-            throw new BuildException("Not implemented");
         }
         public CompilerConfiguration createConfiguration(CCTask task,
                 LinkType linkType, ProcessorDef[] def1, CompilerDef def2,

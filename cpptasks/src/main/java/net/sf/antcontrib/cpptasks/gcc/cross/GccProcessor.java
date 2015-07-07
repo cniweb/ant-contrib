@@ -35,17 +35,6 @@ public class GccProcessor {
     private static String[] specs;
     //   the results from gcc -dumpversion
     private static String version;
-    private static int addLibraryPatterns(String[] libnames, StringBuffer buf,
-            String prefix, String extension, String[] patterns, int offset) {
-        for (int i = 0; i < libnames.length; i++) {
-            buf.setLength(0);
-            buf.append(prefix);
-            buf.append(libnames[i]);
-            buf.append(extension);
-            patterns[offset + i] = buf.toString();
-        }
-        return offset + libnames.length;
-    }
     /**
      * Converts absolute Cygwin file or directory names to the corresponding
      * Win32 name.
@@ -175,13 +164,6 @@ public class GccProcessor {
      */
     public static boolean isCygwin() {
         return getMachine().indexOf("cygwin") > 0;
-    }
-    private static boolean isHPUX() {
-        String osname = System.getProperty("os.name").toLowerCase();
-        if (osname.indexOf("hp") >= 0 && osname.indexOf("ux") >= 0) {
-            return true;
-        }
-        return false;
     }
     /**
      * 

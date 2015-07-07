@@ -68,7 +68,7 @@ public class TestTargetHistoryTable extends TestXMLConsumer {
             copyResourceToTmpDir("openshore/history.xml", "history.xml");
             CCTask task = new CCTask();
             String tmpDir = System.getProperty("java.io.tmpdir");
-            TargetHistoryTable history = new TargetHistoryTable(task, new File(
+            new TargetHistoryTable(task, new File(
                     tmpDir));
         } finally {
             deleteTmpFile("history.xml");
@@ -84,7 +84,7 @@ public class TestTargetHistoryTable extends TestXMLConsumer {
             copyResourceToTmpDir("xerces-c/history.xml", "history.xml");
             CCTask task = new CCTask();
             String tmpDir = System.getProperty("java.io.tmpdir");
-            TargetHistoryTable history = new TargetHistoryTable(task, new File(
+            new TargetHistoryTable(task, new File(
                     tmpDir));
         } finally {
             deleteTmpFile("history.xml");
@@ -114,12 +114,7 @@ public class TestTargetHistoryTable extends TestXMLConsumer {
             compiledFile = new File(tempDir, "dummy.o");
             FileOutputStream compiledStream = new FileOutputStream(compiledFile);
             compiledStream.close();
-            //
-            //   lastModified times can be slightly less than
-            //      task start time due to file system resolution.
-            //      Mimic this by slightly incrementing the last modification time.
-            //      
-            long startTime = compiledFile.lastModified() + 1;
+            compiledFile.lastModified();
             //
             //   update the table
             //

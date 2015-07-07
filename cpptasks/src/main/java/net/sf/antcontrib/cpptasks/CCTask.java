@@ -155,7 +155,6 @@ public class CCTask extends Task {
         }
     }
     
-    private static final ProcessorConfiguration[] EMPTY_CONFIG_ARRAY = new ProcessorConfiguration[0];
     /**
      * Builds a Hashtable to targets needing to be rebuilt keyed by compiler
      * configuration
@@ -182,10 +181,6 @@ public class CCTask extends Task {
     }
     /** The compiler definitions. */
     private Vector _compilers = new Vector();
-    /** The output file type. */
-    //    private LinkType _linkType = LinkType.EXECUTABLE;
-    /** The library sets. */
-    private Vector _libsets = new Vector();
     /** The linker definitions. */
     private Vector _linkers = new Vector();
     /** The object directory. */

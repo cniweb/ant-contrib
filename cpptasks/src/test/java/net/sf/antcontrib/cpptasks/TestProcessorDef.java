@@ -83,7 +83,7 @@ public abstract class TestProcessorDef
     arg.setProject(project);
     arg.setIf("cond");
     try {
-      boolean isActive = arg.isActive();
+      arg.isActive();
     } catch (BuildException ex) {
       return;
     }
@@ -126,7 +126,7 @@ public abstract class TestProcessorDef
     arg.setProject(project);
     arg.setUnless("cond");
     try {
-      boolean isActive = arg.isActive();
+      arg.isActive();
     } catch (BuildException ex) {
       return;
     }

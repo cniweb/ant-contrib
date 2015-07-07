@@ -26,8 +26,6 @@ import net.sf.antcontrib.cpptasks.gcc.GccLibrarian;
  */
 public final class IntelLinux64Linker extends AbstractLdLinker {
     private static final String[] discardFiles = new String[0];
-    private static final String[] libtoolObjFiles = new String[]{".fo", ".a",
-            ".lib", ".dll", ".so", ".sl"};
     private static final String[] objFiles = new String[]{".o", ".a", ".lib",
             ".dll", ".so", ".sl"};
     private static final IntelLinux64Linker dllLinker = new IntelLinux64Linker(

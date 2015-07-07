@@ -76,7 +76,7 @@ public class TestLibrarySet
     project.setProperty("windows", "false");
     libset.setIf("windows");
     try {
-      boolean isActive = libset.isActive(project);
+      libset.isActive(project);
     } catch (BuildException ex) {
       return;
     }
@@ -122,7 +122,7 @@ public class TestLibrarySet
     project.setProperty("windows", "false");
     libset.setUnless("windows");
     try {
-      boolean isActive = libset.isActive(project);
+      libset.isActive(project);
     } catch (BuildException ex) {
       return;
     }

@@ -31,8 +31,6 @@ import org.apache.tools.ant.BuildException;
  * @author Curt Arnold
  */
 public final class LdLinker extends AbstractLdLinker {
-    private static final String[] libtoolObjFiles = new String[]{".fo", ".a",
-            ".lib", ".dll", ".so", ".sl"};
     private static final String[] objFiles = new String[]{".o", ".a", ".lib",
             ".dll", ".so", ".sl"};
     private static final String[] discardFiles = new String[0];
@@ -44,7 +42,6 @@ public final class LdLinker extends AbstractLdLinker {
     public static LdLinker getInstance() {
         return instance;
     }
-    private File[] libDirs;
     private LdLinker(String command, String[] extensions,
             String[] ignoredExtensions, String outputPrefix,
             String outputSuffix, boolean isLibtool, LdLinker libtoolLinker) {

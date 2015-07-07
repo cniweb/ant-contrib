@@ -23,7 +23,6 @@ import net.sf.antcontrib.cpptasks.compiler.CommandLineLinker;
 import net.sf.antcontrib.cpptasks.compiler.LinkType;
 import net.sf.antcontrib.cpptasks.compiler.Linker;
 import net.sf.antcontrib.cpptasks.compiler.Processor;
-import net.sf.antcontrib.cpptasks.compiler.ProcessorConfiguration;
 import net.sf.antcontrib.cpptasks.gcc.GccLinker;
 import net.sf.antcontrib.cpptasks.types.FlexLong;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;

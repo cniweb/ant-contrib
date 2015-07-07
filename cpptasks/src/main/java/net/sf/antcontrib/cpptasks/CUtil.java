@@ -96,7 +96,7 @@ public class CUtil {
      * Extracts the basename of a file, removing the extension, if present
      */
     public static String getBasename(File file) {
-        String path = file.getPath();
+        file.getPath();
         // Remove the extension
         String basename = file.getName();
         int pos = basename.lastIndexOf('.');
