@@ -20,9 +20,9 @@
                     name="ant"
                     rev="1.9.5"
                     conf="provided->default" />
-        <dependency org="apache-xerces"
+        <dependency org="xerces"
                     name="xercesImpl"
-                    rev="2.9.1"
+                    rev="2.11.0"
                     conf="provided->default" />
         <dependency org="commons-httpclient"
                     name="commons-httpclient"
