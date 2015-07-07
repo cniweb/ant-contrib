@@ -285,8 +285,7 @@ public class LibrarySet extends DataType {
                         PatternSet.NameEntry entry = localSet.createInclude();
                         entry.setName(patterns[j]);
                     }
-                   int matches = 0;
-		           //
+                   //
 		           //  if there was no specified directory then
 		           //     run through the libpath backwards
 		           //
@@ -301,7 +300,6 @@ public class LibrarySet extends DataType {
 		                   DirectoryScanner scanner = clone.getDirectoryScanner(project);
 		                   File basedir = scanner.getBasedir();
 		                   String[] files = scanner.getIncludedFiles();
-                           matches += files.length;
                            for (int k = 0; k < files.length; k++) {
 		                       visitor.visit(basedir, files[k]);
 		                   }
@@ -310,36 +308,10 @@ public class LibrarySet extends DataType {
 		               DirectoryScanner scanner = localSet.getDirectoryScanner(project);
 		               File basedir = scanner.getBasedir();
 		               String[] files = scanner.getIncludedFiles();
-                       matches += files.length;
-		               for (int k = 0; k < files.length; k++) {
+                       for (int k = 0; k < files.length; k++) {
 		                   visitor.visit(basedir, files[k]);
 		               }
 		           }
-                   //
-                   //  TODO: following section works well for Windows
-                   //      style linkers but unnecessary fails
-                   //     Unix style linkers.  Will need to revisit.
-                   //
-                   if (matches == 0 && false) {
-                      StringBuffer msg = new StringBuffer("No file matching ");
-                       if (patterns.length == 1) {
-                           msg.append("pattern (");
-                           msg.append(patterns[0]);
-                           msg.append(")");
-                       } else {
-                           msg.append("patterns (\"");
-                           msg.append(patterns[0]);
-                           for (int k = 1; k < patterns.length; k++) {
-                               msg.append(", ");
-                               msg.append(patterns[k]);
-                           }
-                           msg.append(")");
-                       }
-                       msg.append(" for library name \"");
-                       msg.append(libnames[i]);
-                       msg.append("\" was found.");
-                      throw new BuildException(msg.toString());
-                   }
                 }
             }
         }

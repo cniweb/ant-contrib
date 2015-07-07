@@ -159,6 +159,7 @@ public class GccProcessor {
                     }
                     specs = new String[lines.size()];
                     lines.copyInto(specs);
+                    reader.close();
                 } catch (IOException ex) {
                 }
             }
