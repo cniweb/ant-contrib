@@ -63,8 +63,7 @@
 	</target>
 	
 	<target name="configure" depends="init" unless="no-ivy">
-		<!--<ivy:configure file="ivysettings.xml" />-->
-		<ivy:settings url="http://nexus.lan.huk-coburg.de/service/local/templates/settings/huk-ivy/content" />
+		<ivy:configure file="ivysettings.xml" />
     </target>
 		
 	<target name="resolve" depends="configure" unless="no-ivy">
