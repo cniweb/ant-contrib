@@ -28,6 +28,7 @@ import net.sf.antcontrib.cpptasks.gcc.GccCCompiler;
 import net.sf.antcontrib.cpptasks.gcc.WindresResourceCompiler;
 import net.sf.antcontrib.cpptasks.hp.aCCCompiler;
 import net.sf.antcontrib.cpptasks.ibm.VisualAgeCCompiler;
+import net.sf.antcontrib.cpptasks.ibm.XlcCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux32CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux64CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelWin32CCompiler;
@@ -216,6 +217,7 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("armcpp", ADSCCompiler.getArmCpp()),
             new ProcessorEnumValue("tcc", ADSCCompiler.getThumbCC()),
             new ProcessorEnumValue("tcpp", ADSCCompiler.getThumbCpp()),
+            new ProcessorEnumValue("xlc_r", XlcCompiler.getInstance()),
             // GCC Cross Compilers
             new ProcessorEnumValue(
                     "sparc-sun-solaris2-gcc",
