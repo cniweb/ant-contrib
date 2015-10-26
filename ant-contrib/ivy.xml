@@ -48,6 +48,10 @@
                     name="oro"
                     rev="2.0.8"
                     conf="default->default" />
+        <dependency org="com.sun"
+                    name="tools"
+                    rev="1.7"
+                    conf="default->default" />
         <dependency org="junit"
                     name="junit"
                     rev="4.12"
