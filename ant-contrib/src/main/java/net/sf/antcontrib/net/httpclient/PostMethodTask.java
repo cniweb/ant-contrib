@@ -38,14 +38,12 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.util.FileUtils;
 
-public class PostMethodTask
-	extends AbstractMethodTask {
+public class PostMethodTask extends AbstractMethodTask {
 
 	private List parts = new ArrayList();
 	private boolean multipart;
 	private transient FileInputStream stream;
-	
-	
+
 	public static class FilePartType {
 		private File path;
 		private String contentType = FilePart.DEFAULT_CONTENT_TYPE;
@@ -73,9 +71,9 @@ public class PostMethodTask
 
 		public void setCharSet(String charSet) {
 			this.charSet = charSet;
-		}		
+		}
 	}
-	
+
 	public static class TextPartType {
 		private String name = "";
 		private String value = "";
@@ -112,17 +110,17 @@ public class PostMethodTask
 
 		public void setContentType(String contentType) {
 			this.contentType = contentType;
-		}		
-		
+		}
+
 		public void setText(String text) {
 			this.value = text;
 		}
 	}
-	
+
 	public void addConfiguredFile(FilePartType file) {
 		this.parts.add(file);
 	}
-	
+
 	public void setMultipart(boolean multipart) {
 		this.multipart = multipart;
 	}
@@ -130,94 +128,75 @@ public class PostMethodTask
 	public void addConfiguredText(TextPartType text) {
 		this.parts.add(text);
 	}
-	
+
 	public void setParameters(File parameters) {
 		PostMethod post = getPostMethod();
 		Properties p = new Properties();
 		Iterator it = p.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry entry = (Map.Entry) it.next();
-			post.addParameter(entry.getKey().toString(),
-					entry.getValue().toString());
+			post.addParameter(entry.getKey().toString(), entry.getValue().toString());
 		}
 	}
 
 	protected HttpMethodBase createNewMethod() {
 		return new PostMethod();
 	}
-	
+
 	private PostMethod getPostMethod() {
-		return ((PostMethod)createMethodIfNecessary());
+		return ((PostMethod) createMethodIfNecessary());
 	}
 
 	public void addConfiguredParameter(NameValuePair pair) {
 		getPostMethod().setParameter(pair.getName(), pair.getValue());
 	}
-	
+
 	public void setContentChunked(boolean contentChunked) {
 		getPostMethod().setContentChunked(contentChunked);
 	}
-	
+
 	protected void configureMethod(HttpMethodBase method) {
 		PostMethod post = (PostMethod) method;
 
-		if (parts.size() == 1 && ! multipart) {
+		if (parts.size() == 1 && !multipart) {
 			Object part = parts.get(0);
 			if (part instanceof FilePartType) {
-				FilePartType filePart = (FilePartType)part;
+				FilePartType filePart = (FilePartType) part;
 				try {
-					stream = new FileInputStream(
-							filePart.getPath().getAbsolutePath());
-					post.setRequestEntity(
-						new InputStreamRequestEntity(stream,
-								filePart.getPath().length(),
-								filePart.getContentType()));
+					stream = new FileInputStream(filePart.getPath().getAbsolutePath());
+					post.setRequestEntity(new InputStreamRequestEntity(stream, filePart.getPath().length(),
+							filePart.getContentType()));
+				} catch (IOException e) {
+					throw new BuildException(e);
 				}
-				catch (IOException e) {
+			} else if (part instanceof TextPartType) {
+				TextPartType textPart = (TextPartType) part;
+				try {
+					post.setRequestEntity(new StringRequestEntity(textPart.getValue(), textPart.getContentType(),
+							textPart.getCharSet()));
+				} catch (UnsupportedEncodingException e) {
 					throw new BuildException(e);
 				}
 			}
-			else if (part instanceof TextPartType) {
-				TextPartType textPart = (TextPartType)part;
-				try {
-					post.setRequestEntity(
-							new StringRequestEntity(textPart.getValue(),
-									textPart.getContentType(),
-									textPart.getCharSet()));
-				}
-				catch (UnsupportedEncodingException e) {
-					throw new BuildException(e);
-				}
-			}
-		}
-		else if (! parts.isEmpty()){
+		} else if (!parts.isEmpty()) {
 			Part partArray[] = new Part[parts.size()];
-			for (int i=0;i<parts.size();i++) {
+			for (int i = 0; i < parts.size(); i++) {
 				Object part = parts.get(i);
 				if (part instanceof FilePartType) {
-					FilePartType filePart = (FilePartType)part;
+					FilePartType filePart = (FilePartType) part;
 					try {
-						partArray[i] = new FilePart(filePart.getPath().getName(),
-								filePart.getPath().getName(),
-								filePart.getPath(),
-								filePart.getContentType(),
-								filePart.getCharSet());
-					}
-					catch (FileNotFoundException e) {
+						partArray[i] = new FilePart(filePart.getPath().getName(), filePart.getPath().getName(),
+								filePart.getPath(), filePart.getContentType(), filePart.getCharSet());
+					} catch (FileNotFoundException e) {
 						throw new BuildException(e);
 					}
-				}
-				else if (part instanceof TextPartType) {
-					TextPartType textPart = (TextPartType)part;
-					partArray[i] = new StringPart(textPart.getName(),
-							textPart.getValue(),
-							textPart.getCharSet());
-					((StringPart)partArray[i]).setContentType(textPart.getContentType());
+				} else if (part instanceof TextPartType) {
+					TextPartType textPart = (TextPartType) part;
+					partArray[i] = new StringPart(textPart.getName(), textPart.getValue(), textPart.getCharSet());
+					((StringPart) partArray[i]).setContentType(textPart.getContentType());
 				}
 			}
-			MultipartRequestEntity entity = new MultipartRequestEntity(
-					partArray,
-					post.getParams());
+			MultipartRequestEntity entity = new MultipartRequestEntity(partArray, post.getParams());
 			post.setRequestEntity(entity);
 		}
 	}
@@ -225,6 +204,5 @@ public class PostMethodTask
 	protected void cleanupResources(HttpMethodBase method) {
 		FileUtils.close(stream);
 	}
-	
-	
+
 }

@@ -14,37 +14,40 @@
  * limitations under the License.
  */
 package net.sf.antcontrib.logic;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
-  * Ant task that runs a target without creating a new project.
-  *
-  * @author Nicola Ken Barozzi nicolaken@apache.org
-  */
+ * Ant task that runs a target without creating a new project.
+ *
+ * @author Nicola Ken Barozzi nicolaken@apache.org
+ */
 public class RunTargetTask extends Task {
 
-    private String target = null;
+	private String target = null;
 
-    /**
-     * The target attribute
-     *
-     * @param target the name of a target to execute
-     */
-    public void setTarget(String target) {
-        this.target = target;
-    }
+	/**
+	 * The target attribute
+	 *
+	 * @param target
+	 *            the name of a target to execute
+	 */
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    /**
-     * execute the target
-     *
-     * @exception BuildException if a target is not specified
-     */
-    public void execute() throws BuildException {
-        if (target == null) {
-            throw new BuildException("target property required");
-        }
+	/**
+	 * execute the target
+	 *
+	 * @exception BuildException
+	 *                if a target is not specified
+	 */
+	public void execute() throws BuildException {
+		if (target == null) {
+			throw new BuildException("target property required");
+		}
 
-        getProject().executeTarget(target);
-    }
+		getProject().executeTarget(target);
+	}
 }

@@ -13,56 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.server;
+package net.sf.antcontrib.antserver.server;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-
 
 /****************************************************************************
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
- *               
+ * 
  ****************************************************************************/
 
+public class ServerTask extends Task {
+	private Server server;
+	private int port = 17000;
 
-public class ServerTask
-        extends Task
-{
-    private Server server;
-    private int port = 17000;
+	public ServerTask() {
+		super();
+	}
 
-    public ServerTask()
-    {
-        super();
-    }
+	public void setPort(int port) {
+		this.port = port;
+	}
 
+	public void shutdown() {
+		server.stop();
+	}
 
-    public void setPort(int port)
-    {
-        this.port = port;
-    }
-
-
-    public void shutdown()
-    {
-        server.stop();
-    }
-
-    public void execute()
-    {
-        try
-        {
-            server = new Server(this, port);
-            server.start();
-        }
-        catch (InterruptedException e)
-        {
-            throw new BuildException(e);
-        }
-    }
+	public void execute() {
+		try {
+			server = new Server(this, port);
+			server.start();
+		} catch (InterruptedException e) {
+			throw new BuildException(e);
+		}
+	}
 }

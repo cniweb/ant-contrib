@@ -19,11 +19,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /***
- * Task definition for the <code>OsFamily</code> task.
- * This task sets the property indicated in the "property"
- * attribute with the string representing the operating
- * system family.  Possible values include "unix", "dos", "mac"
- * and "windows".
+ * Task definition for the <code>OsFamily</code> task. This task sets the
+ * property indicated in the "property" attribute with the string representing
+ * the operating system family. Possible values include "unix", "dos", "mac" and
+ * "windows".
  *
  * <pre>
  *
@@ -42,31 +41,26 @@ import org.apache.tools.ant.Task;
  *   property --> The name of the property to set with the OS family name
  *
  * </pre>
+ * 
  * @author <a href="mailto:mattinger@yahoo.com">Matthew Inger</a>
  */
-public class OsFamily extends Task
-{
-    private String property;
+public class OsFamily extends Task {
+	private String property;
 
-    public OsFamily()
-    {
-    }
+	public OsFamily() {
+	}
 
-    public void setProperty(String property)
-    {
-        this.property = property;
-    }
+	public void setProperty(String property) {
+		this.property = property;
+	}
 
-    public void execute()
-        throws BuildException
-    {
-        if (property == null)
-            throw new BuildException("The attribute 'property' is required " +
-                                     "for the OsFamily task.");
+	public void execute() throws BuildException {
+		if (property == null)
+			throw new BuildException("The attribute 'property' is required " + "for the OsFamily task.");
 
-        String familyStr = Platform.getOsFamilyName();
-        if (familyStr != null)
-            getProject().setProperty(property, familyStr);
-    }
+		String familyStr = Platform.getOsFamilyName();
+		if (familyStr != null)
+			getProject().setProperty(property, familyStr);
+	}
 
 }

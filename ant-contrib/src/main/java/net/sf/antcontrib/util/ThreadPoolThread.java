@@ -15,9 +15,6 @@
  */
 package net.sf.antcontrib.util;
 
-
-
-
 /****************************************************************************
  * Place class description here.
  *
@@ -25,43 +22,30 @@ package net.sf.antcontrib.util;
  *
  ****************************************************************************/
 
+public class ThreadPoolThread extends Thread {
 
-public class ThreadPoolThread
-        extends Thread
-{
+	private ThreadPool pool;
+	private Runnable runnable;
 
-    private ThreadPool pool;
-    private Runnable runnable;
+	public ThreadPoolThread(ThreadPool pool) {
+		super();
+		this.pool = pool;
+	}
 
-    public ThreadPoolThread(ThreadPool pool)
-    {
-        super();
-        this.pool = pool;
-    }
+	public void setRunnable(Runnable runnable) {
+		this.runnable = runnable;
+	}
 
-    public void setRunnable(Runnable runnable)
-    {
-        this.runnable = runnable;
-    }
-
-
-    public void run()
-    {
-        try
-        {
-            if (runnable != null)
-                runnable.run();
-        }
-        finally
-        {
-            try
-            {
-                pool.returnThread(this);
-            }
-            catch (Exception e)
-            {
-                ; // gulp;
-            }
-        }
-    }
+	public void run() {
+		try {
+			if (runnable != null)
+				runnable.run();
+		} finally {
+			try {
+				pool.returnThread(this);
+			} catch (Exception e) {
+				; // gulp;
+			}
+		}
+	}
 }

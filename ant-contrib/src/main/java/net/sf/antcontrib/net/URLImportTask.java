@@ -26,14 +26,14 @@ import org.apache.tools.ant.taskdefs.ImportTask;
 import org.apache.tools.ant.types.FileSet;
 
 /***
- * Task to import a build file from a url.  The build file can be a build.xml,
- * or a .zip/.jar, in which case we download and extract the entire archive, and
+ * Task to import a build file from a url. The build file can be a build.xml, or
+ * a .zip/.jar, in which case we download and extract the entire archive, and
  * import the file "build.xml"
+ * 
  * @author inger
  *
  */
-public class URLImportTask
-	extends ImportTask {
+public class URLImportTask extends ImportTask {
 
 	private String org;
 	private String module;
@@ -47,7 +47,7 @@ public class URLImportTask
 	private String resource = "build.xml";
 	private String artifactPattern = "/[org]/[module]/[ext]s/[module]-[revision].[ext]";
 	private String ivyPattern = "/[org]/[module]/ivy-[revision].xml";
-	
+
 	public void setModule(String module) {
 		this.module = module;
 	}
@@ -63,7 +63,7 @@ public class URLImportTask
 	public void setConf(String conf) {
 		this.conf = conf;
 	}
-	
+
 	public void setIvyConfFile(File ivyConfFile) {
 		this.ivyConfFile = ivyConfFile;
 	}
@@ -91,7 +91,7 @@ public class URLImportTask
 	public void setResource(String resource) {
 		this.resource = resource;
 	}
-	
+
 	public void setOptional(boolean optional) {
 		throw new BuildException("'optional' property not accessed for ImportURL.");
 	}
@@ -148,64 +148,55 @@ public class URLImportTask
 		return ivyPattern;
 	}
 
-	public void execute()
-		throws BuildException {
-		
+	public void execute() throws BuildException {
+
 		IvyAdapter adapter = null;
-		
+
 		try {
 			Class.forName("org.apache.ivy.Ivy");
 			adapter = new Ivy20Adapter();
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			adapter = new Ivy14Adapter();
 		}
-		
+
 		String setId = org + "." + module + "." + rev + ".fileset";
 		adapter.configure(this);
 		adapter.fileset(this, setId);
-		
-		FileSet fileset =(FileSet) getProject().getReference(setId);
-		
-		DirectoryScanner scanner =
-			fileset.getDirectoryScanner(getProject());
-		
+
+		FileSet fileset = (FileSet) getProject().getReference(setId);
+
+		DirectoryScanner scanner = fileset.getDirectoryScanner(getProject());
+
 		String files[] = scanner.getIncludedFiles();
-		
+
 		File file = new File(scanner.getBasedir(), files[0]);
 
 		File importFile = null;
-		
-	    if ("xml".equalsIgnoreCase(type)) {
-	    	importFile = file;
-	    }
-	    else if ("jar".equalsIgnoreCase(type) ||
-	    		"zip".equalsIgnoreCase(type)) {
-	    	File dir = new File(file.getParentFile(),
-	    			file.getName() + ".extracted");
-	    	if (! dir.exists() ||
-	    			dir.lastModified() < file.lastModified()) {
-	    		dir.mkdir();
-	    		Expand expand = (Expand)getProject().createTask("unjar");
-	    		expand.setSrc(file);
-	    		expand.setDest(dir);
-	    		expand.perform();
-	    	}
-	    	importFile = new File(dir, resource);
-	    	if (! importFile.exists()) {
-	    		throw new BuildException("Cannot find a '" + resource + "' file in " +
-	    				file.getName());
-	    	}
-	    }
-	    else {
-	    	throw new BuildException("Don't know what to do with type: " + type);
-	    }
-		
-	    log("Importing " + importFile.getName(), Project.MSG_INFO);
-	    
-	    super.setFile(importFile.getAbsolutePath());
-	    super.execute();
 
-	    log("Import complete.", Project.MSG_INFO);
+		if ("xml".equalsIgnoreCase(type)) {
+			importFile = file;
+		} else if ("jar".equalsIgnoreCase(type) || "zip".equalsIgnoreCase(type)) {
+			File dir = new File(file.getParentFile(), file.getName() + ".extracted");
+			if (!dir.exists() || dir.lastModified() < file.lastModified()) {
+				dir.mkdir();
+				Expand expand = (Expand) getProject().createTask("unjar");
+				expand.setSrc(file);
+				expand.setDest(dir);
+				expand.perform();
+			}
+			importFile = new File(dir, resource);
+			if (!importFile.exists()) {
+				throw new BuildException("Cannot find a '" + resource + "' file in " + file.getName());
+			}
+		} else {
+			throw new BuildException("Don't know what to do with type: " + type);
+		}
+
+		log("Importing " + importFile.getName(), Project.MSG_INFO);
+
+		super.setFile(importFile.getAbsolutePath());
+		super.execute();
+
+		log("Import complete.", Project.MSG_INFO);
 	}
 }

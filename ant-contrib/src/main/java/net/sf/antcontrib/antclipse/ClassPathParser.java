@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 package net.sf.antcontrib.antclipse;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -31,73 +33,56 @@ import org.xml.sax.SAXParseException;
 
 /**
  * Classic tool firing a SAX parser. Must feed the source file and a handler.
- * Nothing really special about it, only probably some special file handling in nasty cases
- * (Windows files containing strange chars, internationalized filenames,
- * but you shouldn't be doing this, anyway :)).
+ * Nothing really special about it, only probably some special file handling in
+ * nasty cases (Windows files containing strange chars, internationalized
+ * filenames, but you shouldn't be doing this, anyway :)).
+ * 
  * @author Adrian Spinei aspinei@myrealbox.com
  * @version $Revision: 1.2 $
  * @since Ant 1.5
  */
-public class ClassPathParser
-{
-	void parse(File file, HandlerBase handler) throws BuildException
-	{
-		String fName = file.getName();
+public class ClassPathParser {
+	void parse(File file, HandlerBase handler) throws BuildException {
+		final String fName = file.getName();
 		FileInputStream fileInputStream = null;
 		InputSource inputSource = null;
-		try
-		{
-			SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-			//go to UFS if we're on win
-			String uri = "file:" + fName.replace('\\', '/');
+		try {
+			final SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+			// go to UFS if we're on win
+			final String uri = "file:" + fName.replace('\\', '/');
 			fileInputStream = new FileInputStream(file);
 			inputSource = new InputSource(fileInputStream);
 			inputSource.setSystemId(uri);
 			saxParser.parse(inputSource, handler);
-		}
-		catch (ParserConfigurationException pceException)
-		{
+		} catch (final ParserConfigurationException pceException) {
 			throw new BuildException("Parser configuration failed", pceException);
-		}
-		catch (SAXParseException exc)
-		{
-			Location location = new Location(fName.toString(), exc.getLineNumber(), exc.getColumnNumber());
-			Throwable throwable = exc.getException();
-			if ((Object) throwable instanceof BuildException)
-			{
-				BuildException be = (BuildException) (Object) throwable;
-				if (be.getLocation() == Location.UNKNOWN_LOCATION)
+		} catch (final SAXParseException exc) {
+			final Location location = new Location(fName.toString(), exc.getLineNumber(), exc.getColumnNumber());
+			final Throwable throwable = exc.getException();
+			if (throwable instanceof BuildException) {
+				final BuildException be = (BuildException) throwable;
+				if (be.getLocation() == Location.UNKNOWN_LOCATION) {
 					be.setLocation(location);
+				}
 				throw be;
 			}
 			throw new BuildException(exc.getMessage(), throwable, location);
-		}
-		catch (SAXException exc)
-		{
-			Throwable throwable = exc.getException();
-			if ((Object) throwable instanceof BuildException)
-				throw (BuildException) (Object) throwable;
+		} catch (final SAXException exc) {
+			final Throwable throwable = exc.getException();
+			if (throwable instanceof BuildException) {
+				throw (BuildException) throwable;
+			}
 			throw new BuildException(exc.getMessage(), throwable);
-		}
-		catch (FileNotFoundException exc)
-		{
+		} catch (final FileNotFoundException exc) {
 			throw new BuildException(exc);
-		}
-		catch (IOException exc)
-		{
+		} catch (final IOException exc) {
 			throw new BuildException("Error reading file", exc);
-		}
-		finally
-		{
-			if (fileInputStream != null)
-			{
-				try
-				{
+		} finally {
+			if (fileInputStream != null) {
+				try {
 					fileInputStream.close();
-				}
-				catch (IOException ioexception)
-				{
-					//do nothing, should not appear
+				} catch (final IOException ioexception) {
+					// do nothing, should not appear
 				}
 			}
 		}

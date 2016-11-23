@@ -22,81 +22,81 @@ import org.apache.tools.ant.taskdefs.condition.Equals;
  */
 public class Assert extends BooleanConditionBase {
 
-  private String message;
-  private boolean failOnError = true;
-  private boolean execute = true;
-  private Sequential sequential;
-  private String name;
-  private String value;
+	private String message;
+	private boolean failOnError = true;
+	private boolean execute = true;
+	private Sequential sequential;
+	private String name;
+	private String value;
 
-  public Sequential createSequential() {
-    this.sequential = (Sequential) getProject().createTask("sequential");
-    return this.sequential;
-  }
+	public Sequential createSequential() {
+		this.sequential = (Sequential) getProject().createTask("sequential");
+		return this.sequential;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public void setValue(String value) {
-    this.value = value;
-  }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-  public BooleanConditionBase createBool() {
-    return this;
-  }
+	public BooleanConditionBase createBool() {
+		return this;
+	}
 
-  public void setExecute(boolean execute) {
-    this.execute = execute;
-  }
+	public void setExecute(boolean execute) {
+		this.execute = execute;
+	}
 
-  public void setFailOnError(boolean failOnError) {
-    this.failOnError = failOnError;
-  }
+	public void setFailOnError(boolean failOnError) {
+		this.failOnError = failOnError;
+	}
 
-  public void execute() {
-    String use_asserts = getProject().getProperty("ant.enable.asserts");
-    boolean assertsEnabled = Project.toBoolean(use_asserts);
+	public void execute() {
+		String use_asserts = getProject().getProperty("ant.enable.asserts");
+		boolean assertsEnabled = Project.toBoolean(use_asserts);
 
-    if (assertsEnabled) {
-      if (name != null) {
-        if (value == null) {
-          throw new BuildException("The 'value' attribute must accompany the 'name' attribute.");
-        }
-        String propVal = getProject().replaceProperties("${" + name + "}");
-        Equals e = new Equals();
-        e.setArg1(propVal);
-        e.setArg2(value);
-        addEquals(e);
-      }
+		if (assertsEnabled) {
+			if (name != null) {
+				if (value == null) {
+					throw new BuildException("The 'value' attribute must accompany the 'name' attribute.");
+				}
+				String propVal = getProject().replaceProperties("${" + name + "}");
+				Equals e = new Equals();
+				e.setArg1(propVal);
+				e.setArg2(value);
+				addEquals(e);
+			}
 
-      if (countConditions() == 0) {
-        throw new BuildException("There is no condition specified.");
-      } else if (countConditions() > 1) {
-        throw new BuildException("There must be exactly one condition specified.");
-      }
+			if (countConditions() == 0) {
+				throw new BuildException("There is no condition specified.");
+			} else if (countConditions() > 1) {
+				throw new BuildException("There must be exactly one condition specified.");
+			}
 
-      Condition c = (Condition) getConditions().nextElement();
-      if (!c.eval()) {
-        if (failOnError) {
-          Exit fail = (Exit) getProject().createTask("fail");
-          fail.setMessage(message);
-          fail.execute();
-        }
-      } else {
-        if (execute && sequential != null) {
-          this.sequential.execute();
-        }
-      }
-    } else {
-      if (execute && sequential != null) {
-        this.sequential.execute();
-      }
-    }
-  }
+			Condition c = (Condition) getConditions().nextElement();
+			if (!c.eval()) {
+				if (failOnError) {
+					Exit fail = (Exit) getProject().createTask("fail");
+					fail.setMessage(message);
+					fail.execute();
+				}
+			} else {
+				if (execute && sequential != null) {
+					this.sequential.execute();
+				}
+			}
+		} else {
+			if (execute && sequential != null) {
+				this.sequential.execute();
+			}
+		}
+	}
 
 }

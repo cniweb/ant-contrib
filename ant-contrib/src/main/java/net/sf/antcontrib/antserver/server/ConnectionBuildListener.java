@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.server;
+package net.sf.antcontrib.antserver.server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -31,168 +31,143 @@ import org.w3c.dom.Element;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class ConnectionBuildListener implements BuildListener {
+	private Document results;
+	private Stack elementStack;
+	private ThreadGroup group;
 
-public class ConnectionBuildListener
-        implements BuildListener
-{
-    private Document results;
-    private Stack elementStack;
-    private ThreadGroup group;
+	public ConnectionBuildListener() throws ParserConfigurationException {
+		group = Thread.currentThread().getThreadGroup();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		results = builder.newDocument();
+		elementStack = new Stack();
 
-    public ConnectionBuildListener()
-        throws ParserConfigurationException
-    {
-        group = Thread.currentThread().getThreadGroup();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        results = builder.newDocument();
-        elementStack = new Stack();
+		Element rootElement = results.createElement("results");
+		elementStack.push(rootElement);
+		results.appendChild(rootElement);
+	}
 
-        Element rootElement = results.createElement("results");
-        elementStack.push(rootElement);
-        results.appendChild(rootElement);
-    }
+	public Document getDocument() {
+		return results;
+	}
 
-    public Document getDocument()
-    {
-        return results;
-    }
+	public void buildStarted(BuildEvent event) {
+	}
 
-    public void buildStarted(BuildEvent event)
-    {
-    }
+	public void buildFinished(BuildEvent event) {
+	}
 
+	public void targetStarted(BuildEvent event) {
+		if (Thread.currentThread().getThreadGroup() != group)
+			return;
 
-    public void buildFinished(BuildEvent event)
-    {
-    }
+		Element parent = (Element) elementStack.peek();
 
+		Element myElement = results.createElement("target");
+		myElement.setAttribute("name", event.getTarget().getName());
+		parent.appendChild(myElement);
 
-    public void targetStarted(BuildEvent event)
-    {
-        if (Thread.currentThread().getThreadGroup() != group)
-            return;
+		elementStack.push(myElement);
+	}
 
-        Element parent = (Element)elementStack.peek();
+	public void targetFinished(BuildEvent event) {
+		if (Thread.currentThread().getThreadGroup() != group)
+			return;
 
-        Element myElement = results.createElement("target");
-        myElement.setAttribute("name", event.getTarget().getName());
-        parent.appendChild(myElement);
+		Element myElement = (Element) elementStack.peek();
 
-        elementStack.push(myElement);
-    }
+		String message = event.getMessage();
+		if (message != null)
+			myElement.setAttribute("message", message);
 
+		Throwable t = event.getException();
+		if (t != null) {
+			myElement.setAttribute("status", "failure");
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos);
+			t.printStackTrace(ps);
+			ps.flush();
+			String errorMessage = t.getMessage();
+			String stackTrace = baos.toString();
 
-    public void targetFinished(BuildEvent event)
-    {
-        if (Thread.currentThread().getThreadGroup() != group)
-            return;
+			Element error = results.createElement("error");
+			Element errorMsgElement = results.createElement("message");
+			errorMsgElement.appendChild(results.createTextNode(errorMessage));
+			Element stackElement = results.createElement("stack");
+			stackElement.appendChild(results.createCDATASection(stackTrace));
+			error.appendChild(errorMsgElement);
+			error.appendChild(stackElement);
+			myElement.appendChild(error);
+		} else {
+			myElement.setAttribute("status", "success");
+		}
 
-        Element myElement = (Element)elementStack.peek();
+		elementStack.pop();
+	}
 
-        String message = event.getMessage();
-        if (message != null)
-            myElement.setAttribute("message", message);
+	public void taskStarted(BuildEvent event) {
 
-        Throwable t = event.getException();
-        if (t != null)
-        {
-            myElement.setAttribute("status", "failure");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PrintStream ps = new PrintStream(baos);
-            t.printStackTrace(ps);
-            ps.flush();
-            String errorMessage = t.getMessage();
-            String stackTrace = baos.toString();
+		if (Thread.currentThread().getThreadGroup() != group)
+			return;
 
-            Element error = results.createElement("error");
-            Element errorMsgElement = results.createElement("message");
-            errorMsgElement.appendChild(results.createTextNode(errorMessage));
-            Element stackElement = results.createElement("stack");
-            stackElement.appendChild(results.createCDATASection(stackTrace));
-            error.appendChild(errorMsgElement);
-            error.appendChild(stackElement);
-            myElement.appendChild(error);
-        }
-        else
-        {
-            myElement.setAttribute("status", "success");
-        }
+		Element parent = (Element) elementStack.peek();
 
-        elementStack.pop();
-    }
+		Element myElement = results.createElement("task");
+		myElement.setAttribute("name", event.getTask().getTaskName());
+		parent.appendChild(myElement);
 
+		elementStack.push(myElement);
+	}
 
-    public void taskStarted(BuildEvent event)
-    {
+	public void taskFinished(BuildEvent event) {
+		if (Thread.currentThread().getThreadGroup() != group)
+			return;
 
-        if (Thread.currentThread().getThreadGroup() != group)
-            return;
+		Element myElement = (Element) elementStack.peek();
 
-        Element parent = (Element)elementStack.peek();
+		Throwable t = event.getException();
+		if (t != null) {
+			myElement.setAttribute("status", "failure");
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos);
+			t.printStackTrace(ps);
+			ps.flush();
+			String errorMessage = t.getMessage();
+			String stackTrace = baos.toString();
 
-        Element myElement = results.createElement("task");
-        myElement.setAttribute("name", event.getTask().getTaskName());
-        parent.appendChild(myElement);
+			Element error = results.createElement("error");
+			Element errorMsgElement = results.createElement("message");
+			errorMsgElement.appendChild(results.createTextNode(errorMessage));
+			Element stackElement = results.createElement("stack");
+			stackElement.appendChild(results.createCDATASection(stackTrace));
+			error.appendChild(errorMsgElement);
+			error.appendChild(stackElement);
+			myElement.appendChild(error);
+		} else {
+			myElement.setAttribute("status", "success");
+		}
 
-        elementStack.push(myElement);
-    }
+		elementStack.pop();
+	}
 
-
-    public void taskFinished(BuildEvent event)
-    {
-        if (Thread.currentThread().getThreadGroup() != group)
-            return;
-
-        Element myElement = (Element)elementStack.peek();
-
-        Throwable t = event.getException();
-        if (t != null)
-        {
-            myElement.setAttribute("status", "failure");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PrintStream ps = new PrintStream(baos);
-            t.printStackTrace(ps);
-            ps.flush();
-            String errorMessage = t.getMessage();
-            String stackTrace = baos.toString();
-
-            Element error = results.createElement("error");
-            Element errorMsgElement = results.createElement("message");
-            errorMsgElement.appendChild(results.createTextNode(errorMessage));
-            Element stackElement = results.createElement("stack");
-            stackElement.appendChild(results.createCDATASection(stackTrace));
-            error.appendChild(errorMsgElement);
-            error.appendChild(stackElement);
-            myElement.appendChild(error);
-        }
-        else
-        {
-            myElement.setAttribute("status", "success");
-        }
-
-        elementStack.pop();
-    }
-
-
-    public void messageLogged(BuildEvent event)
-    {
-        /*
-        if (Thread.currentThread().getThreadGroup() != group)
-            return;
-
-        Element parentElement = (Element)elementStack.peek();
-
-        Element messageElement = results.createElement("message");
-        messageElement.setAttribute("level", String.valueOf(event.getPriority()));
-        messageElement.appendChild(results.createCDATASection(event.getMessage()));
-        parentElement.appendChild(messageElement);
-        */
-    }
+	public void messageLogged(BuildEvent event) {
+		/*
+		 * if (Thread.currentThread().getThreadGroup() != group) return;
+		 * 
+		 * Element parentElement = (Element)elementStack.peek();
+		 * 
+		 * Element messageElement = results.createElement("message");
+		 * messageElement.setAttribute("level",
+		 * String.valueOf(event.getPriority()));
+		 * messageElement.appendChild(results.createCDATASection(event.
+		 * getMessage())); parentElement.appendChild(messageElement);
+		 */
+	}
 }

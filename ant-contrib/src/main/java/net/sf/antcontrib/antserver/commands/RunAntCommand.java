@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.commands;
+package net.sf.antcontrib.antserver.commands;
 
 import java.io.File;
 import java.io.InputStream;
@@ -30,178 +30,137 @@ import net.sf.antcontrib.antserver.Command;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class RunAntCommand extends AbstractCommand implements Command {
 
-public class RunAntCommand
-        extends AbstractCommand
-        implements Command
-{
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -3002623324458503226L;
+	private String antFile;
+	private String dir;
+	private String target;
+	private Vector properties;
+	private Vector references;
+	private boolean inheritall = false;
+	private boolean interitrefs = false;
 
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -3002623324458503226L;
-    private String antFile;
-    private String dir;
-    private String target;
-    private Vector properties;
-    private Vector references;
-    private boolean inheritall = false;
-    private boolean interitrefs = false;
+	public RunAntCommand() {
+		super();
+		this.properties = new Vector();
+		this.references = new Vector();
+	}
 
-    public RunAntCommand()
-    {
-        super();
-        this.properties = new Vector();
-        this.references = new Vector();
-    }
+	public String getTarget() {
+		return target;
+	}
 
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    public String getTarget()
-    {
-        return target;
-    }
+	public Vector getProperties() {
+		return properties;
+	}
 
+	public void setProperties(Vector properties) {
+		this.properties = properties;
+	}
 
-    public void setTarget(String target)
-    {
-        this.target = target;
-    }
+	public Vector getReferences() {
+		return references;
+	}
 
+	public void setReferences(Vector references) {
+		this.references = references;
+	}
 
-    public Vector getProperties()
-    {
-        return properties;
-    }
+	public boolean isInheritall() {
+		return inheritall;
+	}
 
+	public void setInheritall(boolean inheritall) {
+		this.inheritall = inheritall;
+	}
 
-    public void setProperties(Vector properties)
-    {
-        this.properties = properties;
-    }
+	public boolean isInteritrefs() {
+		return interitrefs;
+	}
 
-    public Vector getReferences()
-    {
-        return references;
-    }
+	public void setInteritrefs(boolean interitrefs) {
+		this.interitrefs = interitrefs;
+	}
 
+	public String getAntFile() {
+		return antFile;
+	}
 
-    public void setReferences(Vector references)
-    {
-        this.references = references;
-    }
+	public void setAntFile(String antFile) {
+		this.antFile = antFile;
+	}
 
-    public boolean isInheritall()
-    {
-        return inheritall;
-    }
+	public String getDir() {
+		return dir;
+	}
 
+	public void setDir(String dir) {
+		this.dir = dir;
+	}
 
-    public void setInheritall(boolean inheritall)
-    {
-        this.inheritall = inheritall;
-    }
+	public void addConfiguredProperty(PropertyContainer property) {
+		properties.addElement(property);
+	}
 
+	public void addConfiguredReference(ReferenceContainer reference) {
+		references.addElement(reference);
+	}
 
-    public boolean isInteritrefs()
-    {
-        return interitrefs;
-    }
+	public void validate(Project project) {
+	}
 
+	public boolean execute(Project project, long contentLength, InputStream content) throws Throwable {
+		Ant ant = (Ant) project.createTask("ant");
+		File baseDir = project.getBaseDir();
+		if (dir != null)
+			baseDir = new File(dir);
+		ant.setDir(baseDir);
+		ant.setInheritAll(inheritall);
+		ant.setInheritRefs(interitrefs);
 
-    public void setInteritrefs(boolean interitrefs)
-    {
-        this.interitrefs = interitrefs;
-    }
+		if (target != null)
+			ant.setTarget(target);
 
+		if (antFile != null)
+			ant.setAntfile(antFile);
 
-    public String getAntFile()
-    {
-        return antFile;
-    }
+		Enumeration e = properties.elements();
+		PropertyContainer pc = null;
+		Property p = null;
+		while (e.hasMoreElements()) {
+			pc = (PropertyContainer) e.nextElement();
+			p = ant.createProperty();
+			p.setName(pc.getName());
+			p.setValue(pc.getValue());
+		}
 
+		e = references.elements();
+		ReferenceContainer rc = null;
+		Ant.Reference ref = null;
+		while (e.hasMoreElements()) {
+			rc = (ReferenceContainer) e.nextElement();
+			ref = new Ant.Reference();
+			ref.setRefId(rc.getRefId());
+			ref.setToRefid(rc.getToRefId());
+			ant.addReference(ref);
+		}
 
-    public void setAntFile(String antFile)
-    {
-        this.antFile = antFile;
-    }
+		ant.execute();
 
-
-    public String getDir()
-    {
-        return dir;
-    }
-
-
-    public void setDir(String dir)
-    {
-        this.dir = dir;
-    }
-
-
-    public void addConfiguredProperty(PropertyContainer property)
-    {
-        properties.addElement(property);
-    }
-
-    public void addConfiguredReference(ReferenceContainer reference)
-    {
-        references.addElement(reference);
-    }
-
-    public void validate(Project project)
-    {
-    }
-
-    public boolean execute(Project project,
-                           long contentLength,
-                           InputStream content)
-            throws Throwable
-    {
-        Ant ant = (Ant)project.createTask("ant");
-        File baseDir = project.getBaseDir();
-        if (dir != null)
-            baseDir = new File(dir);
-        ant.setDir(baseDir);
-        ant.setInheritAll(inheritall);
-        ant.setInheritRefs(interitrefs);
-
-        if (target != null)
-            ant.setTarget(target);
-
-        if (antFile != null)
-            ant.setAntfile(antFile);
-
-        Enumeration e = properties.elements();
-        PropertyContainer pc = null;
-        Property p = null;
-        while (e.hasMoreElements())
-        {
-            pc = (PropertyContainer)e.nextElement();
-            p = ant.createProperty();
-            p.setName(pc.getName());
-            p.setValue(pc.getValue());
-        }
-
-        e = references.elements();
-        ReferenceContainer rc = null;
-        Ant.Reference ref = null;
-        while (e.hasMoreElements())
-        {
-            rc = (ReferenceContainer)e.nextElement();
-            ref = new Ant.Reference();
-            ref.setRefId(rc.getRefId());
-            ref.setToRefid(rc.getToRefId());
-            ant.addReference(ref);
-        }
-
-        ant.execute();
-
-        return false;
-    }
+		return false;
+	}
 }

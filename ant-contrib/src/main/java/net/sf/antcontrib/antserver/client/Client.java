@@ -26,226 +26,165 @@ import net.sf.antcontrib.antserver.Response;
 import net.sf.antcontrib.antserver.Util;
 import net.sf.antcontrib.antserver.commands.DisconnectCommand;
 
-
 /****************************************************************************
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class Client {
+	private String machine;
+	private int port;
+	private Project project;
 
-public class Client
-{
-    private String machine;
-    private int port;
-    private Project project;
+	public Client(Project project, String machine, int port) {
+		super();
+		this.machine = machine;
+		this.port = port;
+		this.project = project;
+	}
 
+	private Socket socket;
+	private OutputStream os;
+	private InputStream is;
+	private ObjectOutputStream oos;
+	private ObjectInputStream ois;
+	private boolean connected;
 
-    public Client(Project project, String machine, int port)
-    {
-        super();
-        this.machine = machine;
-        this.port = port;
-        this.project = project;
-    }
+	public void connect() throws IOException {
+		project.log("Opening connection to " + machine + ":" + port, Project.MSG_DEBUG);
 
+		try {
+			socket = new Socket(machine, port);
+			socket.setKeepAlive(true);
+			project.log("Got connection to " + machine + ":" + port, Project.MSG_DEBUG);
 
-    private Socket socket;
-    private OutputStream os;
-    private InputStream is;
-    private ObjectOutputStream oos;
-    private ObjectInputStream ois;
-    private boolean connected;
+			os = socket.getOutputStream();
+			is = socket.getInputStream();
 
+			oos = new ObjectOutputStream(os);
+			ois = new ObjectInputStream(is);
 
-    public void connect()
-            throws IOException
-    {
-        project.log("Opening connection to " + machine + ":" + port,
-                Project.MSG_DEBUG);
+			connected = true;
+			try {
+				// Read the initial response object so that the
+				// object stream is initialized
+				ois.readObject();
+			} catch (ClassNotFoundException e) {
+				; // gulp
+			}
+		} finally {
+			// If we were unable to connect, close everything
+			if (!connected) {
 
-        try
-        {
-            socket = new Socket(machine, port);
-            socket.setKeepAlive(true);
-            project.log("Got connection to " + machine + ":" + port,
-                    Project.MSG_DEBUG);
+				try {
+					if (os != null)
+						os.close();
+					os = null;
+					oos = null;
+				} catch (IOException e) {
 
-            os = socket.getOutputStream();
-            is = socket.getInputStream();
+				}
 
-            oos = new ObjectOutputStream(os);
-            ois = new ObjectInputStream(is);
+				try {
+					if (is != null)
+						is.close();
+					is = null;
+					ois = null;
+				} catch (IOException e) {
 
-            connected = true;
-            try
-            {
-                // Read the initial response object so that the
-                // object stream is initialized
-                ois.readObject();
-            }
-            catch (ClassNotFoundException e)
-            {
-                ; // gulp
-            }
-        }
-        finally
-        {
-            // If we were unable to connect, close everything
-            if (!connected)
-            {
+				}
 
-                try
-                {
-                    if (os != null)
-                        os.close();
-                    os = null;
-                    oos = null;
-                }
-                catch (IOException e)
-                {
+				try {
+					if (socket != null)
+						socket.close();
+					socket = null;
+				} catch (IOException e) {
 
-                }
+				}
+			}
+		}
 
-                try
-                {
-                    if (is != null)
-                        is.close();
-                    is = null;
-                    ois = null;
-                }
-                catch (IOException e)
-                {
+	}
 
-                }
+	public void shutdown() {
+		try {
+			if (os != null)
+				os.close();
+		} catch (IOException e) {
+			; // gulp
 
-                try
-                {
-                    if (socket != null)
-                        socket.close();
-                    socket = null;
-                }
-                catch (IOException e)
-                {
+		}
+		os = null;
+		oos = null;
 
-                }
-            }
-        }
+		try {
+			if (is != null)
+				is.close();
+		} catch (IOException e) {
+			; // gulp
 
+		}
+		is = null;
+		ois = null;
 
-    }
+		try {
+			socket.close();
+		} catch (IOException e) {
+			; // gulp
+		}
+		socket = null;
 
-    public void shutdown()
-    {
-        try
-        {
-            if (os != null)
-                os.close();
-        }
-        catch (IOException e)
-        {
-            ; // gulp
+		connected = false;
+	}
 
-        }
-        os = null;
-        oos = null;
+	public void disconnect() throws IOException {
+		if (!connected)
+			return;
 
-        try
-        {
-            if (is != null)
-                is.close();
-        }
-        catch (IOException e)
-        {
-            ; // gulp
+		try {
+			oos.writeObject(DisconnectCommand.DISCONNECT_COMMAND);
+			try {
+				// Read disconnect response
+				ois.readObject();
+			} catch (ClassNotFoundException e) {
+				; // gulp
+			}
 
-        }
-        is = null;
-        ois = null;
+			shutdown();
+		} catch (SocketException e) {
+			; // connection was closed
+		} catch (EOFException e) {
+			; // connection was closed
+		}
+	}
 
-        try
-        {
-            socket.close();
-        }
-        catch (IOException e)
-        {
-            ; // gulp
-        }
-        socket = null;
+	public Response sendCommand(Command command) throws IOException {
+		project.log("Sending command: " + command, Project.MSG_DEBUG);
+		oos.writeObject(command);
 
-        connected = false;
-    }
+		if (command.getContentLength() > 0) {
+			Util.transferBytes(command.getContentStream(), command.getContentLength(), os, true);
+		}
 
+		Response response = null;
 
-    public void disconnect()
-            throws IOException
-    {
-        if (!connected)
-            return;
+		try {
+			// Read the response object
+			response = (Response) ois.readObject();
+			project.log("Received Response: " + response, Project.MSG_DEBUG);
+			if (response.getContentLength() != 0) {
+				command.respond(project, response.getContentLength(), is);
+			}
+		} catch (ClassNotFoundException e) {
+			; // gulp
+		}
 
-        try {
-            oos.writeObject(DisconnectCommand.DISCONNECT_COMMAND);
-            try
-            {
-                // Read disconnect response
-                ois.readObject();
-            }
-            catch (ClassNotFoundException e)
-            {
-                ; // gulp
-            }
-
-            shutdown();
-        }
-        catch (SocketException e) {
-            ; // connection was closed
-        }
-        catch (EOFException e) {
-            ; // connection was closed
-        }
-    }
-
-
-    public Response sendCommand(Command command)
-        throws IOException
-    {
-        project.log("Sending command: " + command,
-                Project.MSG_DEBUG);
-        oos.writeObject(command);
-
-        if (command.getContentLength() > 0)
-        {
-            Util.transferBytes(command.getContentStream(),
-                    command.getContentLength(),
-                    os,
-                    true);
-        }
-
-        Response response = null;
-
-        try
-        {
-            // Read the response object
-            response = (Response) ois.readObject();
-            project.log("Received Response: " + response,
-                    Project.MSG_DEBUG);
-            if (response.getContentLength() != 0)
-            {
-                command.respond(project,
-                        response.getContentLength(),
-                        is);
-            }
-        }
-        catch (ClassNotFoundException e)
-        {
-            ; // gulp
-        }
-
-        return response;
-    }
+		return response;
+	}
 
 }

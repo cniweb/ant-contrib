@@ -85,123 +85,104 @@ import org.apache.tools.ant.taskdefs.Sequential;
  * @author <a href="mailto:mattinger@yahoo.com">Matthew Inger</a>
  * @author <a href="mailto:stefan.bodewig@freenet.de">Stefan Bodewig</a>
  */
-public class Switch extends Task
-{
-    private String value;
-    private Vector cases;
-    private Sequential defaultCase;
-    private boolean caseInsensitive;
-    
-    /***
-     * Default Constructor
-     */
-    public Switch()
-    {
-        cases = new Vector();
-    }
+public class Switch extends Task {
+	private String value;
+	private Vector cases;
+	private Sequential defaultCase;
+	private boolean caseInsensitive;
 
-    public void execute()
-        throws BuildException
-    {
-        if (value == null)
-            throw new BuildException("Value is missing");
-        if (cases.size() == 0 && defaultCase == null)
-            throw new BuildException("No cases supplied");
+	/***
+	 * Default Constructor
+	 */
+	public Switch() {
+		cases = new Vector();
+	}
 
-        Sequential selectedCase = defaultCase;
+	public void execute() throws BuildException {
+		if (value == null)
+			throw new BuildException("Value is missing");
+		if (cases.size() == 0 && defaultCase == null)
+			throw new BuildException("No cases supplied");
 
-        int sz = cases.size();
-        for (int i=0;i<sz;i++)
-        {
-            Case c = (Case)(cases.elementAt(i));
+		Sequential selectedCase = defaultCase;
 
-            String cvalue = c.value;
-            if (cvalue == null) {
-                throw new BuildException("Value is required for case.");
-            }
-            String mvalue = value;
+		int sz = cases.size();
+		for (int i = 0; i < sz; i++) {
+			Case c = (Case) (cases.elementAt(i));
 
-            if (caseInsensitive)
-            {
-                cvalue = cvalue.toUpperCase();
-                mvalue = mvalue.toUpperCase();
-            }
+			String cvalue = c.value;
+			if (cvalue == null) {
+				throw new BuildException("Value is required for case.");
+			}
+			String mvalue = value;
 
-            if (cvalue.equals(mvalue) && c != defaultCase)
-                selectedCase = c;
-        }
+			if (caseInsensitive) {
+				cvalue = cvalue.toUpperCase();
+				mvalue = mvalue.toUpperCase();
+			}
 
-        if (selectedCase == null) {
-            throw new BuildException("No case matched the value " + value
-                                     + " and no default has been specified.");
-        }
-        selectedCase.perform();
-    }
+			if (cvalue.equals(mvalue) && c != defaultCase)
+				selectedCase = c;
+		}
 
-    /***
-     * Sets the value being switched on
-     */
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
+		if (selectedCase == null) {
+			throw new BuildException("No case matched the value " + value + " and no default has been specified.");
+		}
+		selectedCase.perform();
+	}
 
-    public void setCaseInsensitive(boolean c)
-    {
-        caseInsensitive = c;
-    }
+	/***
+	 * Sets the value being switched on
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    public final class Case extends Sequential
-    {
-        private String value;
+	public void setCaseInsensitive(boolean c) {
+		caseInsensitive = c;
+	}
 
-        public Case()
-        {
-            super();
-        }
-        
-        public void setValue(String value)
-        {
-            this.value = value;
-        }
+	public final class Case extends Sequential {
+		private String value;
 
-        public void execute()
-            throws BuildException
-        {
-            super.execute();
-        }
+		public Case() {
+			super();
+		}
 
-        public boolean equals(Object o)
-        {
-            boolean res = false;
-            Case c = (Case)o;
-            if (c.value.equals(value))
-                res = true;
-            return res;                
-        }
-    }
+		public void setValue(String value) {
+			this.value = value;
+		}
 
-    /***
-     * Creates the &lt;case&gt; tag
-     */
-    public Switch.Case createCase()
-        throws BuildException
-    {
-        Switch.Case res = new Switch.Case();
-        cases.addElement(res);
-        return res;
-    }
+		public void execute() throws BuildException {
+			super.execute();
+		}
 
-    /***
-     * Creates the &lt;default&gt; tag
-     */
-    public void addDefault(Sequential res)
-        throws BuildException
-    {
-        if (defaultCase != null)
-            throw new BuildException("Cannot specify multiple default cases");
+		public boolean equals(Object o) {
+			boolean res = false;
+			Case c = (Case) o;
+			if (c.value.equals(value))
+				res = true;
+			return res;
+		}
+	}
 
-        defaultCase = res;
-    }
+	/***
+	 * Creates the &lt;case&gt; tag
+	 */
+	public Switch.Case createCase() throws BuildException {
+		Switch.Case res = new Switch.Case();
+		cases.addElement(res);
+		return res;
+	}
+
+	/***
+	 * Creates the &lt;default&gt; tag
+	 */
+	public void addDefault(Sequential res) throws BuildException {
+		if (defaultCase != null)
+			throw new BuildException("Cannot specify multiple default cases");
+
+		defaultCase = res;
+	}
 
 }

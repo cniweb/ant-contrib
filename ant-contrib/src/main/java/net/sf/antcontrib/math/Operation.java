@@ -26,142 +26,130 @@ import java.util.Vector;
 /**
  * Class to represent a mathematical operation.
  *
- * @author		inger
+ * @author inger
  */
 
+public class Operation implements Evaluateable, DynamicConfigurator {
+	private String operation = "add";
+	private Vector operands = new Vector();
+	private String datatype = "double";
+	private boolean strict = false;
 
-public class Operation
-        implements Evaluateable, DynamicConfigurator {
-    private String operation = "add";
-    private Vector operands = new Vector();
-    private String datatype = "double";
-    private boolean strict = false;
+	private boolean hasLocalOperands = false;
+	private Numeric localOperands[] = new Numeric[5];
 
-    private boolean hasLocalOperands = false;
-    private Numeric localOperands[] = new Numeric[5];
+	public void setDynamicAttribute(String s, String s1) throws BuildException {
+		throw new BuildException("no dynamic attributes for this element");
+	}
 
-    public void setDynamicAttribute(String s, String s1)
-            throws BuildException {
-        throw new BuildException("no dynamic attributes for this element");
-    }
+	public Object createDynamicElement(String name) throws BuildException {
+		Operation op = new Operation();
+		op.setOperation(name);
+		operands.add(op);
+		return op;
+	}
 
-    public Object createDynamicElement(String name)
-            throws BuildException {
-        Operation op = new Operation();
-        op.setOperation(name);
-        operands.add(op);
-        return op;
-    }
+	private void setLocalOperand(String value, int index) {
+		hasLocalOperands = true;
+		localOperands[index - 1] = new Numeric();
+		localOperands[index - 1].setValue(value);
+	}
 
-    private void setLocalOperand(String value, int index) {
-        hasLocalOperands = true;
-        localOperands[index - 1] = new Numeric();
-        localOperands[index - 1].setValue(value);
-    }
+	public void setArg1(String value) {
+		setLocalOperand(value, 1);
+	}
 
-    public void setArg1(String value) {
-        setLocalOperand(value, 1);
-    }
+	public void setArg2(String value) {
+		setLocalOperand(value, 2);
+	}
 
-    public void setArg2(String value) {
-        setLocalOperand(value, 2);
-    }
+	public void setArg3(String value) {
+		setLocalOperand(value, 3);
+	}
 
-    public void setArg3(String value) {
-        setLocalOperand(value, 3);
-    }
+	public void setArg4(String value) {
+		setLocalOperand(value, 4);
+	}
 
-    public void setArg4(String value) {
-        setLocalOperand(value, 4);
-    }
+	public void setArg5(String value) {
+		setLocalOperand(value, 5);
+	}
 
-    public void setArg5(String value) {
-        setLocalOperand(value, 5);
-    }
+	public void addConfiguredNumeric(Numeric numeric) {
+		if (hasLocalOperands)
+			throw new BuildException("Cannot combine operand attributes with subelements");
 
-    public void addConfiguredNumeric(Numeric numeric) {
-        if (hasLocalOperands)
-            throw new BuildException("Cannot combine operand attributes with subelements");
+		operands.add(numeric);
+	}
 
-        operands.add(numeric);
-    }
+	public void addConfiguredOperation(Operation operation) {
+		if (hasLocalOperands)
+			throw new BuildException("Cannot combine operand attributes with subelements");
 
-    public void addConfiguredOperation(Operation operation) {
-        if (hasLocalOperands)
-            throw new BuildException("Cannot combine operand attributes with subelements");
+		operands.add(operation);
+	}
 
-        operands.add(operation);
-    }
+	public void addConfiguredNum(Numeric numeric) {
+		if (hasLocalOperands)
+			throw new BuildException("Cannot combine operand attributes with subelements");
 
-    public void addConfiguredNum(Numeric numeric) {
-        if (hasLocalOperands)
-            throw new BuildException("Cannot combine operand attributes with subelements");
+		operands.add(numeric);
+	}
 
-        operands.add(numeric);
-    }
+	public void addConfiguredOp(Operation operation) {
+		if (hasLocalOperands)
+			throw new BuildException("Cannot combine operand attributes with subelements");
 
-    public void addConfiguredOp(Operation operation) {
-        if (hasLocalOperands)
-            throw new BuildException("Cannot combine operand attributes with subelements");
+		operands.add(operation);
+	}
 
-        operands.add(operation);
-    }
+	public void setOp(String operation) {
+		setOperation(operation);
+	}
 
-    public void setOp(String operation) {
-        setOperation(operation);
-    }
+	public void setOperation(String operation) {
+		if (operation.equals("+"))
+			this.operation = "add";
+		else if (operation.equals("-"))
+			this.operation = "subtract";
+		else if (operation.equals("*"))
+			this.operation = "multiply";
+		else if (operation.equals("/"))
+			this.operation = "divide";
+		else if (operation.equals("%"))
+			this.operation = "mod";
+		else
+			this.operation = operation;
+	}
 
-    public void setOperation(String operation) {
-        if (operation.equals("+"))
-            this.operation = "add";
-        else if (operation.equals("-"))
-            this.operation = "subtract";
-        else if (operation.equals("*"))
-            this.operation = "multiply";
-        else if (operation.equals("/"))
-            this.operation = "divide";
-        else if (operation.equals("%"))
-            this.operation = "mod";
-        else
-            this.operation = operation;
-    }
+	public void setDatatype(String datatype) {
+		this.datatype = datatype;
+	}
 
-    public void setDatatype(String datatype) {
-        this.datatype = datatype;
-    }
+	public void setStrict(boolean strict) {
+		this.strict = strict;
+	}
 
-    public void setStrict(boolean strict) {
-        this.strict = strict;
-    }
+	public Number evaluate() {
+		Evaluateable ops[] = null;
 
-    public Number evaluate() {
-        Evaluateable ops[] = null;
+		if (hasLocalOperands) {
+			List localOps = new ArrayList();
+			for (int i = 0; i < localOperands.length; i++) {
+				if (localOperands[i] != null)
+					localOps.add(localOperands[i]);
+			}
 
-        if (hasLocalOperands) {
-            List localOps = new ArrayList();
-            for (int i = 0; i < localOperands.length; i++) {
-                if (localOperands[i] != null)
-                    localOps.add(localOperands[i]);
-            }
+			ops = (Evaluateable[]) localOps.toArray(new Evaluateable[localOps.size()]);
+		} else {
+			ops = (Evaluateable[]) operands.toArray(new Evaluateable[operands.size()]);
+		}
 
-            ops = (Evaluateable[]) localOps.toArray(new Evaluateable[localOps.size()]);
-        }
-        else {
-            ops = (Evaluateable[]) operands.toArray(new Evaluateable[operands.size()]);
-        }
+		return Math.evaluate(operation, datatype, strict, ops);
+	}
 
-        return Math.evaluate(operation,
-                             datatype,
-                             strict,
-                             ops);
-    }
-
-    public String toString() {
-        return "Operation[operation=" + operation
-                + ";datatype=" + datatype
-                + ";strict=" + strict
-                + ";localoperands=" + Arrays.asList(localOperands)
-                + ";operands=" + operands
-                + "]";
-    }
+	public String toString() {
+		return "Operation[operation=" + operation + ";datatype=" + datatype + ";strict=" + strict + ";localoperands="
+				+ Arrays.asList(localOperands) + ";operands=" + operands + "]";
+	}
 }

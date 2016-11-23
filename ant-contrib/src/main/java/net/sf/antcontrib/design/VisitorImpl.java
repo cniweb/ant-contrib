@@ -107,8 +107,7 @@ class VisitorImpl extends EmptyVisitor {
 
 		String[] types = Utility.methodSignatureArgumentTypes(m.getSignature());
 		for (int i = 0; i < types.length; i++) {
-			log("         method param[" + i + "]=" + types[i],
-					Project.MSG_VERBOSE);
+			log("         method param[" + i + "]=" + types[i], Project.MSG_VERBOSE);
 			design.checkClass(types[i]);
 		}
 
@@ -175,15 +174,14 @@ class VisitorImpl extends EmptyVisitor {
 		if (catch_type == 0)
 			return;
 
-		String temp = pool.getConstantString(catch_type,
-				Constants.CONSTANT_Class);
+		String temp = pool.getConstantString(catch_type, Constants.CONSTANT_Class);
 		String str = Utility.compactClassName(temp, false);
 
 		log("         catch=" + str, Project.MSG_DEBUG);
 		design.checkClass(str);
 	}
 
-	//		
+	//
 	public void visitCode(Code c) {
 		LineNumberTable table = c.getLineNumberTable();
 		// LocalVariableTable table = c.getLocalVariableTable();
@@ -192,9 +190,9 @@ class VisitorImpl extends EmptyVisitor {
 	}
 
 	public static String getNoDebugMsg(String className) {
-		String s = "Class="+className+" was not compiled with the debug option(-g) and\n" +
-				"therefore verifydesign cannot be used on this jar.  Please compile your code\n"+
-				"with -g option in javac or debug=\"true\" in the ant build.xml file";
+		String s = "Class=" + className + " was not compiled with the debug option(-g) and\n"
+				+ "therefore verifydesign cannot be used on this jar.  Please compile your code\n"
+				+ "with -g option in javac or debug=\"true\" in the ant build.xml file";
 		return s;
 	}
 
@@ -203,9 +201,9 @@ class VisitorImpl extends EmptyVisitor {
 	 * @return
 	 */
 	public static String getNoFileMsg(File jarName) {
-		String s = "File you specified in your path(or jar attribute)='"+jarName.getAbsolutePath()+"' does not exist";
+		String s = "File you specified in your path(or jar attribute)='" + jarName.getAbsolutePath()
+				+ "' does not exist";
 		return s;
 	}
-	
-	
+
 }

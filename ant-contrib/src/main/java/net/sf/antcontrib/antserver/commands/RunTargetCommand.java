@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.commands;
+package net.sf.antcontrib.antserver.commands;
 
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -30,151 +30,113 @@ import net.sf.antcontrib.antserver.Command;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class RunTargetCommand extends AbstractCommand implements Command {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -8043232025417127406L;
+	private String target;
+	private Vector properties;
+	private Vector references;
+	private boolean inheritall = false;
+	private boolean interitrefs = false;
 
-public class RunTargetCommand
-        extends AbstractCommand
-        implements Command
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -8043232025417127406L;
-    private String target;
-    private Vector properties;
-    private Vector references;
-    private boolean inheritall = false;
-    private boolean interitrefs = false;
+	public RunTargetCommand() {
+		super();
+		this.properties = new Vector();
+		this.references = new Vector();
+	}
 
-    public RunTargetCommand()
-    {
-        super();
-        this.properties = new Vector();
-        this.references = new Vector();
-    }
+	public String getTarget() {
+		return target;
+	}
 
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    public String getTarget()
-    {
-        return target;
-    }
+	public Vector getProperties() {
+		return properties;
+	}
 
+	public void setProperties(Vector properties) {
+		this.properties = properties;
+	}
 
-    public void setTarget(String target)
-    {
-        this.target = target;
-    }
+	public Vector getReferences() {
+		return references;
+	}
 
+	public void setReferences(Vector references) {
+		this.references = references;
+	}
 
-    public Vector getProperties()
-    {
-        return properties;
-    }
+	public boolean isInheritall() {
+		return inheritall;
+	}
 
+	public void setInheritall(boolean inheritall) {
+		this.inheritall = inheritall;
+	}
 
-    public void setProperties(Vector properties)
-    {
-        this.properties = properties;
-    }
+	public boolean isInteritrefs() {
+		return interitrefs;
+	}
 
+	public void setInteritrefs(boolean interitrefs) {
+		this.interitrefs = interitrefs;
+	}
 
+	public void addConfiguredProperty(PropertyContainer property) {
+		properties.addElement(property);
+	}
 
-    public Vector getReferences()
-    {
-        return references;
-    }
+	public void addConfiguredReference(ReferenceContainer reference) {
+		references.addElement(reference);
+	}
 
+	public void validate(Project project) {
+	}
 
-    public void setReferences(Vector references)
-    {
-        this.references = references;
-    }
+	public boolean execute(Project project, long contentLength, InputStream content) throws Throwable {
+		CallTarget callTarget = (CallTarget) project.createTask("antcall");
+		callTarget.setInheritAll(inheritall);
+		callTarget.setInheritRefs(interitrefs);
 
+		String toExecute = target;
+		if (toExecute == null)
+			toExecute = project.getDefaultTarget();
+		callTarget.setTarget(toExecute);
 
-    public boolean isInheritall()
-    {
-        return inheritall;
-    }
+		Enumeration e = properties.elements();
+		PropertyContainer pc = null;
+		Property p = null;
+		while (e.hasMoreElements()) {
+			pc = (PropertyContainer) e.nextElement();
+			p = callTarget.createParam();
+			p.setName(pc.getName());
+			p.setValue(pc.getValue());
+		}
 
+		e = references.elements();
+		ReferenceContainer rc = null;
+		Ant.Reference ref = null;
+		while (e.hasMoreElements()) {
+			rc = (ReferenceContainer) e.nextElement();
+			ref = new Ant.Reference();
+			ref.setRefId(rc.getRefId());
+			ref.setToRefid(rc.getToRefId());
+			callTarget.addReference(ref);
+		}
 
-    public void setInheritall(boolean inheritall)
-    {
-        this.inheritall = inheritall;
-    }
+		callTarget.execute();
 
-
-    public boolean isInteritrefs()
-    {
-        return interitrefs;
-    }
-
-
-    public void setInteritrefs(boolean interitrefs)
-    {
-        this.interitrefs = interitrefs;
-    }
-
-
-    public void addConfiguredProperty(PropertyContainer property)
-    {
-        properties.addElement(property);
-    }
-
-
-    public void addConfiguredReference(ReferenceContainer reference)
-    {
-        references.addElement(reference);
-    }
-
-    public void validate(Project project)
-    {
-    }
-
-    public boolean execute(Project project,
-                           long contentLength,
-                           InputStream content)
-            throws Throwable
-    {
-        CallTarget callTarget = (CallTarget)project.createTask("antcall");
-        callTarget.setInheritAll(inheritall);
-        callTarget.setInheritRefs(interitrefs);
-
-        String toExecute = target;
-        if (toExecute == null)
-            toExecute = project.getDefaultTarget();
-        callTarget.setTarget(toExecute);
-
-        Enumeration e = properties.elements();
-        PropertyContainer pc = null;
-        Property p = null;
-        while (e.hasMoreElements())
-        {
-            pc = (PropertyContainer)e.nextElement();
-            p = callTarget.createParam();
-            p.setName(pc.getName());
-            p.setValue(pc.getValue());
-        }
-
-
-        e = references.elements();
-        ReferenceContainer rc = null;
-        Ant.Reference ref = null;
-        while (e.hasMoreElements())
-        {
-            rc = (ReferenceContainer)e.nextElement();
-            ref = new Ant.Reference();
-            ref.setRefId(rc.getRefId());
-            ref.setToRefid(rc.getToRefId());
-            callTarget.addReference(ref);
-        }
-
-        callTarget.execute();
-
-        return false;
-    }
+		return false;
+	}
 }

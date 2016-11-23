@@ -33,8 +33,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Property;
 import org.apache.tools.ant.util.FileUtils;
 
-public abstract class AbstractMethodTask
-	extends Task {
+public abstract class AbstractMethodTask extends Task {
 
 	private HttpMethodBase method;
 	private File responseDataFile;
@@ -42,45 +41,51 @@ public abstract class AbstractMethodTask
 	private String statusCodeProperty;
 	private HttpClient httpClient;
 	private List responseHeaders = new ArrayList();
-	
+
 	public static class ResponseHeader {
 		private String name;
 		private String property;
+
 		public String getName() {
 			return name;
 		}
+
 		public void setName(String name) {
 			this.name = name;
 		}
+
 		public String getProperty() {
 			return property;
 		}
+
 		public void setProperty(String property) {
 			this.property = property;
-		}		
+		}
 	}
-	
+
 	protected abstract HttpMethodBase createNewMethod();
-	protected void configureMethod(HttpMethodBase method) {	
+
+	protected void configureMethod(HttpMethodBase method) {
 	}
-	protected void cleanupResources(HttpMethodBase method) {		
+
+	protected void cleanupResources(HttpMethodBase method) {
 	}
-	
+
 	public void addConfiguredResponseHeader(ResponseHeader responseHeader) {
 		this.responseHeaders.add(responseHeader);
 	}
-	
+
 	public void addConfiguredHttpClient(HttpClientType httpClientType) {
 		this.httpClient = httpClientType.getClient();
 	}
-	
+
 	protected HttpMethodBase createMethodIfNecessary() {
 		if (method == null) {
 			method = createNewMethod();
 		}
 		return method;
 	}
-	
+
 	public void setResponseDataFile(File responseDataFile) {
 		this.responseDataFile = responseDataFile;
 	}
@@ -98,7 +103,7 @@ public abstract class AbstractMethodTask
 		if (clientRef == null) {
 			throw new BuildException("Reference '" + clientRefId + "' does not exist.");
 		}
-		if (! (clientRef instanceof HttpClientType)) {
+		if (!(clientRef instanceof HttpClientType)) {
 			throw new BuildException("Reference '" + clientRefId + "' is of the wrong type.");
 		}
 		httpClient = ((HttpClientType) clientRef).getClient();
@@ -115,84 +120,79 @@ public abstract class AbstractMethodTask
 	public void addConfiguredParams(MethodParams params) {
 		createMethodIfNecessary().setParams(params);
 	}
-	
+
 	public void setPath(String path) {
 		createMethodIfNecessary().setPath(path);
 	}
-	
+
 	public void setURL(String url) {
 		try {
 			createMethodIfNecessary().setURI(new URI(url, false));
-		}
-		catch (URIException e) {
+		} catch (URIException e) {
 			throw new BuildException(e);
 		}
 	}
-	
+
 	public void setQueryString(String queryString) {
 		createMethodIfNecessary().setQueryString(queryString);
 	}
-	
+
 	public void addConfiguredHeader(Header header) {
 		createMethodIfNecessary().setRequestHeader(header);
 	}
-	
+
 	public void execute() throws BuildException {
 		if (httpClient == null) {
 			httpClient = new HttpClient();
 		}
-		
+
 		HttpMethodBase method = createMethodIfNecessary();
 		configureMethod(method);
 		try {
 			int statusCode = httpClient.executeMethod(method);
 			if (statusCodeProperty != null) {
-				Property p = (Property)getProject().createTask("property");
+				Property p = (Property) getProject().createTask("property");
 				p.setName(statusCodeProperty);
 				p.setValue(String.valueOf(statusCode));
 				p.perform();
 			}
-			
+
 			Iterator it = responseHeaders.iterator();
 			while (it.hasNext()) {
-				ResponseHeader header = (ResponseHeader)it.next();
-				Property p = (Property)getProject().createTask("property");
+				ResponseHeader header = (ResponseHeader) it.next();
+				Property p = (Property) getProject().createTask("property");
 				p.setName(header.getProperty());
 				Header h = method.getResponseHeader(header.getName());
 				if (h != null && h.getValue() != null) {
 					p.setValue(h.getValue());
 					p.perform();
 				}
-				
+
 			}
 			if (responseDataProperty != null) {
-				Property p = (Property)getProject().createTask("property");
+				Property p = (Property) getProject().createTask("property");
 				p.setName(responseDataProperty);
 				p.setValue(method.getResponseBodyAsString());
-				p.perform();				
-			}
-			else if (responseDataFile != null) {
+				p.perform();
+			} else if (responseDataFile != null) {
 				FileOutputStream fos = null;
 				InputStream is = null;
 				try {
 					is = method.getResponseBodyAsStream();
 					fos = new FileOutputStream(responseDataFile);
-					byte buf[] = new byte[10*1024];
+					byte buf[] = new byte[10 * 1024];
 					int read = 0;
-					while ((read = is.read(buf, 0, 10*1024)) != -1) {
+					while ((read = is.read(buf, 0, 10 * 1024)) != -1) {
 						fos.write(buf, 0, read);
 					}
-				}
-				finally {
+				} finally {
 					FileUtils.close(fos);
 					FileUtils.close(is);
 				}
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new BuildException(e);
-		}
-		finally {
+		} finally {
 			cleanupResources(method);
 		}
 	}

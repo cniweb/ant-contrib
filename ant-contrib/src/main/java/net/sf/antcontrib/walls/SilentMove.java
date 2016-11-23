@@ -31,15 +31,15 @@ import org.apache.tools.ant.taskdefs.Move;
  */
 public class SilentMove extends Move {
 
-    public void log(String msg) {
-        log(msg, Project.MSG_INFO);
-    }
-    
-    public void log(String msg, int level) {
-        if(level == Project.MSG_INFO)
-            super.log(msg, Project.MSG_VERBOSE);
-        else if(level == Project.MSG_VERBOSE)
-            super.log(msg, Project.MSG_DEBUG);
+	public void log(String msg) {
+		log(msg, Project.MSG_INFO);
+	}
 
-    }
+	public void log(String msg, int level) {
+		if (level == Project.MSG_INFO)
+			super.log(msg, Project.MSG_VERBOSE);
+		else if (level == Project.MSG_VERBOSE)
+			super.log(msg, Project.MSG_DEBUG);
+
+	}
 }

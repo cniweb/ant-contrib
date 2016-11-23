@@ -22,19 +22,18 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Ant;
 
 /**
- * Subclass of CallTarget which allows us to fetch
- * properties which are set in the scope of the called
- * target, and set them in the scope of the calling target.
- * Normally, these properties are thrown away as soon as the
- * called target completes execution.
+ * Subclass of CallTarget which allows us to fetch properties which are set in
+ * the scope of the called target, and set them in the scope of the calling
+ * target. Normally, these properties are thrown away as soon as the called
+ * target completes execution.
  *
- * @author     inger
- * @author     Dale Anson, danson@germane-software.com
+ * @author inger
+ * @author Dale Anson, danson@germane-software.com
  */
 public class AntFetch extends Ant {
 	/** the name of the property to fetch from the new project */
 	private String returnName = null;
-	
+
 	private ProjectDelegate fakeProject = null;
 
 	public void setProject(Project realProject) {
@@ -45,24 +44,24 @@ public class AntFetch extends Ant {
 	/**
 	 * Do the execution.
 	 *
-	 * @exception BuildException  Description of the Exception
+	 * @exception BuildException
+	 *                Description of the Exception
 	 */
 	public void execute() throws BuildException {
 		super.execute();
 
 		// copy back the props if possible
-		if ( returnName != null ) {
-			StringTokenizer st = new StringTokenizer( returnName, "," );
-			while ( st.hasMoreTokens() ) {
+		if (returnName != null) {
+			StringTokenizer st = new StringTokenizer(returnName, ",");
+			while (st.hasMoreTokens()) {
 				String name = st.nextToken().trim();
-				String value = fakeProject.getSubproject().getUserProperty( name );
-				if ( value != null ) {
-					getProject().setUserProperty( name, value );
-				}
-				else {
-					value = fakeProject.getSubproject().getProperty( name );
-					if ( value != null ) {
-						getProject().setProperty( name, value );
+				String value = fakeProject.getSubproject().getUserProperty(name);
+				if (value != null) {
+					getProject().setUserProperty(name, value);
+				} else {
+					value = fakeProject.getSubproject().getProperty(name);
+					if (value != null) {
+						getProject().setProperty(name, value);
 					}
 				}
 			}
@@ -72,13 +71,15 @@ public class AntFetch extends Ant {
 	/**
 	 * Set the property or properties that are set in the new project to be
 	 * transfered back to the original project. As with all properties, if the
-	 * property already exists in the original project, it will not be overridden
-	 * by a different value from the new project.
+	 * property already exists in the original project, it will not be
+	 * overridden by a different value from the new project.
 	 *
-	 * @param r  the name of a property in the new project to set in the original
-	 *      project. This may be a comma separate list of properties.
+	 * @param r
+	 *            the name of a property in the new project to set in the
+	 *            original project. This may be a comma separate list of
+	 *            properties.
 	 */
-	public void setReturn( String r ) {
+	public void setReturn(String r) {
 		returnName = r;
-	}	
+	}
 }

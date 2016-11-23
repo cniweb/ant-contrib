@@ -27,149 +27,108 @@ import net.sf.antcontrib.antserver.Util;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class SendFileCommand extends AbstractCommand implements Command {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -8628792564027507857L;
+	private long contentLength;
+	private String todir;
+	private String tofile;
+	private String fileBaseName;
+	private transient File file;
 
-public class SendFileCommand
-        extends AbstractCommand
-        implements Command
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -8628792564027507857L;
-    private long contentLength;
-    private String todir;
-    private String tofile;
-    private String fileBaseName;
-    private transient File file;
+	public File getFile() {
+		return file;
+	}
 
-    public File getFile()
-    {
-        return file;
-    }
+	public long getContentLength() {
+		return contentLength;
+	}
 
-    public long getContentLength()
-    {
-        return contentLength;
-    }
+	public InputStream getContentStream() throws IOException {
+		return new FileInputStream(file);
+	}
 
-    public InputStream getContentStream()
-        throws IOException
-    {
-        return new FileInputStream(file);
-    }
+	public void setFile(File file) {
+		this.file = file;
+		this.fileBaseName = file.getName();
+		this.contentLength = file.length();
+	}
 
-    public void setFile(File file)
-    {
-        this.file = file;
-        this.fileBaseName = file.getName();
-        this.contentLength = file.length();
-    }
+	public String getTofile() {
+		return tofile;
+	}
 
+	public void setTofile(String tofile) {
+		this.tofile = tofile;
+	}
 
-    public String getTofile()
-    {
-        return tofile;
-    }
+	public String getTodir() {
+		return todir;
+	}
 
+	public void setTodir(String todir) {
+		this.todir = todir;
+	}
 
-    public void setTofile(String tofile)
-    {
-        this.tofile = tofile;
-    }
+	public void validate(Project project) {
+		if (file == null)
+			throw new BuildException("Missing required attribute 'file'");
 
+		if (tofile == null && todir == null)
+			throw new BuildException("Missing both attributes 'tofile' and 'todir'" + " at least one must be supplied");
 
-    public String getTodir()
-    {
-        return todir;
-    }
+		/*
+		 * try { String realBasePath = project.getBaseDir().getCanonicalPath();
+		 * String realGetBasePath = file.getCanonicalPath(); if (!
+		 * realGetBasePath.startsWith(realBasePath)) throw new
+		 * SecurityException(
+		 * "Cannot access a file that is not rooted in the project execution directory"
+		 * ); } catch (IOException e) { throw new BuildException(e); }
+		 */
 
+	}
 
-    public void setTodir(String todir)
-    {
-        this.todir = todir;
-    }
+	public boolean execute(Project project, long contentLength, InputStream content) throws Throwable {
+		File dest = null;
 
-    public void validate(Project project)
-    {
-        if (file == null)
-            throw new BuildException("Missing required attribute 'file'");
+		if (tofile != null) {
+			dest = new File(project.getBaseDir(), tofile);
+			if (!dest.getCanonicalPath().startsWith(project.getBaseDir().getCanonicalPath())) {
+				System.out.println("throwing an exception");
+				throw new SecurityException("toFile must be a relative path");
+			}
+		} else {
+			dest = new File(project.getBaseDir(), todir);
+			dest = new File(dest, fileBaseName);
 
-        if (tofile == null && todir == null)
-            throw new BuildException("Missing both attributes 'tofile' and 'todir'"
-                + " at least one must be supplied");
+			if (!dest.getCanonicalPath().startsWith(project.getBaseDir().getCanonicalPath())) {
+				throw new SecurityException("toDir must be a relative path");
+			}
 
-        /*
-        try
-        {
-            String realBasePath = project.getBaseDir().getCanonicalPath();
-            String realGetBasePath = file.getCanonicalPath();
-            if (! realGetBasePath.startsWith(realBasePath))
-                throw new SecurityException("Cannot access a file that is not rooted in the project execution directory");
-        }
-        catch (IOException e)
-        {
-            throw new BuildException(e);
-        }
-        */
+		}
 
+		FileOutputStream fos = null;
 
-    }
+		try {
+			fos = new FileOutputStream(dest);
 
-    public boolean execute(Project project,
-                           long contentLength,
-                           InputStream content)
-            throws Throwable
-    {
-        File dest = null;
-
-        if (tofile != null)
-        {
-            dest = new File(project.getBaseDir(), tofile);
-            if (! dest.getCanonicalPath().startsWith(project.getBaseDir().getCanonicalPath())) {
-                System.out.println("throwing an exception");
-                throw new SecurityException("toFile must be a relative path");
-            }
-        }
-        else
-        {
-            dest = new File(project.getBaseDir(), todir);
-            dest = new File(dest, fileBaseName);
-
-            if (! dest.getCanonicalPath().startsWith(project.getBaseDir().getCanonicalPath())) {
-            	throw new SecurityException("toDir must be a relative path");
-            }
-
-        }
-
-        FileOutputStream fos =  null;
-
-        try
-        {
-            fos = new FileOutputStream(dest);
-
-            Util.transferBytes(content,
-                    contentLength,
-                    fos,
-                    false);
-        }
-        finally
-        {
-            try
-            {
-                if (fos != null)
-                    fos.close();
-            }
-            catch (IOException e)
-            {
-                ; // gulp;
-            }
-        }
-        return false;
-    }
+			Util.transferBytes(content, contentLength, fos, false);
+		} finally {
+			try {
+				if (fos != null)
+					fos.close();
+			} catch (IOException e) {
+				; // gulp;
+			}
+		}
+		return false;
+	}
 }

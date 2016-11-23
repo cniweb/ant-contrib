@@ -17,8 +17,7 @@ import org.apache.tools.ant.input.InputHandler;
 import org.apache.tools.ant.types.FilterSet;
 import org.apache.tools.ant.types.Path;
 
-public class ProjectDelegate
-extends Project {
+public class ProjectDelegate extends Project {
 
 	private Project delegate;
 	private Project subproject;
@@ -387,5 +386,5 @@ extends Project {
 
 	public String toString() {
 		return delegate.toString();
-	}		
+	}
 }

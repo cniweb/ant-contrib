@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.commands;
+package net.sf.antcontrib.antserver.commands;
 
 import java.io.Serializable;
 
@@ -21,49 +21,37 @@ import java.io.Serializable;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
- *               
+ * 
  ****************************************************************************/
 
+public class PropertyContainer implements Serializable {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -657169565072812175L;
+	private String name;
+	private String value;
 
-public class PropertyContainer
-        implements Serializable
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -657169565072812175L;
-    private String name;
-    private String value;
+	public PropertyContainer() {
+		super();
+	}
 
-    public PropertyContainer()
-    {
-        super();
-    }
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public String getValue() {
+		return value;
+	}
 
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-
-    public String getValue()
-    {
-        return value;
-    }
-
-
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

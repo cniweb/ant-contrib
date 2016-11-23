@@ -36,8 +36,8 @@ import net.sf.antcontrib.util.ThreadPool;
 import net.sf.antcontrib.util.ThreadPoolThread;
 
 /***
- * Task definition for the foreach task.  The foreach task iterates
- * over a list, a list of filesets, or both.
+ * Task definition for the foreach task. The foreach task iterates over a list,
+ * a list of filesets, or both.
  *
  * <pre>
  *
@@ -68,356 +68,314 @@ import net.sf.antcontrib.util.ThreadPoolThread;
  *         trim      --> Should we trim the list item before calling the target?
  *
  * </pre>
+ * 
  * @author <a href="mailto:mattinger@yahoo.com">Matthew Inger</a>
  */
-public class ForEach extends Task
-{
-    private String list;
-    private String param;
-    private String delimiter;
-    private String target;
-    private boolean inheritAll;
-    private boolean inheritRefs;
-    private Vector params;
-    private Vector references;
-    private Path currPath;
-    private boolean parallel;
-    private boolean trim;
-    private int maxThreads;
-    private Mapper mapper;
+public class ForEach extends Task {
+	private String list;
+	private String param;
+	private String delimiter;
+	private String target;
+	private boolean inheritAll;
+	private boolean inheritRefs;
+	private Vector params;
+	private Vector references;
+	private Path currPath;
+	private boolean parallel;
+	private boolean trim;
+	private int maxThreads;
+	private Mapper mapper;
 
-    /***
-     * Default Constructor
-     */
-    public ForEach()
-    {
-        super();
-        this.list = null;
-        this.param = null;
-        this.delimiter = ",";
-        this.target = null;
-        this.inheritAll = false;
-        this.inheritRefs = false;
-        this.params = new Vector();
-        this.references = new Vector();
-    	this.parallel = false;
-        this.maxThreads = 5;
-    }
+	/***
+	 * Default Constructor
+	 */
+	public ForEach() {
+		super();
+		this.list = null;
+		this.param = null;
+		this.delimiter = ",";
+		this.target = null;
+		this.inheritAll = false;
+		this.inheritRefs = false;
+		this.params = new Vector();
+		this.references = new Vector();
+		this.parallel = false;
+		this.maxThreads = 5;
+	}
 
-    private void executeParallel(Vector tasks)
-    {
-        ThreadPool pool = new ThreadPool(maxThreads);
-        Enumeration e = tasks.elements();
-        Runnable r = null;
-        Vector threads = new Vector();
+	private void executeParallel(Vector tasks) {
+		ThreadPool pool = new ThreadPool(maxThreads);
+		Enumeration e = tasks.elements();
+		Runnable r = null;
+		Vector threads = new Vector();
 
-        // start each task in it's own thread, using the
-        // pool to ensure that we don't exceed the maximum
-        // amount of threads
-        while (e.hasMoreElements())
-        {
-            // Create the Runnable object
-            final Task task = (Task)e.nextElement();
-            r = new Runnable()
-            {
-                public void run()
-                {
-                    task.execute();
-                }
-            };
+		// start each task in it's own thread, using the
+		// pool to ensure that we don't exceed the maximum
+		// amount of threads
+		while (e.hasMoreElements()) {
+			// Create the Runnable object
+			final Task task = (Task) e.nextElement();
+			r = new Runnable() {
+				public void run() {
+					task.execute();
+				}
+			};
 
-            // Get a thread, and start the task.
-            // If there is no thread available, this will
-            // block until one becomes available
-            try
-            {
-                ThreadPoolThread tpt = pool.borrowThread();
-                tpt.setRunnable(r);
-                tpt.start();
-                threads.addElement(tpt);
-            }
-            catch (Exception ex)
-            {
-                throw new BuildException(ex);
-            }
+			// Get a thread, and start the task.
+			// If there is no thread available, this will
+			// block until one becomes available
+			try {
+				ThreadPoolThread tpt = pool.borrowThread();
+				tpt.setRunnable(r);
+				tpt.start();
+				threads.addElement(tpt);
+			} catch (Exception ex) {
+				throw new BuildException(ex);
+			}
 
-        }
+		}
 
-        // Wait for all threads to finish before we
-        // are allowed to return.
-        Enumeration te = threads.elements();
-        Thread t= null;
-        while (te.hasMoreElements())
-        {
-            t = (Thread)te.nextElement();
-            if (t.isAlive())
-            {
-                try
-                {
-                    t.join();
-                }
-                catch (InterruptedException ex)
-                {
-                    throw new BuildException(ex);
-                }
-            }
-        }
-    }
+		// Wait for all threads to finish before we
+		// are allowed to return.
+		Enumeration te = threads.elements();
+		Thread t = null;
+		while (te.hasMoreElements()) {
+			t = (Thread) te.nextElement();
+			if (t.isAlive()) {
+				try {
+					t.join();
+				} catch (InterruptedException ex) {
+					throw new BuildException(ex);
+				}
+			}
+		}
+	}
 
-    private void executeSequential(Vector tasks)
-    {
-        TaskContainer tc = (TaskContainer) getProject().createTask("sequential");
-        Enumeration e = tasks.elements();
-        Task t = null;
-        while (e.hasMoreElements())
-        {
-            t = (Task)e.nextElement();
-            tc.addTask(t);
-        }
+	private void executeSequential(Vector tasks) {
+		TaskContainer tc = (TaskContainer) getProject().createTask("sequential");
+		Enumeration e = tasks.elements();
+		Task t = null;
+		while (e.hasMoreElements()) {
+			t = (Task) e.nextElement();
+			tc.addTask(t);
+		}
 
-        ((Task)tc).execute();
-    }
+		((Task) tc).execute();
+	}
 
-    public void execute()
-        throws BuildException
-    {
-        if (list == null && currPath == null) {
-            throw new BuildException("You must have a list or path to iterate through");
-        }
-        if (param == null)
-            throw new BuildException("You must supply a property name to set on each iteration in param");
-        if (target == null)
-            throw new BuildException("You must supply a target to perform");
+	public void execute() throws BuildException {
+		if (list == null && currPath == null) {
+			throw new BuildException("You must have a list or path to iterate through");
+		}
+		if (param == null)
+			throw new BuildException("You must supply a property name to set on each iteration in param");
+		if (target == null)
+			throw new BuildException("You must supply a target to perform");
 
-        Vector values = new Vector();
+		Vector values = new Vector();
 
-        // Take Care of the list attribute
-        if (list != null)
-        {
-            StringTokenizer st = new StringTokenizer(list, delimiter);
+		// Take Care of the list attribute
+		if (list != null) {
+			StringTokenizer st = new StringTokenizer(list, delimiter);
 
-            while (st.hasMoreTokens())
-            {
-                String tok = st.nextToken();
-                if (trim) tok = tok.trim();
-                values.addElement(tok);
-            }
-        }
+			while (st.hasMoreTokens()) {
+				String tok = st.nextToken();
+				if (trim)
+					tok = tok.trim();
+				values.addElement(tok);
+			}
+		}
 
-        String[] pathElements = new String[0];
-        if (currPath != null) {
-            pathElements = currPath.list();
-        }
+		String[] pathElements = new String[0];
+		if (currPath != null) {
+			pathElements = currPath.list();
+		}
 
-        for (int i=0;i<pathElements.length;i++)
-        {
-            if (mapper != null)
-            {
-                FileNameMapper m = mapper.getImplementation();
-                String mapped[] = m.mapFileName(pathElements[i]);
-                for (int j=0;j<mapped.length;j++)
-                    values.addElement(mapped[j]);
-            }
-            else
-            {
-                values.addElement(new File(pathElements[i]));
-            }
-        }
+		for (int i = 0; i < pathElements.length; i++) {
+			if (mapper != null) {
+				FileNameMapper m = mapper.getImplementation();
+				String mapped[] = m.mapFileName(pathElements[i]);
+				for (int j = 0; j < mapped.length; j++)
+					values.addElement(mapped[j]);
+			} else {
+				values.addElement(new File(pathElements[i]));
+			}
+		}
 
-        Vector tasks = new Vector();
+		Vector tasks = new Vector();
 
-        int sz = values.size();
-        CallTarget ct = null;
-        Object val = null;
-        Property p = null;
+		int sz = values.size();
+		CallTarget ct = null;
+		Object val = null;
+		Property p = null;
 
-        for (int i = 0; i < sz; i++) {
-            val = values.elementAt(i);
-            ct = createCallTarget();
-            p = ct.createParam();
-            p.setName(param);
+		for (int i = 0; i < sz; i++) {
+			val = values.elementAt(i);
+			ct = createCallTarget();
+			p = ct.createParam();
+			p.setName(param);
 
-            if (val instanceof File)
-                p.setLocation((File)val);
-            else
-                p.setValue((String)val);
+			if (val instanceof File)
+				p.setLocation((File) val);
+			else
+				p.setValue((String) val);
 
-            tasks.addElement(ct);
-        }
+			tasks.addElement(ct);
+		}
 
-        if (parallel && maxThreads > 1)
-        {
-            executeParallel(tasks);
-        }
-        else
-        {
-            executeSequential(tasks);
-        }
-    }
+		if (parallel && maxThreads > 1) {
+			executeParallel(tasks);
+		} else {
+			executeSequential(tasks);
+		}
+	}
 
-    public void setTrim(boolean trim)
-    {
-        this.trim = trim;
-    }
+	public void setTrim(boolean trim) {
+		this.trim = trim;
+	}
 
-    public void setList(String list)
-    {
-        this.list = list;
-    }
+	public void setList(String list) {
+		this.list = list;
+	}
 
-    public void setDelimiter(String delimiter)
-    {
-        this.delimiter = delimiter;
-    }
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}
 
-    public void setParam(String param)
-    {
-        this.param = param;
-    }
+	public void setParam(String param) {
+		this.param = param;
+	}
 
-    public void setTarget(String target)
-    {
-        this.target = target;
-    }
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    public void setParallel(boolean parallel)
-    {
-	    this.parallel = parallel;
-    }
+	public void setParallel(boolean parallel) {
+		this.parallel = parallel;
+	}
 
-    /**
-     * Corresponds to <code>&lt;antcall&gt;</code>'s <code>inheritall</code>
-     * attribute.
-     */
-    public void setInheritall(boolean b) {
-        this.inheritAll = b;
-    }
+	/**
+	 * Corresponds to <code>&lt;antcall&gt;</code>'s <code>inheritall</code>
+	 * attribute.
+	 */
+	public void setInheritall(boolean b) {
+		this.inheritAll = b;
+	}
 
-    /**
-     * Corresponds to <code>&lt;antcall&gt;</code>'s <code>inheritrefs</code>
-     * attribute.
-     */
-    public void setInheritrefs(boolean b) {
-        this.inheritRefs = b;
-    }
+	/**
+	 * Corresponds to <code>&lt;antcall&gt;</code>'s <code>inheritrefs</code>
+	 * attribute.
+	 */
+	public void setInheritrefs(boolean b) {
+		this.inheritRefs = b;
+	}
 
+	/***
+	 * Set the maximum amount of threads we're going to allow at once to execute
+	 * 
+	 * @param maxThreads
+	 */
+	public void setMaxThreads(int maxThreads) {
+		this.maxThreads = maxThreads;
+	}
 
-    /***
-     * Set the maximum amount of threads we're going to allow
-     * at once to execute
-     * @param maxThreads
-     */
-    public void setMaxThreads(int maxThreads)
-    {
-        this.maxThreads = maxThreads;
-    }
+	/**
+	 * Corresponds to <code>&lt;antcall&gt;</code>'s nested
+	 * <code>&lt;param&gt;</code> element.
+	 */
+	public void addParam(Property p) {
+		params.addElement(p);
+	}
 
+	/**
+	 * Corresponds to <code>&lt;antcall&gt;</code>'s nested
+	 * <code>&lt;reference&gt;</code> element.
+	 */
+	public void addReference(Ant.Reference r) {
+		references.addElement(r);
+	}
 
-    /**
-     * Corresponds to <code>&lt;antcall&gt;</code>'s nested
-     * <code>&lt;param&gt;</code> element.
-     */
-    public void addParam(Property p) {
-        params.addElement(p);
-    }
+	/**
+	 * @deprecated Use createPath instead.
+	 */
+	public void addFileset(FileSet set) {
+		log("The nested fileset element is deprectated, use a nested path " + "instead", Project.MSG_WARN);
+		createPath().addFileset(set);
+	}
 
-    /**
-     * Corresponds to <code>&lt;antcall&gt;</code>'s nested
-     * <code>&lt;reference&gt;</code> element.
-     */
-    public void addReference(Ant.Reference r) {
-        references.addElement(r);
-    }
+	public Path createPath() {
+		if (currPath == null) {
+			currPath = new Path(getProject());
+		}
+		return currPath;
+	}
 
-    /**
-     * @deprecated Use createPath instead.
-     */
-    public void addFileset(FileSet set)
-    {
-        log("The nested fileset element is deprectated, use a nested path "
-            + "instead",
-            Project.MSG_WARN);
-        createPath().addFileset(set);
-    }
+	public Mapper createMapper() {
+		mapper = new Mapper(getProject());
+		return mapper;
+	}
 
-    public Path createPath() {
-        if (currPath == null) {
-            currPath = new Path(getProject());
-        }
-        return currPath;
-    }
+	private CallTarget createCallTarget() {
+		CallTarget ct = (CallTarget) getProject().createTask("antcall");
+		ct.setOwningTarget(getOwningTarget());
+		ct.init();
+		ct.setTarget(target);
+		ct.setInheritAll(inheritAll);
+		ct.setInheritRefs(inheritRefs);
+		Enumeration e = params.elements();
+		while (e.hasMoreElements()) {
+			Property param = (Property) e.nextElement();
+			Property toSet = ct.createParam();
+			toSet.setName(param.getName());
+			if (param.getValue() != null) {
+				toSet.setValue(param.getValue());
+			}
+			if (param.getFile() != null) {
+				toSet.setFile(param.getFile());
+			}
+			if (param.getResource() != null) {
+				toSet.setResource(param.getResource());
+			}
+			if (param.getPrefix() != null) {
+				toSet.setPrefix(param.getPrefix());
+			}
+			if (param.getRefid() != null) {
+				toSet.setRefid(param.getRefid());
+			}
+			if (param.getEnvironment() != null) {
+				toSet.setEnvironment(param.getEnvironment());
+			}
+			if (param.getClasspath() != null) {
+				toSet.setClasspath(param.getClasspath());
+			}
+		}
 
-    public Mapper createMapper()
-    {
-        mapper = new Mapper(getProject());
-        return mapper;
-    }
+		e = references.elements();
+		while (e.hasMoreElements()) {
+			ct.addReference((Ant.Reference) e.nextElement());
+		}
 
-    private CallTarget createCallTarget() {
-        CallTarget ct = (CallTarget) getProject().createTask("antcall");
-        ct.setOwningTarget(getOwningTarget());
-        ct.init();
-        ct.setTarget(target);
-        ct.setInheritAll(inheritAll);
-        ct.setInheritRefs(inheritRefs);
-        Enumeration e = params.elements();
-        while (e.hasMoreElements()) {
-            Property param = (Property) e.nextElement();
-            Property toSet = ct.createParam();
-            toSet.setName(param.getName());
-            if (param.getValue() != null) {
-                toSet.setValue(param.getValue());
-            }
-            if (param.getFile() != null) {
-                toSet.setFile(param.getFile());
-            }
-            if (param.getResource() != null) {
-                toSet.setResource(param.getResource());
-            }
-            if (param.getPrefix() != null) {
-                toSet.setPrefix(param.getPrefix());
-            }
-            if (param.getRefid() != null) {
-                toSet.setRefid(param.getRefid());
-            }
-            if (param.getEnvironment() != null) {
-                toSet.setEnvironment(param.getEnvironment());
-            }
-            if (param.getClasspath() != null) {
-                toSet.setClasspath(param.getClasspath());
-            }
-        }
+		return ct;
+	}
 
-        e = references.elements();
-        while (e.hasMoreElements()) {
-            ct.addReference((Ant.Reference) e.nextElement());
-        }
+	protected void handleOutput(String line) {
+		try {
+			super.handleOutput(line);
+		}
+		// This is needed so we can run with 1.5 and 1.5.1
+		catch (IllegalAccessError e) {
+			super.handleOutput(line);
+		}
+	}
 
-        return ct;
-    }
-
-    protected void handleOutput(String line)
-    {
-        try {
-                super.handleOutput(line);
-        }
-        // This is needed so we can run with 1.5 and 1.5.1
-        catch (IllegalAccessError e) {
-            super.handleOutput(line);
-        }
-    }
-
-    protected void handleErrorOutput(String line)
-    {
-        try {
-                super.handleErrorOutput(line);
-        }
-        // This is needed so we can run with 1.5 and 1.5.1
-        catch (IllegalAccessError e) {
-            super.handleErrorOutput(line);
-        }
-    }
+	protected void handleErrorOutput(String line) {
+		try {
+			super.handleErrorOutput(line);
+		}
+		// This is needed so we can run with 1.5 and 1.5.1
+		catch (IllegalAccessError e) {
+			super.handleErrorOutput(line);
+		}
+	}
 
 }
-
-

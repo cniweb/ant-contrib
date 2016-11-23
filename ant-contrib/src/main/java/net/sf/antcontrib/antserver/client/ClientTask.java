@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.client;
+package net.sf.antcontrib.antserver.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -42,162 +42,122 @@ import net.sf.antcontrib.antserver.commands.ShutdownCommand;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class ClientTask extends Task {
+	private String machine = "localhost";
+	private int port = 17000;
+	private Vector commands;
+	private boolean persistant = false;
+	private boolean failOnError = true;
 
-public class ClientTask
-        extends Task
-{
-    private String machine = "localhost";
-    private int port = 17000;
-    private Vector commands;
-    private boolean persistant = false;
-    private boolean failOnError = true;
+	public ClientTask() {
+		super();
+		this.commands = new Vector();
+	}
 
-    public ClientTask()
-    {
-        super();
-        this.commands = new Vector();
-    }
+	public void setMachine(String machine) {
+		this.machine = machine;
+	}
 
+	public void setPort(int port) {
+		this.port = port;
+	}
 
-    public void setMachine(String machine)
-    {
-        this.machine = machine;
-    }
+	public void setPersistant(boolean persistant) {
+		this.persistant = persistant;
+	}
 
+	public void setFailOnError(boolean failOnError) {
+		this.failOnError = failOnError;
+	}
 
-    public void setPort(int port)
-    {
-        this.port = port;
-    }
+	public void addConfiguredShutdown(ShutdownCommand cmd) {
+		commands.add(cmd);
+	}
 
+	public void addConfiguredRunTarget(RunTargetCommand cmd) {
+		commands.add(cmd);
+	}
 
-    public void setPersistant(boolean persistant)
-    {
-        this.persistant = persistant;
-    }
+	public void addConfiguredRunAnt(RunAntCommand cmd) {
+		commands.add(cmd);
+	}
 
+	public void addConfiguredSendFile(SendFileCommand cmd) {
+		commands.add(cmd);
+	}
 
-    public void setFailOnError(boolean failOnError)
-    {
-        this.failOnError = failOnError;
-    }
+	public void execute() {
+		Enumeration e = commands.elements();
+		Command c = null;
+		while (e.hasMoreElements()) {
+			c = (Command) e.nextElement();
+			c.validate(getProject());
+		}
 
+		Client client = new Client(getProject(), machine, port);
 
-    public void addConfiguredShutdown(ShutdownCommand cmd)
-    {
-        commands.add(cmd);
-    }
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
 
-    public void addConfiguredRunTarget(RunTargetCommand cmd)
-    {
-        commands.add(cmd);
-    }
+			try {
+				int failCount = 0;
 
-    public void addConfiguredRunAnt(RunAntCommand cmd)
-    {
-        commands.add(cmd);
-    }
+				client.connect();
 
-    public void addConfiguredSendFile(SendFileCommand cmd)
-    {
-        commands.add(cmd);
-    }
+				e = commands.elements();
+				c = null;
+				Response r = null;
+				Document d = null;
+				boolean keepGoing = true;
+				while (e.hasMoreElements() && keepGoing) {
+					c = (Command) e.nextElement();
+					r = client.sendCommand(c);
+					if (!r.isSucceeded()) {
+						failCount++;
+						log("Command caused a build failure:" + c, Project.MSG_ERR);
+						log(r.getErrorMessage(), Project.MSG_ERR);
+						log(r.getErrorStackTrace(), Project.MSG_DEBUG);
+						if (!persistant)
+							keepGoing = false;
+					}
 
+					try {
+						ByteArrayInputStream bais = new ByteArrayInputStream(r.getResultsXml().getBytes());
+						d = db.parse(bais);
+						NodeList nl = d.getElementsByTagName("target");
+						int len = nl.getLength();
+						Element element = null;
+						for (int i = 0; i < len; i++) {
+							element = (Element) nl.item(i);
+							getProject().log("[" + element.getAttribute("name") + "]", Project.MSG_INFO);
+						}
+					} catch (SAXException se) {
 
-    public void execute()
-    {
-        Enumeration e = commands.elements();
-        Command c = null;
-        while (e.hasMoreElements())
-        {
-            c = (Command)e.nextElement();
-            c.validate(getProject());
-        }
+					}
 
-        Client client = new Client(getProject(), machine, port);
+					if (c instanceof ShutdownCommand) {
+						keepGoing = false;
+						client.shutdown();
+					}
+				}
 
-        try
-        {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-
-            try
-            {
-                int failCount = 0;
-
-                client.connect();
-
-                e = commands.elements();
-                c = null;
-                Response r = null;
-                Document d = null;
-                boolean keepGoing = true;
-                while (e.hasMoreElements() && keepGoing)
-                {
-                    c = (Command)e.nextElement();
-                    r = client.sendCommand(c);
-                    if (! r.isSucceeded())
-                    {
-                        failCount++;
-                        log("Command caused a build failure:" + c,
-                                Project.MSG_ERR);
-                        log(r.getErrorMessage(),
-                                Project.MSG_ERR);
-                        log(r.getErrorStackTrace(),
-                                Project.MSG_DEBUG);
-                        if (! persistant)
-                            keepGoing = false;
-                    }
-
-                    try
-                    {
-                        ByteArrayInputStream bais =
-                                new ByteArrayInputStream(r.getResultsXml().getBytes());
-                        d = db.parse(bais);
-                        NodeList nl = d.getElementsByTagName("target");
-                        int len = nl.getLength();
-                        Element element = null;
-                        for (int i=0;i<len;i++)
-                        {
-                            element = (Element)nl.item(i);
-                            getProject().log("[" + element.getAttribute("name") + "]",
-                                    Project.MSG_INFO);
-                        }
-                    }
-                    catch (SAXException se)
-                    {
-
-                    }
-
-                    if (c instanceof ShutdownCommand)
-                    {
-                        keepGoing = false;
-                        client.shutdown();
-                    }
-                }
-
-                if (failCount > 0 && failOnError)
-                    throw new BuildException("One or more commands failed.");
-            }
-            finally
-            {
-                if (client != null)
-                    client.disconnect();
-            }
-        }
-        catch (ParserConfigurationException ex)
-        {
-            throw new BuildException(ex);
-        }
-        catch (IOException ex)
-        {
-            throw new BuildException(ex);
-        }
-    }
+				if (failCount > 0 && failOnError)
+					throw new BuildException("One or more commands failed.");
+			} finally {
+				if (client != null)
+					client.disconnect();
+			}
+		} catch (ParserConfigurationException ex) {
+			throw new BuildException(ex);
+		} catch (IOException ex) {
+			throw new BuildException(ex);
+		}
+	}
 }

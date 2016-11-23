@@ -22,19 +22,18 @@ import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Property;
 
-public class GetCookieTask
-	extends AbstractHttpStateTypeTask {
+public class GetCookieTask extends AbstractHttpStateTypeTask {
 
 	private String property;
-    private String prefix;
+	private String prefix;
 	private String cookiePolicy = CookiePolicy.DEFAULT;
-	
+
 	private String realm = null;
-    private int port = 80;
-    private String path = null;
-    private boolean secure = false;
-    private String name = null;
-    
+	private int port = 80;
+	private String path = null;
+	private boolean secure = false;
+	private String name = null;
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -64,19 +63,20 @@ public class GetCookieTask
 	}
 
 	private Cookie findCookie(Cookie cookies[], String name) {
-		for (int i=0;i<cookies.length;i++) {
+		for (int i = 0; i < cookies.length; i++) {
 			if (cookies[i].getName().equals(name)) {
 				return cookies[i];
 			}
 		}
 		return null;
 	}
+
 	protected void execute(HttpStateType stateType) throws BuildException {
-		
+
 		if (realm == null || path == null) {
 			throw new BuildException("'realm' and 'path' attributes are required");
 		}
-		
+
 		HttpState state = stateType.getState();
 		CookieSpec spec = CookiePolicy.getCookieSpec(cookiePolicy);
 		Cookie cookies[] = state.getCookies();
@@ -86,38 +86,31 @@ public class GetCookieTask
 			Cookie c = findCookie(matches, name);
 			if (c != null) {
 				matches = new Cookie[] { c };
-			}
-			else {
+			} else {
 				matches = new Cookie[0];
 			}
 		}
-		
-		
+
 		if (property != null) {
 			if (matches != null && matches.length > 0) {
-				Property p = (Property)getProject().createTask("property");
+				Property p = (Property) getProject().createTask("property");
 				p.setName(property);
 				p.setValue(matches[0].getValue());
-				p.perform();					
+				p.perform();
 			}
-		}
-		else if (prefix != null) {
+		} else if (prefix != null) {
 			if (matches != null && matches.length > 0) {
-				for (int i=0;i<matches.length;i++) {
-					String propName =
-						prefix +
-						matches[i].getName();
-					Property p = (Property)getProject().createTask("property");
+				for (int i = 0; i < matches.length; i++) {
+					String propName = prefix + matches[i].getName();
+					Property p = (Property) getProject().createTask("property");
 					p.setName(propName);
 					p.setValue(matches[i].getValue());
 					p.perform();
 				}
 			}
-		}
-		else {
+		} else {
 			throw new BuildException("Nothing to set");
 		}
 	}
-	
-	
+
 }

@@ -18,52 +18,56 @@ package net.sf.antcontrib;
 /**
  * @author Dean Hiller
  *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public class AntContribVersion {
 
-	private Package thePackage;
-	
 	/**
-	 * The main program for MockVersion that prints the version info from 
-	 * the manifest file.
-	 * 
-	 * @param args Ignores all arguments.
+	 * The main program for MockVersion that prints the version info from the
+	 * manifest file.
+	 *
+	 * @param args
+	 *            Ignores all arguments.
 	 */
 	public static void main(String[] args) {
-		AntContribVersion version = new AntContribVersion(AntContribVersion.class);
-		System.out.println(""+version);
+		final AntContribVersion version = new AntContribVersion(AntContribVersion.class);
+		System.out.println("" + version);
 	}
-	
+
+	private final Package thePackage;
+
 	/**
-	 * Constructor that takes a class to get the version information
-	 * from out of the manifest.  Uses the class's package to retrieve
-	 * the manifest version info.
-	 * @param c The Class on whose package to use to get version info.
+	 * Constructor that takes a class to get the version information from out of
+	 * the manifest. Uses the class's package to retrieve the manifest version
+	 * info.
+	 * 
+	 * @param c
+	 *            The Class on whose package to use to get version info.
 	 */
 	public AntContribVersion(Class c) {
-		String name = c.getName();
-		int index = name.lastIndexOf(".");
-		
-		if(index < 0)
+		final String name = c.getName();
+		final int index = name.lastIndexOf(".");
+
+		if (index < 0) {
 			throw new RuntimeException("This class is the default package and can't be to use this feature");
-		
-		String packageName = name.substring(0, index);
-		thePackage = Package.getPackage(packageName);
+		}
+
+		final String packageName = name.substring(0, index);
+		this.thePackage = Package.getPackage(packageName);
 	}
-	
-	
+
 	/**
 	 * Prints the version info the MockVersion represents.
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		String version = "\nVersion of Ant Contrib...";
-		version += "\ntitle="+thePackage.getImplementationTitle();
-		version += "\nwebsite="+thePackage.getImplementationVendor();
-		version += "\nversion="+thePackage.getImplementationVersion()+"\n";
+		version += "\ntitle=" + this.thePackage.getImplementationTitle();
+		version += "\nwebsite=" + this.thePackage.getImplementationVendor();
+		version += "\nversion=" + this.thePackage.getImplementationVersion() + "\n";
 
 		return version;
 	}

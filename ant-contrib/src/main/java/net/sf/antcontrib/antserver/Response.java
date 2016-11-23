@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver;
+package net.sf.antcontrib.antserver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -26,91 +26,69 @@ import java.io.Serializable;
  *
  ****************************************************************************/
 
+public class Response implements Serializable {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = 586998774611927305L;
+	private boolean succeeded;
+	private String errorStackTrace;
+	private String errorMessage;
+	private String resultsXml;
 
-public class Response
-        implements Serializable
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = 586998774611927305L;
-    private boolean succeeded;
-    private String errorStackTrace;
-    private String errorMessage;
-    private String resultsXml;
+	private long contentLength;
 
-    private long contentLength;
+	public Response() {
+		super();
+		this.succeeded = true;
+	}
 
-    public Response()
-    {
-        super();
-        this.succeeded = true;
-    }
+	public boolean isSucceeded() {
+		return succeeded;
+	}
 
+	public void setSucceeded(boolean succeeded) {
+		this.succeeded = succeeded;
+	}
 
-    public boolean isSucceeded()
-    {
-        return succeeded;
-    }
+	public void setThrowable(Throwable t) {
+		errorMessage = t.getMessage();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		t.printStackTrace(ps);
+		ps.flush();
+		setErrorStackTrace(baos.toString());
+	}
 
+	public String getErrorStackTrace() {
+		return errorStackTrace;
+	}
 
-    public void setSucceeded(boolean succeeded)
-    {
-        this.succeeded = succeeded;
-    }
+	public void setErrorStackTrace(String errorStackTrace) {
+		this.errorStackTrace = errorStackTrace;
+	}
 
-    public void setThrowable(Throwable t)
-    {
-        errorMessage = t.getMessage();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
-        t.printStackTrace(ps);
-        ps.flush();
-        setErrorStackTrace(baos.toString());
-    }
+	public String getErrorMessage() {
+		return errorMessage;
+	}
 
-    public String getErrorStackTrace()
-    {
-        return errorStackTrace;
-    }
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 
+	public String getResultsXml() {
+		return resultsXml;
+	}
 
-    public void setErrorStackTrace(String errorStackTrace)
-    {
-        this.errorStackTrace = errorStackTrace;
-    }
+	public void setResultsXml(String resultsXml) {
+		this.resultsXml = resultsXml;
+	}
 
+	public long getContentLength() {
+		return contentLength;
+	}
 
-    public String getErrorMessage()
-    {
-        return errorMessage;
-    }
-
-
-    public void setErrorMessage(String errorMessage)
-    {
-        this.errorMessage = errorMessage;
-    }
-
-
-    public String getResultsXml()
-    {
-        return resultsXml;
-    }
-
-
-    public void setResultsXml(String resultsXml)
-    {
-        this.resultsXml = resultsXml;
-    }
-
-    public long getContentLength()
-    {
-        return contentLength;
-    }
-
-    public void setContentLength(long contentLength)
-    {
-        this.contentLength = contentLength;
-    }
+	public void setContentLength(long contentLength) {
+		this.contentLength = contentLength;
+	}
 }

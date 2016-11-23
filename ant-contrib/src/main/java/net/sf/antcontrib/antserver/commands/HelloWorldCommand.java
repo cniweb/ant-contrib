@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.commands;
+package net.sf.antcontrib.antserver.commands;
 
 import java.io.InputStream;
 
@@ -25,32 +25,23 @@ import net.sf.antcontrib.antserver.Command;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class HelloWorldCommand extends AbstractCommand implements Command {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -7712225309558807617L;
 
-public class HelloWorldCommand
-        extends AbstractCommand
-        implements Command
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -7712225309558807617L;
+	public void validate(Project project) {
+	}
 
-    public void validate(Project project)
-    {
-    }
-
-    public boolean execute(Project project,
-                           long contentLength,
-                           InputStream content)
-            throws Throwable
-    {
-        project.log("Hello World", Project.MSG_ERR);
-        return false;
-    }
+	public boolean execute(Project project, long contentLength, InputStream content) throws Throwable {
+		project.log("Hello World", Project.MSG_ERR);
+		return false;
+	}
 }

@@ -22,42 +22,31 @@ package net.sf.antcontrib.util;
  *
  ****************************************************************************/
 
+public class ThreadPool {
+	private int maxActive;
+	private int active;
 
-public class ThreadPool
-{
-    private int maxActive;
-    private int active;
+	public ThreadPool(int maxActive) {
+		super();
+		this.maxActive = maxActive;
+		this.active = 0;
+	}
 
+	public void returnThread(ThreadPoolThread thread) {
+		synchronized (this) {
+			active--;
+			notify();
+		}
+	}
 
-    public ThreadPool(int maxActive)
-    {
-        super();
-        this.maxActive = maxActive;
-        this.active = 0;
-    }
+	public ThreadPoolThread borrowThread() throws InterruptedException {
+		synchronized (this) {
+			if (maxActive > 0 && active >= maxActive) {
+				wait();
+			}
 
-    public void returnThread(ThreadPoolThread thread)
-    {
-        synchronized (this)
-        {
-            active--;
-            notify();
-        }
-    }
-
-
-    public ThreadPoolThread borrowThread()
-        throws InterruptedException
-    {
-        synchronized (this)
-        {
-            if (maxActive > 0 && active >= maxActive)
-            {
-                wait();
-            }
-
-            active++;
-            return new ThreadPoolThread(this);
-        }
-    }
+			active++;
+			return new ThreadPoolThread(this);
+		}
+	}
 }

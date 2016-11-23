@@ -19,42 +19,37 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.DataType;
 
-public class HttpClientType
-	extends DataType {
+public class HttpClientType extends DataType {
 
 	private HttpClient client;
-	
+
 	public HttpClientType(Project p) {
 		super();
 		setProject(p);
-		
+
 		client = new HttpClient();
 	}
-	
+
 	public HttpClient getClient() {
 		if (isReference()) {
 			return getRef().getClient();
-		}
-		else {
+		} else {
 			return client;
 		}
 	}
-	
+
 	public void setStateRefId(String stateRefId) {
 		if (isReference()) {
 			tooManyAttributes();
 		}
-		HttpStateType stateType = AbstractHttpStateTypeTask.getStateType(
-				getProject(),
-				stateRefId);
+		HttpStateType stateType = AbstractHttpStateTypeTask.getStateType(getProject(), stateRefId);
 		getClient().setState(stateType.getState());
 	}
-	
+
 	protected HttpClientType getRef() {
-		return (HttpClientType) super.getCheckedRef(HttpClientType.class,
-				"http-client");
+		return (HttpClientType) super.getCheckedRef(HttpClientType.class, "http-client");
 	}
-	
+
 	public ClientParams createClientParams() {
 		if (isReference()) {
 			tooManyAttributes();
@@ -63,7 +58,7 @@ public class HttpClientType
 		client.setParams(clientParams);
 		return clientParams;
 	}
-	
+
 	public HttpStateType createHttpState() {
 		if (isReference()) {
 			tooManyAttributes();
@@ -72,13 +67,13 @@ public class HttpClientType
 		getClient().setState(state.getState());
 		return state;
 	}
-	
+
 	public HostConfig createHostConfig() {
 		if (isReference()) {
 			tooManyAttributes();
 		}
 		HostConfig config = new HostConfig();
 		client.setHostConfiguration(config);
-		return config;		
+		return config;
 	}
 }

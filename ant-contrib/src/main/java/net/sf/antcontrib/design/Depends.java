@@ -18,15 +18,17 @@
  */
 package net.sf.antcontrib.design;
 
-/** 
+/**
  *
  * @author dhiller
  */
 public class Depends {
 
 	private String name;
-	
-	public Depends() {}
+
+	public Depends() {
+	}
+
 	/**
 	 * @param name
 	 */
@@ -34,13 +36,14 @@ public class Depends {
 		super();
 		this.name = name;
 	}
+
 	/**
 	 * @param string
 	 */
 	public void setName(String s) {
 		this.name = s;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

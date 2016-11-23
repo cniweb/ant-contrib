@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.server;
+package net.sf.antcontrib.antserver.server;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -27,100 +27,70 @@ import org.apache.tools.ant.Project;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
  *
  ****************************************************************************/
 
+public class Server implements Runnable {
+	private ServerTask task;
+	private int port = 17000;
+	private boolean running = false;
+	private Thread thread = null;
 
-public class Server
-        implements Runnable
-{
-    private ServerTask task;
-    private int port = 17000;
-    private boolean running = false;
-    private Thread thread = null;
+	public Server(ServerTask task, int port) {
+		super();
+		this.task = task;
+		this.port = port;
+	}
 
-    public Server(ServerTask task, int port)
-    {
-        super();
-        this.task = task;
-        this.port = port;
-    }
+	public void start() throws InterruptedException {
+		thread = new Thread(this);
+		thread.start();
+		thread.join();
+	}
 
-    public void start()
-        throws InterruptedException
-    {
-        thread = new Thread(this);
-        thread.start();
-        thread.join();
-    }
+	public void stop() {
+		running = false;
+	}
 
-    public void stop()
-    {
-        running = false;
-    }
+	public void run() {
+		ServerSocket server = null;
+		running = true;
+		try {
+			task.getProject().log("Starting server on port: " + port, Project.MSG_DEBUG);
+			try {
+				server = new ServerSocket(port);
+				server.setSoTimeout(500);
+			} catch (IOException e) {
+				throw new BuildException(e);
+			}
 
-    public void run()
-    {
-        ServerSocket server = null;
-        running = true;
-        try
-        {
-            task.getProject().log("Starting server on port: " + port,
-                    Project.MSG_DEBUG);
-            try
-            {
-                server = new ServerSocket(port);
-                server.setSoTimeout(500);
-            }
-            catch (IOException e)
-            {
-                throw new BuildException(e);
-            }
+			while (running) {
+				try {
+					Socket clientSocket = server.accept();
+					task.getProject().log("Got a client connection. Starting Handler.", Project.MSG_DEBUG);
+					ConnectionHandler handler = new ConnectionHandler(task, clientSocket);
+					handler.start();
+				} catch (InterruptedIOException e) {
+					; // gulp, no socket connection
+				} catch (IOException e) {
+					task.getProject().log(e.getMessage(), Project.MSG_ERR);
+				}
+			}
+		} finally {
+			if (server != null) {
+				try {
+					server.close();
+					server = null;
+				} catch (IOException e) {
+					; // gulp
+				}
+			}
+		}
+		running = false;
 
-
-            while (running)
-            {
-                try
-                {
-                    Socket clientSocket = server.accept();
-                    task.getProject().log("Got a client connection. Starting Handler.",
-                            Project.MSG_DEBUG);
-                    ConnectionHandler handler = new ConnectionHandler(task,
-                            clientSocket);
-                    handler.start();
-                }
-                catch (InterruptedIOException e)
-                {
-                    ; // gulp, no socket connection
-                }
-                catch (IOException e)
-                {
-                    task.getProject().log(e.getMessage(),
-                            Project.MSG_ERR);
-                }
-            }
-        }
-        finally
-        {
-            if (server != null)
-            {
-                try
-                {
-                    server.close();
-                    server = null;
-                }
-                catch (IOException e)
-                {
-                    ; // gulp
-                }
-            }
-        }
-        running = false;
-
-
-    }
+	}
 
 }

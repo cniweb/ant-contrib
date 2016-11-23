@@ -22,112 +22,92 @@ import org.apache.tools.ant.DynamicConfigurator;
 /**
  * Task for mathematical operations.
  *
- * @author		inger
+ * @author inger
  */
 
+public class MathTask extends Task implements DynamicConfigurator {
+	// storage for result
+	private String result = null;
+	private Operation operation = null;
+	private Operation locOperation = null;
+	private String datatype = null;
+	private boolean strict = false;
 
-public class MathTask
-        extends Task
-        implements DynamicConfigurator
-{
-    // storage for result
-    private String result = null;
-    private Operation operation = null;
-    private Operation locOperation = null;
-    private String datatype = null;
-    private boolean strict = false;
+	public MathTask() {
+		super();
+	}
 
-    public MathTask()
-    {
-        super();
-    }
+	public void execute() throws BuildException {
+		Operation op = locOperation;
+		if (op == null)
+			op = operation;
 
-    public void execute()
-            throws BuildException
-    {
-        Operation op = locOperation;
-        if (op == null)
-            op = operation;
+		Number res = op.evaluate();
 
-        Number res = op.evaluate();
+		if (datatype != null)
+			res = Math.convert(res, datatype);
+		getProject().setUserProperty(result, res.toString());
+	}
 
-        if (datatype != null)
-            res = Math.convert(res, datatype);
-        getProject().setUserProperty(result, res.toString());
-    }
+	public void setDynamicAttribute(String s, String s1) throws BuildException {
+		throw new BuildException("No dynamic attributes for this task");
+	}
 
-    public void setDynamicAttribute(String s, String s1)
-            throws BuildException {
-        throw new BuildException("No dynamic attributes for this task");
-    }
+	public Object createDynamicElement(String name) throws BuildException {
+		Operation op = new Operation();
+		op.setOperation(name);
+		operation = op;
+		return op;
+	}
 
-    public Object createDynamicElement(String name)
-            throws BuildException {
-        Operation op = new Operation();
-        op.setOperation(name);
-        operation = op;
-        return op;
-    }
+	public void setResult(String result) {
+		this.result = result;
+	}
 
-    public void setResult(String result)
-    {
-        this.result = result;
-    }
+	public void setDatatype(String datatype) {
+		this.datatype = datatype;
+	}
 
-    public void setDatatype(String datatype)
-    {
-        this.datatype = datatype;
-    }
+	public void setStrict(boolean strict) {
+		this.strict = strict;
+	}
 
-    public void setStrict(boolean strict)
-    {
-        this.strict = strict;
-    }
+	private Operation getLocalOperation() {
+		if (locOperation == null) {
+			locOperation = new Operation();
+			locOperation.setDatatype(datatype);
+			locOperation.setStrict(strict);
+		}
+		return locOperation;
+	}
 
-    private Operation getLocalOperation()
-    {
-        if (locOperation == null)
-        {
-            locOperation = new Operation();
-            locOperation.setDatatype(datatype);
-            locOperation.setStrict(strict);
-        }
-        return locOperation;
-    }
+	public void setOperation(String operation) {
+		getLocalOperation().setOperation(operation);
+	}
 
-    public void setOperation(String operation)
-    {
-        getLocalOperation().setOperation(operation);
-    }
+	public void setDataType(String dataType) {
+		getLocalOperation().setDatatype(dataType);
+	}
 
-    public void setDataType(String dataType)
-    {
-        getLocalOperation().setDatatype(dataType);
-    }
+	public void setOperand1(String operand1) {
+		getLocalOperation().setArg1(operand1);
+	}
 
-    public void setOperand1(String operand1)
-    {
-        getLocalOperation().setArg1(operand1);
-    }
+	public void setOperand2(String operand2) {
+		getLocalOperation().setArg2(operand2);
+	}
 
-    public void setOperand2(String operand2)
-    {
-        getLocalOperation().setArg2(operand2);
-    }
+	public Operation createOperation() {
+		if (locOperation != null || operation != null)
+			throw new BuildException("Only 1 operation can be specified");
+		this.operation = new Operation();
+		this.operation.setStrict(strict);
+		this.operation.setDatatype(datatype);
+		return this.operation;
+	}
 
-    public Operation createOperation()
-    {
-        if (locOperation != null || operation != null)
-            throw new BuildException("Only 1 operation can be specified");
-        this.operation = new Operation();
-        this.operation.setStrict(strict);
-        this.operation.setDatatype(datatype);
-        return this.operation;
-    }
-
-    // conform to old task
-    public Operation createOp()
-    {
-        return createOperation();
-    }
+	// conform to old task
+	public Operation createOp() {
+		return createOperation();
+	}
 }

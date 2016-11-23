@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.antserver.commands;
+package net.sf.antcontrib.antserver.commands;
 
 import java.io.Serializable;
 
@@ -21,49 +21,37 @@ import java.io.Serializable;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
- *               
+ * 
  ****************************************************************************/
 
+public class ReferenceContainer implements Serializable {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -8648025598456960491L;
+	private String refId;
+	private String toRefId;
 
-public class ReferenceContainer
-        implements Serializable
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = -8648025598456960491L;
-    private String refId;
-    private String toRefId;
+	public ReferenceContainer() {
+		super();
+	}
 
-    public ReferenceContainer()
-    {
-        super();
-    }
+	public String getRefId() {
+		return refId;
+	}
 
+	public void setRefid(String refId) {
+		this.refId = refId;
+	}
 
-    public String getRefId()
-    {
-        return refId;
-    }
+	public String getToRefId() {
+		return toRefId;
+	}
 
-
-    public void setRefid(String refId)
-    {
-        this.refId = refId;
-    }
-
-
-    public String getToRefId()
-    {
-        return toRefId;
-    }
-
-
-    public void setToRefId(String toRefId)
-    {
-        this.toRefId = toRefId;
-    }
+	public void setToRefId(String toRefId) {
+		this.toRefId = toRefId;
+	}
 }

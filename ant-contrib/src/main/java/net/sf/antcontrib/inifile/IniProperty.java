@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package net.sf.antcontrib.inifile;
+package net.sf.antcontrib.inifile;
 
 import java.io.IOException;
 import java.io.Writer;
-
 
 /****************************************************************************
  * A single property in an IniSection.
@@ -26,81 +25,75 @@ import java.io.Writer;
  *
  ****************************************************************************/
 
+public class IniProperty implements IniPart {
+	private String name;
+	private String value;
 
-public class IniProperty
-        implements IniPart
-{
-    private String name;
-    private String value;
+	/***
+	 * Default constructor
+	 */
+	public IniProperty() {
+		super();
+	}
 
-    /***
-     * Default constructor
-     */
-    public IniProperty()
-    {
-        super();
-    }
+	/***
+	 * Construct an IniProperty with a certain name and value
+	 * 
+	 * @param name
+	 *            The name of the property
+	 * @param value
+	 *            The property value
+	 */
+	public IniProperty(String name, String value) {
+		this();
+		this.name = name;
+		this.value = value;
+	}
 
-    /***
-     * Construct an IniProperty with a certain name and value
-     * @param name The name of the property
-     * @param value The property value
-     */
-    public IniProperty(String name, String value)
-    {
-        this();
-        this.name = name;
-        this.value = value;
-    }
+	/***
+	 * Gets the name of the property
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /***
-     * Gets the name of the property
-     */
-    public String getName()
-    {
-        return name;
-    }
+	/***
+	 * Sets the name of the property
+	 * 
+	 * @param name
+	 *            The name of the property
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /***
-     * Sets the name of the property
-     * @param name The name of the property
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	/***
+	 * Gets the value of the property
+	 */
+	public String getValue() {
+		return value;
+	}
 
+	/***
+	 * Sets the value of the property
+	 * 
+	 * @param value
+	 *            the value of the property
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    /***
-     * Gets the value of the property
-     */
-    public String getValue()
-    {
-        return value;
-    }
-
-
-    /***
-     * Sets the value of the property
-     * @param value the value of the property
-     */
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
-
-
-    /***
-     * Write this property to a writer object.
-     * @param writer
-     * @throws IOException
-     */
-    public void write(Writer writer)
-            throws IOException
-    {
-        writer.write(name);
-        if (! name.trim().startsWith(";"))
-            writer.write("=" + value);
-    }
+	/***
+	 * Write this property to a writer object.
+	 * 
+	 * @param writer
+	 * @throws IOException
+	 */
+	public void write(Writer writer) throws IOException {
+		writer.write(name);
+		if (!name.trim().startsWith(";"))
+			writer.write("=" + value);
+	}
 
 }

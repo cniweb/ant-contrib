@@ -22,7 +22,6 @@ import org.apache.tools.ant.Project;
 
 import net.sf.antcontrib.antserver.Command;
 
-
 /****************************************************************************
  * Place class description here.
  *
@@ -30,46 +29,29 @@ import net.sf.antcontrib.antserver.Command;
  *
  ****************************************************************************/
 
+public abstract class AbstractCommand implements Command {
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = 6316557943646204850L;
 
-public abstract class AbstractCommand
-        implements Command
-{
-    /**
-   * 
-   */
-  private static final long serialVersionUID = 6316557943646204850L;
+	public long getContentLength() {
+		return 0;
+	}
 
+	public InputStream getContentStream() throws IOException {
+		return null;
+	}
 
-    public long getContentLength()
-    {
-        return 0;
-    }
+	public long getResponseContentLength() {
+		return 0;
+	}
 
+	public InputStream getReponseContentStream() throws IOException {
+		return null;
+	}
 
-    public InputStream getContentStream()
-        throws IOException
-    {
-        return null;
-    }
-
-
-    public long getResponseContentLength()
-    {
-        return 0;
-    }
-
-
-    public InputStream getReponseContentStream() throws IOException
-    {
-        return null;
-    }
-
-
-    public boolean respond(Project project,
-                           long contentLength,
-                           InputStream contentStream)
-            throws IOException
-    {
-        return false;
-    }
+	public boolean respond(Project project, long contentLength, InputStream contentStream) throws IOException {
+		return false;
+	}
 }

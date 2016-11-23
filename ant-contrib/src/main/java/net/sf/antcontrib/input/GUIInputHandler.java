@@ -24,8 +24,8 @@ import org.apache.tools.ant.input.InputRequest;
 import org.apache.tools.ant.input.MultipleChoiceInputRequest;
 
 /**
- * Prompts for user input using a JOptionPane. Developed for use with
- * Antelope, migrated to ant-contrib Oct 2003.
+ * Prompts for user input using a JOptionPane. Developed for use with Antelope,
+ * migrated to ant-contrib Oct 2003.
  *
  * @author <a href="mailto:danson@germane-software.com">Dale Anson</a>
  * @version $Revision: 1.3 $
@@ -33,45 +33,46 @@ import org.apache.tools.ant.input.MultipleChoiceInputRequest;
  */
 public class GUIInputHandler implements InputHandler {
 
-    private Component parent = null;
+	private Component parent = null;
 
-    public GUIInputHandler() {}
+	public GUIInputHandler() {
+	}
 
-    /**
-     * @param parent the parent component to display the input dialog.
-     */
-    public GUIInputHandler( Component parent ) {
-        this.parent = parent;
-    }
+	/**
+	 * @param parent
+	 *            the parent component to display the input dialog.
+	 */
+	public GUIInputHandler(Component parent) {
+		this.parent = parent;
+	}
 
-    /**
-     * Prompts and requests input.  May loop until a valid input has
-     * been entered.
-     */
-    public void handleInput( InputRequest request ) throws BuildException {
+	/**
+	 * Prompts and requests input. May loop until a valid input has been
+	 * entered.
+	 */
+	public void handleInput(InputRequest request) throws BuildException {
 
-        if ( request instanceof MultipleChoiceInputRequest ) {
-            String prompt = request.getPrompt();
-            String title = "Select Input";
-            int optionType = JOptionPane.YES_NO_OPTION;
-            Icon icon = null;
-            Object[] choices = ( ( MultipleChoiceInputRequest ) request ).getChoices().toArray();
-            Object initialChoice = null;
-            do {
-                Object input = JOptionPane.showInputDialog(parent, prompt, 
-                    title, optionType, icon, choices, initialChoice);
-                if (input == null)
-                   throw new BuildException("User cancelled.");
-                request.setInput(input.toString());
-            } while (!request.isInputValid());
-            
-        }
-        else {
-            do {
-                String input = JOptionPane.showInputDialog( parent, request.getPrompt() );
-                request.setInput( input );
-            } while ( !request.isInputValid() );
-        }
-    }
+		if (request instanceof MultipleChoiceInputRequest) {
+			String prompt = request.getPrompt();
+			String title = "Select Input";
+			int optionType = JOptionPane.YES_NO_OPTION;
+			Icon icon = null;
+			Object[] choices = ((MultipleChoiceInputRequest) request).getChoices().toArray();
+			Object initialChoice = null;
+			do {
+				Object input = JOptionPane.showInputDialog(parent, prompt, title, optionType, icon, choices,
+						initialChoice);
+				if (input == null)
+					throw new BuildException("User cancelled.");
+				request.setInput(input.toString());
+			} while (!request.isInputValid());
+
+		} else {
+			do {
+				String input = JOptionPane.showInputDialog(parent, request.getPrompt());
+				request.setInput(input);
+			} while (!request.isInputValid());
+		}
+	}
 
 }

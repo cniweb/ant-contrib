@@ -26,174 +26,147 @@ import org.apache.tools.ant.util.regexp.Regexp;
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
- *               
+ * 
  ****************************************************************************/
 
+public class RegexTask extends AbstractPropertySetterTask {
+	private String input;
 
-public class RegexTask
-        extends AbstractPropertySetterTask
-{
-    private String input;
+	private RegularExpression regexp;
+	private String select;
+	private Substitution replace;
+	private String defaultValue;
 
-    private RegularExpression regexp;
-    private String select;
-    private Substitution replace;
-    private String defaultValue;
+	private boolean caseSensitive = true;
+	private boolean global = true;
 
-    private boolean caseSensitive = true;
-    private boolean global = true;
+	public RegexTask() {
+		super();
+	}
 
-    public RegexTask()
-    {
-        super();
-    }
+	public void setInput(String input) {
+		this.input = input;
+	}
 
-    public void setInput(String input)
-    {
-        this.input = input;
-    }
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 
-    public void setDefaultValue(String defaultValue)
-    {
-        this.defaultValue = defaultValue;
-    }
+	public void setRegexp(String regex) {
+		if (this.regexp != null)
+			throw new BuildException("Cannot specify more than one regular expression");
 
-    public void setRegexp(String regex)
-    {
-        if (this.regexp != null)
-            throw new BuildException("Cannot specify more than one regular expression");
+		this.regexp = new RegularExpression();
+		this.regexp.setPattern(regex);
+	}
 
-        this.regexp = new RegularExpression();
-        this.regexp.setPattern(regex);
-    }
+	public RegularExpression createRegexp() {
+		if (this.regexp != null)
+			throw new BuildException("Cannot specify more than one regular expression");
+		regexp = new RegularExpression();
+		return regexp;
+	}
 
+	public void setReplace(String replace) {
+		if (this.replace != null)
+			throw new BuildException("Cannot specify more than one replace expression");
+		if (select != null)
+			throw new BuildException("You cannot specify both a select and replace expression");
+		this.replace = new Substitution();
+		this.replace.setExpression(replace);
+	}
 
-    public RegularExpression createRegexp()
-    {
-        if (this.regexp != null)
-            throw new BuildException("Cannot specify more than one regular expression");
-        regexp = new RegularExpression();
-        return regexp;
-    }
+	public Substitution createReplace() {
+		if (replace != null)
+			throw new BuildException("Cannot specify more than one replace expression");
+		if (select != null)
+			throw new BuildException("You cannot specify both a select and replace expression");
+		replace = new Substitution();
+		return replace;
+	}
 
-    public void setReplace(String replace)
-    {
-        if (this.replace != null)
-            throw new BuildException("Cannot specify more than one replace expression");
-        if (select != null)
-            throw new BuildException("You cannot specify both a select and replace expression");
-        this.replace = new Substitution();
-        this.replace.setExpression(replace);
-    }
+	public void setSelect(String select) {
+		if (replace != null)
+			throw new BuildException("You cannot specify both a select and replace expression");
+		this.select = select;
+	}
 
-    public Substitution createReplace()
-    {
-        if (replace != null)
-            throw new BuildException("Cannot specify more than one replace expression");
-        if (select != null)
-            throw new BuildException("You cannot specify both a select and replace expression");
-        replace = new Substitution();
-        return replace;
-    }
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
+	}
 
-    public void setSelect(String select)
-    {
-        if (replace != null)
-            throw new BuildException("You cannot specify both a select and replace expression");
-        this.select = select;
-    }
+	public void setGlobal(boolean global) {
+		this.global = global;
+	}
 
-    public void setCaseSensitive(boolean caseSensitive)
-    {
-        this.caseSensitive = caseSensitive;
-    }
+	protected String doReplace() throws BuildException {
+		if (replace == null)
+			throw new BuildException("No replace expression specified.");
 
-    public void setGlobal(boolean global)
-    {
-        this.global = global;
-    }
+		int options = 0;
+		if (!caseSensitive)
+			options |= Regexp.MATCH_CASE_INSENSITIVE;
+		if (global)
+			options |= Regexp.REPLACE_ALL;
 
-    protected String doReplace()
-        throws BuildException
-    {
-        if (replace == null)
-            throw new BuildException("No replace expression specified.");
+		Regexp sregex = regexp.getRegexp(project);
 
-        int options = 0;
-        if (! caseSensitive)
-            options |= Regexp.MATCH_CASE_INSENSITIVE;
-        if (global)
-            options |= Regexp.REPLACE_ALL;
+		String output = null;
 
-        Regexp sregex = regexp.getRegexp(project);
+		if (sregex.matches(input, options)) {
+			String expression = replace.getExpression(project);
+			output = sregex.substitute(input, expression, options);
+		}
 
-        String output = null;
+		if (output == null)
+			output = defaultValue;
 
-        if (sregex.matches(input, options)) {
-            String expression = replace.getExpression(project);
-            output = sregex.substitute(input,
-                                       expression,
-                                       options);
-        }
+		return output;
+	}
 
-        if (output == null)
-            output = defaultValue;
+	protected String doSelect() throws BuildException {
+		int options = 0;
+		if (!caseSensitive)
+			options |= Regexp.MATCH_CASE_INSENSITIVE;
 
-        return output;
-    }
+		Regexp sregex = regexp.getRegexp(project);
 
-    protected String doSelect()
-        throws BuildException
-    {
-        int options = 0;
-        if (! caseSensitive)
-            options |= Regexp.MATCH_CASE_INSENSITIVE;
+		String output = select;
+		Vector groups = sregex.getGroups(input, options);
 
-        Regexp sregex = regexp.getRegexp(project);
+		if (groups != null && groups.size() > 0) {
+			output = RegexUtil.select(select, groups);
+		} else {
+			output = null;
+		}
 
-        String output = select;
-        Vector groups = sregex.getGroups(input, options);
+		if (output == null)
+			output = defaultValue;
 
-        if (groups != null && groups.size() > 0)
-        {
-            output = RegexUtil.select(select, groups);
-        }
-        else
-        {
-            output = null;
-        }
+		return output;
+	}
 
-        if (output == null)
-            output = defaultValue;
-        
-        return output;
-    }
+	protected void validate() {
+		super.validate();
+		if (regexp == null)
+			throw new BuildException("No match expression specified.");
+		if (replace == null && select == null)
+			throw new BuildException("You must specify either a replace or select expression");
+	}
 
+	public void execute() throws BuildException {
+		validate();
 
-    protected void validate()
-    {
-        super.validate();
-        if (regexp == null)
-            throw new BuildException("No match expression specified.");
-        if (replace == null && select == null)
-            throw new BuildException("You must specify either a replace or select expression");
-    }
+		String output = input;
+		if (replace != null)
+			output = doReplace();
+		else
+			output = doSelect();
 
-    public void execute()
-        throws BuildException
-    {
-        validate();
-
-        String output = input;
-        if (replace != null)
-            output = doReplace();
-        else
-            output = doSelect();
-
-        if (output != null)
-            setPropertyValue(output);
-    }
+		if (output != null)
+			setPropertyValue(output);
+	}
 }

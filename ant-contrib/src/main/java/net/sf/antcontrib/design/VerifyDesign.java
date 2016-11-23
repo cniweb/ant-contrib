@@ -24,49 +24,47 @@ import org.apache.tools.ant.types.Path;
 /**
  * @author dhiller
  */
-public class VerifyDesign
-        extends Task
-        implements Log {
+public class VerifyDesign extends Task implements Log {
 
-    private VerifyDesignDelegate delegate;
+	private VerifyDesignDelegate delegate;
 
-    public VerifyDesign() {
-        delegate = new VerifyDesignDelegate(this);
-    }
+	public VerifyDesign() {
+		delegate = new VerifyDesignDelegate(this);
+	}
 
-    public void setJar(File f) {
-        delegate.setJar(f);
-    }
+	public void setJar(File f) {
+		delegate.setJar(f);
+	}
 
-    public void setDesign(File f) {
-        delegate.setDesign(f);
-    }
+	public void setDesign(File f) {
+		delegate.setDesign(f);
+	}
 
-    public void setCircularDesign(boolean isCircularDesign) {
-        delegate.setCircularDesign(isCircularDesign);
-    }
-    
-    public void setDeleteFiles(boolean deleteFiles) {
-        delegate.setDeleteFiles(deleteFiles);
-    }
-    
-    public void setFillInBuildException(boolean b) {
-    	delegate.setFillInBuildException(b);
-    }
-    
-    public void setNeedDeclarationsDefault(boolean b) {
-    	delegate.setNeedDeclarationsDefault(b);
-    }
-    
-    public void setNeedDependsDefault(boolean b) {
-    	delegate.setNeedDependsDefault(b);
-    }
+	public void setCircularDesign(boolean isCircularDesign) {
+		delegate.setCircularDesign(isCircularDesign);
+	}
 
-    public void addConfiguredPath(Path path) {
-        delegate.addConfiguredPath(path);
-    }
-    public void execute()
-            throws BuildException {
-        delegate.execute();
-    }
+	public void setDeleteFiles(boolean deleteFiles) {
+		delegate.setDeleteFiles(deleteFiles);
+	}
+
+	public void setFillInBuildException(boolean b) {
+		delegate.setFillInBuildException(b);
+	}
+
+	public void setNeedDeclarationsDefault(boolean b) {
+		delegate.setNeedDeclarationsDefault(b);
+	}
+
+	public void setNeedDependsDefault(boolean b) {
+		delegate.setNeedDependsDefault(b);
+	}
+
+	public void addConfiguredPath(Path path) {
+		delegate.addConfiguredPath(path);
+	}
+
+	public void execute() throws BuildException {
+		delegate.execute();
+	}
 }

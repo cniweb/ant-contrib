@@ -22,73 +22,61 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Reference;
 
-
 /****************************************************************************
  * Place class description here.
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a>
- * @author		<additional author>
+ * @author <additional author>
  *
  * @since
- *               
+ * 
  ****************************************************************************/
 
+public class URLEncodeTask extends AbstractPropertySetterTask {
+	private String value;
+	private Reference ref;
 
-public class URLEncodeTask
-        extends AbstractPropertySetterTask
-{
-    private String value;
-    private Reference ref;
+	public void setName(String name) {
+		setProperty(name);
+	}
 
-    public void setName(String name)
-    {
-        setProperty(name);
-    }
+	public void setValue(String value) {
+		this.value = URLEncoder.encode(value);
+	}
 
+	public String getValue(Project p) {
+		String val = value;
 
-    public void setValue(String value)
-    {
-        this.value = URLEncoder.encode(value);
-    }
+		if (ref != null)
+			val = ref.getReferencedObject(p).toString();
 
-    public String getValue(Project p)
-    {
-        String val = value;
+		return val;
+	}
 
-        if (ref != null)
-            val = ref.getReferencedObject(p).toString();
+	public void setLocation(File location) {
+		setValue(location.getAbsolutePath());
+	}
 
-        return val;
-    }
+	public void setRefid(Reference ref) {
+		this.ref = ref;
+	}
 
-    public void setLocation(File location) {
-        setValue(location.getAbsolutePath());
-    }
+	public String toString() {
+		return value == null ? "" : value;
+	}
 
-    public void setRefid(Reference ref) {
-        this.ref = ref;
-    }
+	protected void validate() {
+		super.validate();
+		if (value == null && ref == null) {
+			throw new BuildException("You must specify value, location or " + "refid with the name attribute",
+					getLocation());
+		}
+	}
 
-    public String toString() {
-        return value == null ? "" : value;
-    }
-
-    protected void validate()
-    {
-        super.validate();
-        if (value == null && ref == null)
-        {
-            throw new BuildException("You must specify value, location or "
-                                     + "refid with the name attribute",
-                                     getLocation());
-        }
-    }
-
-    public void execute()
-    {
-        validate();
-        String val = getValue(getProject());
-        setPropertyValue(val);
-    }
+	public void execute() {
+		validate();
+		String val = getValue(getProject());
+		setPropertyValue(val);
+	}
 
 }

@@ -22,26 +22,26 @@ import org.apache.tools.ant.taskdefs.condition.Condition;
 
 /**
  * Checks the value of a specified property.
- * <p>Developed for use with Antelope, migrated to ant-contrib Oct 2003.
+ * <p>
+ * Developed for use with Antelope, migrated to ant-contrib Oct 2003.
  *
- * @author     Dale Anson, danson@germane-software.com
+ * @author Dale Anson, danson@germane-software.com
  * @version $Revision: 1.3 $
  */
-public final class IsPropertyTrue
-    extends ProjectComponent implements Condition {
+public final class IsPropertyTrue extends ProjectComponent implements Condition {
 
-    private String name = null;
+	private String name = null;
 
-    public void setProperty( String name ) {
-        this.name = name;
-    }
+	public void setProperty(String name) {
+		this.name = name;
+	}
 
-    public boolean eval() throws BuildException {
-        if ( name == null )
-            throw new BuildException( "Property name must be set." );
-        String value = getProject().getProperty( name );
-        getProject();
-        return value != null && Project.toBoolean( value );
-    }
+	public boolean eval() throws BuildException {
+		if (name == null)
+			throw new BuildException("Property name must be set.");
+		String value = getProject().getProperty(name);
+		getProject();
+		return value != null && Project.toBoolean(value);
+	}
 
 }

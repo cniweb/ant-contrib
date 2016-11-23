@@ -18,7 +18,7 @@
  */
 package net.sf.antcontrib.design;
 
-/** 
+/**
  *
  * @author dhiller
  */

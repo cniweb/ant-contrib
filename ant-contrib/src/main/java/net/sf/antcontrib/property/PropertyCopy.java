@@ -18,10 +18,10 @@ package net.sf.antcontrib.property;
 import org.apache.tools.ant.BuildException;
 
 /***
- * Task definition for the propertycopy task, which copies the value of a
- * named property to another property.  This is useful when you need to
- * plug in the value of another property in order to get a property name
- * and then want to get the value of that property name.
+ * Task definition for the propertycopy task, which copies the value of a named
+ * property to another property. This is useful when you need to plug in the
+ * value of another property in order to get a property name and then want to
+ * get the value of that property name.
  *
  * <pre>
  * Usage:
@@ -52,58 +52,47 @@ import org.apache.tools.ant.BuildException;
  *
  * @author <a href="mailto:mattinger@yahoo.com">Matthew Inger</a>
  */
-public class PropertyCopy
-        extends AbstractPropertySetterTask
-{
-    private String from;
-    private boolean silent;
+public class PropertyCopy extends AbstractPropertySetterTask {
+	private String from;
+	private boolean silent;
 
-    /***
-     * Default Constructor
-     */
-    public PropertyCopy()
-    {
-        super();
-        this.from = null;
-        this.silent = false;
-    }
+	/***
+	 * Default Constructor
+	 */
+	public PropertyCopy() {
+		super();
+		this.from = null;
+		this.silent = false;
+	}
 
-    public void setName(String name)
-    {
-        setProperty(name);
-    }
+	public void setName(String name) {
+		setProperty(name);
+	}
 
-    public void setFrom(String from)
-    {
-        this.from = from;
-    }
+	public void setFrom(String from) {
+		this.from = from;
+	}
 
-    public void setSilent(boolean silent)
-    {
-        this.silent = silent;
-    }
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
 
-    protected void validate()
-    {
-        super.validate();
-        if (from == null)
-            throw new BuildException("Missing the 'from' attribute.");
-    }
+	protected void validate() {
+		super.validate();
+		if (from == null)
+			throw new BuildException("Missing the 'from' attribute.");
+	}
 
-    public void execute()
-        throws BuildException
-    {
-        validate();
+	public void execute() throws BuildException {
+		validate();
 
-        String value = getProject().getProperty(from);
+		String value = getProject().getProperty(from);
 
-        if (value == null && ! silent)
-            throw new BuildException("Property '" + from + "' is not defined.");
+		if (value == null && !silent)
+			throw new BuildException("Property '" + from + "' is not defined.");
 
-        if (value != null)
-            setPropertyValue(value);
-    }
+		if (value != null)
+			setPropertyValue(value);
+	}
 
 }
-
-
