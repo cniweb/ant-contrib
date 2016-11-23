@@ -7,11 +7,11 @@ This Software is distributed under the [Apache Software License](LICENSE.md).
 ## Installation
 
 First you must install Apache Ant itself, most of the Ant-Contrib tasks require Ant 1.5 or higher to work properly.
-You can download Ant from Apache.
+You can download Ant from [ant.apache.org](http://ant.apache.org/bindownload.cgi)
 
 See the cc tasks for installation instructions for cpptasks.
 
-To install ant-contrib:
+###To install ant-contrib:
 
 Copy ant-contrib-x.x.jar to the lib directory of your Ant installation. If you want to use one of the tasks in your own project, add the lines
 
