@@ -1,2 +1,5 @@
 language: java
-before_script: cd ant-contrib
+java:
+  - "1.7"
+  - "1.8"
+script: cd ant-contrib && mvn install && cd ../cpptasks && mvn install
