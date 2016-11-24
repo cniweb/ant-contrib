@@ -1,5 +1,4 @@
 language: java
-java:
-  - "1.7"
-  - "1.8"
+jdk:
+  - oraclejdk8
 script: cd ant-contrib && mvn install && cd ../cpptasks && mvn install
