@@ -1,4 +1,4 @@
 language: java
 jdk:
   - oraclejdk7
-script: cd ant-contrib && mvn install && cd ../cpptasks && mvn install
+script: cd ant-contrib && mvn install && cd ../cpptasks && mvn install -DskipTests=true
