@@ -1,4 +1,4 @@
-# ant-contrib
+# ant-contrib [![Build Status](https://travis-ci.org/cniweb/ant-contrib.svg?branch=master)](https://travis-ci.org/cniweb/ant-contrib)
 A home for additional useful tasks and types for Ant .
 The Ant-Contrib project is a collection of tasks (and at one point maybe types and other tools) for [Apache Ant](http://ant.apache.org).
 
