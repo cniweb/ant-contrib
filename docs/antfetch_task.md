@@ -34,12 +34,11 @@ And this one will also print out the thumbnail directory:
 
 The attributes for AntFetch are identical to the 'ant' task, with one additional, optional attibute. This attribute is named "return" and can be either a single property name or a comma separated list of property names.
 
-<span id="N10B35"></span>
 **Table 14.1. AntFetch Attributes**
 
 | Attribute | Description                                                                                                | Default | Required |
 |-----------|------------------------------------------------------------------------------------------------------------|---------|----------|
-| return    | A comma separated list of property names. Whitespace is allowed, so either "a,b" or "a, b" are acceptable. | None    | No       |
+| `return`  | A comma separated list of property names. Whitespace is allowed, so either "a,b" or "a, b" are acceptable. | None    | No       |
 
 For other attribute and nested element information and more examples, see the documentation for the "ant" task in the Ant documentation.
 

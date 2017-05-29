@@ -90,23 +90,30 @@ It is important to note that when doing a "replace" operation, if the input stri
 Example
 -------
 
-        
-        <propertyregex property="pack.name"
-                  input="package.ABC.name"
-                  regexp="package\.([^\.]*)\.name"
-                  select="\1"
-                  casesensitive="false" />
-        
-        yields ABC
-        
+```xml
+<propertyregex property="pack.name"
+               input="package.ABC.name"
+               regexp="package\.([^\.]*)\.name"
+               select="\1"
+               casesensitive="false" />
+```    
 
-        
-        <propertyregex property="pack.name"
-                  input="package.ABC.name"
-                  regexp="(package)\.[^\.]*\.(name)"
-                  replace="\1.DEF.\2"
-                  casesensitive="false" />
-        
-        yields package.DEF.name
-        
+yields
 
+```
+ABC
+```
+        
+```xml
+<propertyregex property="pack.name"
+               input="package.ABC.name"
+               regexp="(package)\.[^\.]*\.(name)"
+               replace="\1.DEF.\2"
+               casesensitive="false" />
+```
+
+yields
+
+```
+package.DEF.name
+```     

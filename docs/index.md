@@ -46,7 +46,7 @@ Keep `ant-contrib-version.jar` in a separate location. You now have to tell Ant 
 </taskdef>
 ```
 
-If you would like to use run with Ant Version 1.5 you must use the the .properties file instead. Keep in mind that some tasks will not be available to you , such as the &lt;for&gt; task:
+If you would like to use run with Ant Version 1.5 you must use the the .properties file instead. Keep in mind that some tasks will not be available to you , such as the <for> task:
 
 ```xml
 <taskdef resource="net/sf/antcontrib/antcontrib.properties">

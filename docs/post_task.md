@@ -1,7 +1,7 @@
 ---
 layout: home
 ---
-<span id="post"></span> HTTP Post
+ HTTP Post
 ---------------------------------
 
 The Post task is a companion to the standard Ant "Get" task. This task does a post and does not necessarily expect anything in return. Almost always, there will be some sort of returned data, this can be logged or written to a file if needed.
@@ -12,7 +12,6 @@ This task handles cookies correctly, which is useful for websites that set a ses
 
 The Post task has three ways of specifying the data to be posted. Nested "prop" elements can be used. A "prop" element represents a single name/value pair. The second way is to specify a property file as an attribute to the Post. All properties from the file will be sent as part of the Post data. The third way is to just type in some defined Ant properties. Is it allowed to use all three ways at once, that is, read some properties from a file, specify others via "prop" elements, and just type in some Ant properties.
 
-<span id="N10A61"></span>
 **Table 12.1. Post Task Attributes**
 
 Attribute
@@ -68,108 +67,54 @@ No
 
 Post supports nested "prop" elements. As an HTTP POST basically sends a list of names and values, the "prop" element represents one name/value pair. A Post may contain any number of "prop" elements.
 
-<span id="N10ABF"></span>
 **Table 12.2. Prop Attributes**
 
 | Attribute | Description                         | Default | Required |
 |-----------|-------------------------------------|---------|----------|
-| name      | The name of a property to post.     | None    | Yes      |
-| value     | The value associated with the name. | None    | No       |
+| `name`  | The name of a property to post.     | None    | Yes      |
+| `value`  | The value associated with the name. | None    | No       |
 
 The "value" attribute is not strictly required. This provides a short-cut method in cases where the property data is an already-defined Ant property. Suppose the build file has this property defined:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-    &lt;property name=&quot;src.dir&quot; value=&quot;/home/user/project/src&quot;/&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
-
+```xml
+<property name="src.dir" value="/home/user/project/src"/>
+```
 Then the following are equivalent:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-    &lt;prop name=&quot;src.dir&quot;/&gt;
-    &lt;prop name=&quot;src.dir&quot; value=&quot;${src.dir}&quot;/&gt;
-    &lt;prop name=&quot;src.dir&quot; value=&quot;/home/user/project/src&quot;/&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```xml
+<prop name="src.dir"/>
+<prop name="src.dir" value="${src.dir}"/>
+<prop name="src.dir" value="/home/user/project/src"/>
+```
 
 Defined Ant properties can be entered directly into the post element. Again, suppose the build file has this property defined:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-    &lt;property name=&quot;src.dir&quot; value=&quot;/home/user/project/src&quot;/&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```xml
+<property name="src.dir" value="/home/user/project/src"/>
+```
 
 Then the following are equivalent:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-    ${src.dir}
-    &lt;prop name=&quot;src.dir&quot;/&gt;
-    &lt;prop name=&quot;src.dir&quot; value=&quot;${src.dir}&quot;/&gt;
-    &lt;prop name=&quot;src.dir&quot; value=&quot;/home/user/project/src&quot;/&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```xml
+${src.dir}
+<prop name="src.dir"/>
+<prop name="src.dir" value="${src.dir}"/>
+<prop name="src.dir" value="/home/user/project/src"/>
 
 I googled for the URL in the following example.
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-    &lt;property name=&quot;test.val&quot; value=&quot;here&#39;s my test value&quot;/&gt;
-    &lt;property name=&quot;test.val2&quot; value=&quot;second test value&quot;/&gt;
-    &lt;post to=&quot;http://wwwj.cs.unc.edu:8888/tang/servlet/tangGetPostServlet&quot;
-        verbose=&quot;true&quot;&gt;
-        &lt;prop name=&quot;prop1&quot; value=&quot;val1 ${test.val}&quot;/&gt;
-        &lt;prop name=&quot;prop2&quot; value=&quot;val1 value 2&quot;/&gt;
-        &lt;prop name=&quot;prop3&quot; value=&quot;val got some spaces %funky ^$* chars&quot;/&gt;
-        &lt;prop name=&quot;prop4&quot; value=&quot;&amp;amp; do an ampersand like this &amp;amp;amp; or
-        Ant will whine&quot;/&gt;
-        &lt;prop name=&quot;thanks&quot; value=&quot;dude, thanks for the echo server!&quot;/&gt;
-        &lt;prop name=&quot;test.val&quot;/&gt;
-        ${test.val2}
-    &lt;/post&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
-
+```xml
+<property name="test.val" value="here&#39;s my test value"/>
+<property name="test.val2" value="second test value"/>
+<post to="http://wwwj.cs.unc.edu:8888/tang/servlet/tangGetPostServlet"
+    verbose="true">
+    <prop name="prop1" value="val1 ${test.val}"/>
+    <prop name="prop2" value="val1 value 2"/>
+    <prop name="prop3" value="val got some spaces %funky ^$* chars"/>
+    <prop name="prop4" value="&amp;amp; do an ampersand like this &amp;amp;amp; or
+    Ant will whine"/>
+    <prop name="thanks" value="dude, thanks for the echo server!"/>
+    <prop name="test.val"/>
+    ${test.val2}
+</post>
+```

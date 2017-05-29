@@ -4,7 +4,7 @@ layout: home
 HttpClient
 ==========
 
-The &lt;httpClient&gt; type allows the caller to create an HttpClient instance, and add it as a reference, or be nested as a subelement of an HTTP method call.
+The <httpClient> type allows the caller to create an HttpClient instance, and add it as a reference, or be nested as a subelement of an HTTP method call.
 
 Parameters
 ----------
@@ -18,7 +18,7 @@ Parameters
 Parameters specified as Nested Elements
 ---------------------------------------
 
-**&lt;clientParams&gt;**
+**<clientParams>**
 
 Create http client params.
 
@@ -34,8 +34,8 @@ Create http client params.
 | *soTimeout*                |                                                                     | No.      |
 | *version*                  | The HTTP version.                                                   | No.      |
 
-Additional **&lt;clientParams&gt;** subelements:
-&lt;double&gt;,&lt;int&gt;,&lt;long&gt;,&lt;boolean&gt; ,&lt;string&gt;
+Additional **<clientParams>** subelements:
+<double>,<int>,<long>,<boolean> ,<string>
 
 Create a client parameter.
 
@@ -44,7 +44,7 @@ Create a client parameter.
 | *name*    | The parameter name   | Yes.     |
 | *value*   | The parameter value. | Yes.     |
 
-**&lt;hostConfig&gt;**
+**<hostConfig>**
 
 Create a host configuration.
 
@@ -57,15 +57,15 @@ Create a host configuration.
 | *proxyHost* | The proxyHost to connect to. | No.      |
 | *proxyPort* |                              | No.      |
 
-Additional **&lt;hostConfig&gt;** subelements:
-&lt;hostParams&gt;
+Additional **<hostConfig>** subelements:
+<hostParams>
 
 Specify HostParams.
 
-| &lt;hostParams&gt; subelements are identical to those of &lt;clientParams&gt; |
+| <hostParams> subelements are identical to those of <clientParams> |
 |-------------------------------------------------------------------------------|
 
-**&lt;httpState&gt;**
+**<httpState>**
 
 Create (or reference an existing) HttpState for use with this HTTP client. This is necessary if you wish to enable authentication, or retain state across multiple method calls.
 
@@ -81,5 +81,4 @@ Examples
         </httpClient>
         
         
-
 

@@ -51,12 +51,11 @@ This is an often requested feature for Ant, at least judging from the Ant mailin
 This is actually looks cleaner in this situation, and is faster, too. There is significant overhead in using both "antcall" and "antcallback" in that they both require a lot of object instantiation and property copying. That said, many people prefer to use "antcall" and "antcallback" as it better fits their logic and style.
 The attributes for AntCallBack are identical to the 'antcall' task, with one additional, optional attibute. This attribute is named "return" and can be either a single property name or a comma separated list of property names.
 
-<span id="N10B76"></span>
 **Table 15.1. AntCallBack Attributes**
 
 | Attribute | Description                                                                                                | Default | Required |
 |-----------|------------------------------------------------------------------------------------------------------------|---------|----------|
-| return    | A comma separated list of property names. Whitespace is allowed, so either "a,b" or "a, b" are acceptable. | None    | No       |
+| `return`  | A comma separated list of property names. Whitespace is allowed, so either "a,b" or "a, b" are acceptable. | None    | No       |
 
 For other attribute and nested element information and more examples, see the documentation for the "antcall" task in the Ant documentation.
 

@@ -34,10 +34,10 @@ Example
     <fail>Tada!</fail>
   </try>
   <catch>
-    <echo>In &lt;catch&gt;.</echo>
+    <echo>In <catch>.</echo>
   </catch>
   <finally>
-    <echo>In &lt;finally&gt;.</echo>
+    <echo>In <finally>.</echo>
   </finally>
 </trycatch>
 

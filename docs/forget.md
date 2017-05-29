@@ -11,7 +11,7 @@ Parameters
 
 | Attribute | Description                                                                                                                      | Required              |
 |-----------|----------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| daemon    | Should the created thread be a daemon thread. That is, should the ANT program be allowed to exit if the thread is still running. | No. Defaults to true. |
+| `daemon`  | Should the created thread be a daemon thread. That is, should the ANT program be allowed to exit if the thread is still running. | No. Defaults to true. |
 
 Example
 -------
@@ -34,5 +34,4 @@ The following code
         
 
 Would start the Tomcat webserver as a background process, then waiting for the server to become available.
-
 

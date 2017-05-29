@@ -34,27 +34,19 @@ Parameters
 Parameters specified as nested elements
 ---------------------------------------
 
-<span id="path"></span>
-
 ### path
 
 [Path](http://ant.apache.org/manual/using.html#path)s are used to select sets of files or directories to iterate over.
 
 Using a path allows you to determine the order by which files are considered by using [filelist](http://ant.apache.org/manual/CoreTypes/filelist.html)s or explicit `pathelements`. You also can specify whether you want to iterate over files or directories by chosing either filesets or [dirset](http://ant.apache.org/manual/CoreTypes/dirset.html)s.
 
-<span id="fileset"></span>
-
 ### fileset
 
 [FileSet](http://ant.apache.org/manual/CoreTypes/fileset.html)s are used to select sets of files to iterate over.
 
-<span id="fileset"></span>
-
 ### dirset
 
 [DirSet](http://ant.apache.org/manual/CoreTypes/dirset.html)s are used to select sets of directories to iterate over.
-
-<span id="seqential"></span>
 
 ### sequential
 

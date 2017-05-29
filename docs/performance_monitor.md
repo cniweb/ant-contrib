@@ -1,7 +1,7 @@
 ---
 layout: home
 ---
-<span id="performance"></span> Performance Monitoring
+ Performance Monitoring
 -----------------------------------------------------
 
 The "Performance Monitor" is a special Ant listener than can keep track of the amount of time that each target and task takes to execute. At the end of the build, these times will be sorted from fastest to slowest and displayed following the build output. This can be useful to pinpoint slow and/or inefficient spots in the build process and identify those areas that could benefit from optimization.

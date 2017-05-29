@@ -11,6 +11,4 @@ Parameters
 
 | Attribute | Description                                              | Required |
 |-----------|----------------------------------------------------------|----------|
-| property  | The name of the property to set with the OS family name. | Yes.     |
-
-
+| `property`  | The name of the property to set with the OS family name. | Yes.     |

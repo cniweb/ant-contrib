@@ -4,7 +4,7 @@ layout: home
 HttpState
 =========
 
-The &lt;httpState&gt; type allows the caller to create an HttpState instance, and add it as a reference, or be nested as a subelement of an &lt;httpClient&gt; element.
+The <httpState> type allows the caller to create an HttpState instance, and add it as a reference, or be nested as a subelement of an <httpClient> element.
 
 Parameters
 ----------
@@ -17,7 +17,7 @@ Parameters
 Parameters specified as Nested Elements
 ---------------------------------------
 
-**&lt;cookie&gt;**
+**<cookie>**
 
 Create a cookie.
 
@@ -34,7 +34,7 @@ Create a cookie.
 | *domainAttributeSpecified* |             | No.      |
 | *pathAttributeSpecified*   |             | No.      |
 
-**&lt;credentials&gt;**
+**<credentials>**
 
 Create authentication credentials.
 
@@ -47,17 +47,15 @@ Create authentication credentials.
 | *username* | The username. | No.      |
 | *password* | The password. | No.      |
 
-**&lt;proxyCredentials&gt;**
+**<proxyCredentials>**
 
 Create proxy authentication credentials.
 
-| Identitical to &lt;credentials&gt; element. |
+| Identitical to <credentials> element. |
 |---------------------------------------------|
 
 Examples
 --------
-
-
 
         
         <httpState id="myState">

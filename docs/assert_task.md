@@ -13,15 +13,14 @@ This task can hold other tasks including Assert.
 
 Thie assert task may contain a single conditional element known by ANT, or one of the following additional conditions: [IsPropertyTrue](more_conditions.html "More Conditions") , [IsPropertyFalse](more_conditions.html "More Conditions") , [StartsWith](more_conditions.html "More Conditions") , [EndsWith](more_conditions.html "More Conditions") , [IsGreaterThan](more_conditions.html "More Conditions") , [IsLessThan](more_conditions.html "More Conditions") and conditions. See the If task for examples of using these conditionals.
 
-<span id="N10583"></span>
 **Table 4.1. Assert Task Attributes**
 
 | Attribute   | Description                                                                                                                                                 | Default | Required                                                              |
 |-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------------------------------------------------------------------|
-| name        | The name of the property to test for. This is a shortcut for specifying an <equals> condition.                                                        | none    | No. However, if specified, the 'value' attribute must also be present |
-| value       | The value to test for, implies . If the value in the project is different than this value, a BuildException will be thrown and the build will stop.         | none    | No, unless the 'name' attribute is specified.                         |
-| execute     | Should the tasks contained in this task be executed? It may be useful to set this to false when testing build files.                                        | True    | No                                                                    |
-| failonerror | Should the build halt if the assertion fails? Setting this to false is contrary to the intented use of assertions, but may be useful in certain situations. | True    | No                                                                    |
+| `name`  | The name of the property to test for. This is a shortcut for specifying an <equals> condition.                                                        | none    | No. However, if specified, the 'value' attribute must also be present |
+| `value`  | The value to test for, implies . If the value in the project is different than this value, a BuildException will be thrown and the build will stop.         | none    | No, unless the 'name' attribute is specified.                         |
+| `execute`  | Should the tasks contained in this task be executed? It may be useful to set this to false when testing build files.                                        | True    | No                                                                    |
+| `failonerror`  | Should the build halt if the assertion fails? Setting this to false is contrary to the intented use of assertions, but may be useful in certain situations. | True    | No                                                                    |
 
 Examples
 --------

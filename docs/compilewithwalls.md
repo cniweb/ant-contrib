@@ -41,8 +41,8 @@ Looking closely at the api.\* packages, each one has a Factory. This factory use
 |                      |                                                                                                                  |                                                   |
 |----------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
 | **Attribute**        | **Description**                                                                                                  | **Required**                                      |
-| walls                | Specifies the external dependency file to use(see example below)                                                 | Either this or a nested walls element is required |
-| intermediaryBuildDir | Specifies scratch area for the compilewithwalls task to do the building and ensure dependencies are not violated | required                                          |
+| `walls`  | Specifies the external dependency file to use(see example below)                                                 | Either this or a nested walls element is required |
+| `intermediaryBuildDir`  | Specifies scratch area for the compilewithwalls task to do the building and ensure dependencies are not violated | required                                          |
 
 ## Parameters specified as nested elements
 
@@ -55,9 +55,9 @@ The nested walls element or the walls attribute must be specified. Only one may 
 |               |                                                                                                                                                                 |              |
 |---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
 | **Attribute** | **Description**                                                                                                                                                 | **Required** |
-| name          | A smaller nickname for the package to reference in depends                                                                                                      | Required     |
-| package       | The package to compile such as biz.xsoftware.\* to include the immediate package only or biz.xsoftware.\*\* to include biz.xsoftware and all subpackages.       | Required     |
-| depends       | If a package need one of the previously specified packages to compile, it's name would be added here in a comma separated list. For example depends="modA,modB" | Optional     |
+| `name`  | A smaller nickname for the package to reference in depends                                                                                                      | Required     |
+| `package`  | The package to compile such as biz.xsoftware.\* to include the immediate package only or biz.xsoftware.\*\* to include biz.xsoftware and all subpackages.       | Required     |
+| `depends`  | If a package need one of the previously specified packages to compile, it's name would be added here in a comma separated list. For example depends="modA,modB" | Optional     |
 
 ## Examples
 

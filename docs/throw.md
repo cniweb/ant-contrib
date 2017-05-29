@@ -11,10 +11,6 @@ Parameters
 
 | Attribute | Description                     | Required |
 |-----------|---------------------------------|----------|
-| refid     | Id of the referenced exception. | No.      |
+| `refid`  | Id of the referenced exception. | No.      |
 
 In addition, all attributes of the [`<fail>` task](http://jakarta.apache.org/ant/manual/CoreTasks/fail.html) are supported.
-
-------------------------------------------------------------------------
-
-Copyright © 2002 Ant-Contrib Project. All rights Reserved.

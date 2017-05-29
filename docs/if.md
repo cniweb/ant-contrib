@@ -46,7 +46,6 @@ Example
   </then>
   </elseif>
 
-
   <else>
     <echo message="The value of property foo is not 'foo' or 'bar'" />
   </else>
