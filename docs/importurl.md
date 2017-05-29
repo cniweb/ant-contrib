@@ -46,7 +46,6 @@ Example
                              rev="3.2" />
 </project>
 ```
-        
 
 would look for the file "antcontrib/common/jars/common-3.2.jar" in the IvyRep repository.
 
@@ -56,7 +55,6 @@ would look for the file "antcontrib/common/jars/common-3.2.jar" in the IvyRep re
                          rev="3.2" 
                          type="xml" />
 ```
-        
 
 would look for the file "antcontrib/common/jars/common-3.2.xml" in the IvyRep repository.
 
@@ -75,7 +73,6 @@ would look for the located at "http://www.antcontrib.org/ivyrep/antcontrib/commo
                          module="common"
                         rev="3.2" />
 ```
-        
 
 would configure ivy using the ivy configuration file at the given ivyConfUrl.
 

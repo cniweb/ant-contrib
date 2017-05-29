@@ -1,37 +1,20 @@
 ---
 layout: home
 ---
- Performance Monitoring
------------------------------------------------------
+
+#Performance Monitoring
 
 The "Performance Monitor" is a special Ant listener than can keep track of the amount of time that each target and task takes to execute. At the end of the build, these times will be sorted from fastest to slowest and displayed following the build output. This can be useful to pinpoint slow and/or inefficient spots in the build process and identify those areas that could benefit from optimization.
 
 The performance listener can be used by passing a parameter to the command line for Ant:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-    ant -listener net.sf.antcontrib.perf.AntPerformanceListener target
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```shell
+ant -listener net.sf.antcontrib.perf.AntPerformanceListener target
+```
 
 Following is an example of the results from using the listener. The result format is projectname.targetname for targets and projectname.targetname.taskname for tasks. All times are shown to the nearest millisecond.
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
+```shell
 [danson@blackdog antelope]$ ant -listener net.sf.antcontrib.perf.AntPerformanceListener dist
 Buildfile: build.xml
 
@@ -114,8 +97,4 @@ Antelope.compile.javac: 1.708 sec
 Start time: Thu, 5 Dec 2002 17:18:30
 Stop time: Thu, 5 Dec 2002 17:18:39
 Total time: 8.476 sec
-</code></pre></td>
-</tr>
-</tbody>
-</table>
-
+```

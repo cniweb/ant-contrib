@@ -17,21 +17,10 @@ The stopwatch is started with the "start" action. When the action is "elapsed" o
 
 Example:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
+```xml
 <stopwatch name="timer1"/>
 <!-- do some tasks here... -->
 <stopwatch name="timer1" action="elapsed"/> <!-- print the elapsed time -->
 <!-- do some more tasks here... -->
 <stopwatch name="timer1" action="total"/> <!-- print out the total time -->
-</code></pre></td>
-</tr>
-</tbody>
-</table>
-
+```

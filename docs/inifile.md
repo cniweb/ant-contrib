@@ -36,10 +36,11 @@ Parameters specified as nested elements
 Example
 -------
 
-    <inifile source="myprog.ini" dest="myprog.new.ini">
-       <set section="Section1" property="release-date" value="${todays.date}" />
-       <set section="Section1" property="build-number" operation="+" />
-       <remove section="Section2" property="useless" />
-       <remove section="OutdatedSection" />
-    </inifile>
-
+```xml
+<inifile source="myprog.ini" dest="myprog.new.ini">
+  <set section="Section1" property="release-date" value="${todays.date}" />
+  <set section="Section1" property="build-number" operation="+" />
+  <remove section="Section2" property="useless" />
+  <remove section="OutdatedSection" />
+</inifile>
+```

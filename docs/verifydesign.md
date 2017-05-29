@@ -16,11 +16,11 @@ Describe your design dependencies in an xml file, and this task will enforce the
 
 For example, if there are three packages in one source tree
 
--   biz.xsoftware.presentation
--   biz.xsoftware.business
--   biz.xsoftware.dataaccess
+-   `biz.xsoftware.presentation`
+-   `biz.xsoftware.business`
+-   `biz.xsoftware.dataaccess`
 
-and naturally presentation should only depend on business package, and business should depend on dataaccess. If you define your design this way and it is violated the build will fail when the verifydesign ant task is called. For example, if I created a class in biz.xsoftware.presentation and that class depended on a class in biz.xsoftware.dataaccess, the build would fail. This ensures the design actually follows what is documented(to some degree at least). This is especially nice with automated builds
+and naturally `presentation` should only depend on `business` package, and business should depend on `dataaccess`. If you define your design this way and it is violated the build will fail when the `<verifydesign>` ant task is called. For example, if I created a class in `biz.xsoftware.presentation` and that class depended on a class in `biz.xsoftware.dataaccess`, the build would fail. This ensures the design actually follows what is documented(to some degree at least). This is especially nice with automated builds
 
 ### Getting Started
 
@@ -139,9 +139,9 @@ These lines would be in dependencies.xml.....
 </design>
 ```
 
-Notice in this example, if biz.xsoftware.dataaccess.XYZClass depended on biz.xsoftware.util.Util, the build would fail since that package dependency is not defined. Similarly, any class in biz.xsoftware.presentation cannot depend on any class in biz.xsoftware.dataaccess
+Notice in this example, if `biz.xsoftware.dataaccess.XYZClass` depended on `biz.xsoftware.util.Util`, the build would fail since that package dependency is not defined. Similarly, any class in `biz.xsoftware.presentation` cannot depend on any class in `biz.xsoftware.dataaccess`
 
-Also, notice that biz.xsoftware.presentation.Gui is allowed to depend on biz.xsoftware.util.pres.ClassInSubpackage because subpackages is set to include. This allows subpackages of biz.xsoftware.util to also be included in the design without having to define every subpackage.
+Also, notice that `biz.xsoftware.presentation.Gui` is allowed to depend on `biz.xsoftware.util.pres.ClassInSubpackage` because subpackages is set to include. This allows subpackages of `biz.xsoftware.util` to also be included in the design without having to define every subpackage.
 
 Lastly, notice the first line so javax and all javax subpackages can be depended on without declaring them. Use this sparingly though as sometimes you might want to isolate dependencies like depending on JMX to a certain package. For example, you may want only biz.xsoftware.management to depend on JMX and nothing else to depend on it. If you declare the same declaration I declared here for javax, you will not be able to guarantee that.
 

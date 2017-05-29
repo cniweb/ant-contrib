@@ -18,20 +18,17 @@ Example
 
 The following code
 
-        
-        <forget>
-            <exec executeable="${env.CATALINA_HOME}/bin/catalina.bat}">
-                <arg line="start -security" />
-            </exec>
-        </forget>
+```xml
+<forget>
+  <exec executeable="${env.CATALINA_HOME}/bin/catalina.bat}">
+    <arg line="start -security" />
+  </exec>
+</forget>
 
-        <waitfor maxwait="1" maxwaitunit="minute"
-                    checkevery="100" checkeveryunit="millisecond">
-            <http url="http://localhost:8080" />
-        </waitfor>
-
-        
-        
+<waitfor maxwait="1" maxwaitunit="minute"
+        checkevery="100" checkeveryunit="millisecond">
+  <http url="http://localhost:8080" />
+</waitfor>
+```
 
 Would start the Tomcat webserver as a background process, then waiting for the server to become available.
-

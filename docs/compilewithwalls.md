@@ -14,9 +14,9 @@ Puts up walls in a the same source tree to ensure that designs are not violated
 
 This task helps someone separate out packages and prevent dependencies from occurring on accident. For example, if there are three packages in one source tree
 
--   biz.xsoftware.mod
--   biz.xsoftware.modA
--   biz.xsoftware.modB
+-   `biz.xsoftware.mod`
+-   `biz.xsoftware.modA`
+-   `biz.xsoftware.modB`
 
 and modB and modA should be able to compiled independently, you can put a wall up in between the two so that if anyone adds a dependency between modA and modB, the build will break. This is particularly good if the builds are automated.
 
@@ -27,14 +27,14 @@ One pattern I personally like to follow can be seen on the vmaster project on so
 -   vmaster/vmasterdiff/conf/build.xml(ant file using compilewithwalls)
 -   vmaster/vmasterdiff/conf/dependencies.xml(The compilewithwalls task references this file as the walls)
 
-Looking at some of the 2nd file(dependencies.xml), one can see apis separated out for many non-GUI and GUI components in these packages
+Looking at some of the 2nd file (dependencies.xml), one can see apis separated out for many non-GUI and GUI components in these packages
 
--   api.biz.xsoftware.difflib.file.\*
--   api.biz.xsoftware.difflib.dir.\*
--   more api.\* packages
--   org.vmasterdiff.gui.dirdiff.impl.\*
+-   `api.biz.xsoftware.difflib.file.*`
+-   `api.biz.xsoftware.difflib.dir.*`
+-   `more api.*` packages
+-   `org.vmasterdiff.gui.dirdiff.impl.*`
 
-Looking closely at the api.\* packages, each one has a Factory. This factory uses reflection to create the implementation components. Basically, the api should not know of the implementation so there are walls around the api. Reflection to instantiate the implementation gets around these walls. My bigger components that use the smaller one's use these factories. In my design you are guaranteed these components are replaceable. Feel free to checkout vmaster and look at the factories also.
+Looking closely at the `api.*` packages, each one has a Factory. This factory uses reflection to create the implementation components. Basically, the api should not know of the implementation so there are walls around the api. Reflection to instantiate the implementation gets around these walls. My bigger components that use the smaller one's use these factories. In my design you are guaranteed these components are replaceable. Feel free to checkout vmaster and look at the factories also.
 
 ## Parameters
 
@@ -67,12 +67,12 @@ In the examples, I will show the javac as a null element, because it's use is do
 
 ```xml
 <compilewithwalls>
-    <walls>
-      <package name="modA" package="biz.xsoftware.mod.modA.**"/>
-      <package name="modB" package="biz.xsoftware.mod.modB.*"/>
-      <package name="mod" package="biz.xsoftware.mod.modA.*" depends="modA,modB"/>
-    </walls>
-    <javac></javac>
+  <walls>
+    <package name="modA" package="biz.xsoftware.mod.modA.**"/>
+    <package name="modB" package="biz.xsoftware.mod.modB.*"/>
+    <package name="mod" package="biz.xsoftware.mod.modA.*" depends="modA,modB"/>
+  </walls>
+  <javac></javac>
 </compilewithwalls>
 ```
 
@@ -84,7 +84,7 @@ These next lines would be in build.xml.....
 
 ```xml
 <compilewithwalls walls="dependencies.xml">
-    <javac></javac>
+  <javac></javac>
 </compilewithwalls>
 ```
 
@@ -92,8 +92,8 @@ These lines would be in dependencies.xml.....
 
 ```xml
 <walls>
-    <package name="modA" package="biz.xsoftware.mod.modA.**"/>
-    <package name="modB" package="biz.xsoftware.mod.modB.*"/>
-    <package name="mod" package="biz.xsoftware.mod.modA.*" depends="modA,modB"/>
+  <package name="modA" package="biz.xsoftware.mod.modA.**"/>
+  <package name="modB" package="biz.xsoftware.mod.modB.*"/>
+  <package name="mod" package="biz.xsoftware.mod.modA.*" depends="modA,modB"/>
 </walls>
 ```

@@ -1,8 +1,7 @@
 ---
 layout: home
 ---
- Limit
-------------------------------
+# Limit
 
 The Limit task is a task container (that is, it holds other tasks) and sets a time limit on how long the nested tasks are allowed to run. This is useful for unit tests that go awry, hung socket connections, or other potentially long running tasks that need to be shut off without stopping the build.
 
@@ -22,88 +21,45 @@ The Limit task is a task container (that is, it holds other tasks) and sets a ti
 | `days`  | How long to wait in days.                                                                        | 3 minutes               | No       |
 | `weeks`  | How long to wait in weeks.                                                                       | 3 minutes               | No       |
 
-Examples:
+## Examples
 
 Neither the echo nor the fail will happen in this example. The build will continue once the time has expired.
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
+```xml
 <limit maxwait="3">
    <sleep seconds="10"/>
    <echo>This won&#39;t happen...</echo>
    <fail>This won&#39;t happen either...</fail>
 </limit>
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
 
 This is identical to the above example, but uses the convenience "seconds" attribute:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
+```xml
 <limit seconds="3">
    <sleep seconds="10"/>
    <echo>This won&#39;t happen...</echo>
    <fail>This won&#39;t happen either...</fail>
 </limit>
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
 
 Neither the echo nor the fail will happen in this example. The build will not continue once the time has expired.
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
+```xml
 <limit maxwait="3" failonerror="true">
    <sleep seconds="10"/>
    <echo>This won&#39;t happen...</echo>
    <fail>This won&#39;t happen either...</fail>
 </limit>
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
 
 The limit will be reached and a property will be set indicating so.
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
+```xml
 <limit minutes="3" property="limit_reached">
    <sleep minutes="10"/>
    <echo>This won&#39;t happen...</echo>
    <fail>This won&#39;t happen either...</fail>
 </limit>
-<echo>limit_reached = ${limit_reached)</echo></code></pre></td>
-</tr>
-</tbody>
-</table>
-
-------------------------------------------------------------------------
-
-Copyright © 2003-2004 Ant-Contrib Project. All rights Reserved.
+<echo>limit_reached = ${limit_reached)</echo>
+```

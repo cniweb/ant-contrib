@@ -38,7 +38,7 @@ Using a path allows you to determine the order by which files are considered by 
 
 Specifies the properties to set before running the specified target. See [property](http://ant.apache.org/manual/CoreTasks/property.html) for usage guidelines.
 
-### <span id="reference">reference</span>
+### reference
 
 Used to chose references that shall be copied into the new project, optionally changing their id.
 

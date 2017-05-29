@@ -19,20 +19,20 @@ Parameters
 Example
 -------
 
-        <outofdate outputsourcespath="modified.sources.path">
-          <sourcefiles>
-            <fileset dir="a/b/c" includes="**/*.java"/>
-          </sourcefiles>
-          <mapper dir="a/b/c" type="glob" from="*.java" to="output/*.xml"/>
-          <sequential>
-            <pathtofileset name="modified.sources.fileset"
-                           pathrefid="modified.sources.path"
-                           dir="a/b/c"/>
-            <copy todir="output">
-              <fileset refid="modified.sources.fileset"/>
-              <mapper type="glob" from="*.java" to="*.xml"/>
-            </copy>
-          </sequential>
-        </outofdate>
-        
-
+```xml
+<outofdate outputsourcespath="modified.sources.path">
+  <sourcefiles>
+    <fileset dir="a/b/c" includes="**/*.java"/>
+  </sourcefiles>
+  <mapper dir="a/b/c" type="glob" from="*.java" to="output/*.xml"/>
+  <sequential>
+    <pathtofileset name="modified.sources.fileset"
+                    pathrefid="modified.sources.path"
+                    dir="a/b/c"/>
+    <copy todir="output">
+      <fileset refid="modified.sources.fileset"/>
+      <mapper type="glob" from="*.java" to="*.xml"/>
+    </copy>
+  </sequential>
+</outofdate>
+```

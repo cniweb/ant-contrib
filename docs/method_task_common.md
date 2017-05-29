@@ -4,7 +4,7 @@ layout: home
 \*Method
 ========
 
-The <method> tasks allows the caller to use the various HTTP methods (current GET, HEAD and POST are supported). These methods have some common attributes, and sub-elements which are are as shown below:
+The `<method>` tasks allows the caller to use the various HTTP methods (current GET, HEAD and POST are supported). These methods have some common attributes, and sub-elements which are are as shown below:
 
 Parameters
 ----------
@@ -71,7 +71,3 @@ Create a method parameter.
 |-----------|----------------------|----------|
 | *name*    | The parameter name   | Yes.     |
 | *value*   | The parameter value. | Yes.     |
-
-Examples
---------
-

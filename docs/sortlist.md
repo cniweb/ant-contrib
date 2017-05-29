@@ -41,7 +41,6 @@ prints
 
 ## Example 2
 
-
 test.properties
 
 ```properties
