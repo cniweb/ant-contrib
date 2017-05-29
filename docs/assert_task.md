@@ -18,7 +18,7 @@ Thie assert task may contain a single conditional element known by ANT, or one o
 
 | Attribute   | Description                                                                                                                                                 | Default | Required                                                              |
 |-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------------------------------------------------------------------|
-| name        | The name of the property to test for. This is a shortcut for specifying an &lt;equals&gt; condition.                                                        | none    | No. However, if specified, the 'value' attribute must also be present |
+| name        | The name of the property to test for. This is a shortcut for specifying an <equals> condition.                                                        | none    | No. However, if specified, the 'value' attribute must also be present |
 | value       | The value to test for, implies . If the value in the project is different than this value, a BuildException will be thrown and the build will stop.         | none    | No, unless the 'name' attribute is specified.                         |
 | execute     | Should the tasks contained in this task be executed? It may be useful to set this to false when testing build files.                                        | True    | No                                                                    |
 | failonerror | Should the build halt if the assertion fails? Setting this to false is contrary to the intented use of assertions, but may be useful in certain situations. | True    | No                                                                    |
@@ -28,62 +28,41 @@ Examples
 
 In the following example, the first ` assert` task checks that the ` wait` property exists and does not execute the ` echo` and ` sleep` tasks. The second ` assert` task checks that the ` wait` property exists, has a value of 2, and executes the ` echo` task.
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-     &lt;property name=&quot;wait&quot; value=&quot;2&quot;/&gt;
-     &lt;assert execute=&quot;false&quot;&gt;
-        &lt;isset property=&quot;wait&quot; /&gt;
-        &lt;sequential&gt;
-        &lt;echo&gt;
-            Waiting ${wait} seconds...
-            Click the red button to stop waiting.
-            &lt;/echo&gt;
-            &lt;sleep seconds=&quot;${wait}&quot;/&gt;
-        &lt;/sequential&gt;
-     &lt;/assert&gt;
-     &lt;assert name=&quot;wait&quot; value=&quot;2&quot; execute=&quot;true&quot;&gt;
-        &lt;sequential&gt;
-            &lt;echo&gt;done waiting!&lt;/echo&gt;
-        &lt;/sequential&gt;
-     &lt;/assert&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```xml
+<property name="wait" value="2"/>
+<assert execute="false">
+<isset property="wait" />
+<sequential>
+  <echo>
+    Waiting ${wait} seconds...
+    Click the red button to stop waiting.
+  </echo>
+  <sleep seconds="${wait}"/>
+</sequential>
+</assert>
+<assert name="wait" value="2" execute="true">
+<sequential>
+  <echo>done waiting!</echo>
+</sequential>
+</assert>
+```
 
 The next example shows Assert being used in a unit test for the "limit" task:
 
-<table>
-<colgroup>
-<col width="100%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><pre class="programlisting"><code>
-
-  &lt;property name=&quot;ant.enable.asserts&quot; value=&quot;true&quot;/&gt;
-  &lt;target name=&quot;test2&quot;&gt;
-    &lt;!-- should not stop &#39;sleep&#39; task, should print out &#39;_passed_&#39; --&gt;
-    &lt;stopwatch name=&quot;timer&quot;/&gt;
-    &lt;limit maxwait=&quot;5&quot;&gt;
-        &lt;sleep seconds=&quot;1&quot;/&gt;
-        &lt;echo&gt;_passed_&lt;/echo&gt;
-    &lt;/limit&gt;
-    &lt;stopwatch name=&quot;timer&quot; action=&quot;total&quot;/&gt;
-    &lt;assert message=&quot;Too much time.&quot;&gt;
-        &lt;islessthan arg1=&quot;${timer}&quot; arg2=&quot;2&quot;/&gt;
-    &lt;/assert&gt;
-  &lt;/target&gt;
-</code></pre></td>
-</tr>
-</tbody>
-</table>
+```xml
+<property name="ant.enable.asserts" value="true"/>
+<target name="test2">
+  <!-- should not stop &#39;sleep&#39; task, should print out &#39;_passed_&#39; -->
+  <stopwatch name="timer"/>
+  <limit maxwait="5">
+    <sleep seconds="1"/>
+    <echo>_passed_</echo>
+  </limit>
+  <stopwatch name="timer" action="total"/>
+  <assert message="Too much time.">
+    <islessthan arg1="${timer}" arg2="2"/>
+  </assert>
+</target>
+```
 
 If the ` ant.enable.asserts` property is set to false, then in the above example, the ` echo` , ` sleep` , and ` echo` tasks will all execute.
-

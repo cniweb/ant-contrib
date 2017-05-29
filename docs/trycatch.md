@@ -22,36 +22,36 @@ Parameters
 
 | Attribute | Description                                                                                     | Required |
 |-----------|-------------------------------------------------------------------------------------------------|----------|
-| property  | Name of a property that will receive the message of the exception that has been caught (if any) | No.      |
-| reference | Id of a reference that will point to the exception object that has been caught (if any)         | No       |
+| `property`  | Name of a property that will receive the message of the exception that has been caught (if any) | No.      |
+| `reference` | Id of a reference that will point to the exception object that has been caught (if any)         | No       |
 
 Example
 -------
 
-    <trycatch property="foo" reference="bar">
-      <try>
-        <fail>Tada!</fail>
-      </try>
+```xml
+<trycatch property="foo" reference="bar">
+  <try>
+    <fail>Tada!</fail>
+  </try>
+  <catch>
+    <echo>In &lt;catch&gt;.</echo>
+  </catch>
+  <finally>
+    <echo>In &lt;finally&gt;.</echo>
+  </finally>
+</trycatch>
 
-      <catch>
-        <echo>In &lt;catch&gt;.</echo>
-      </catch>
-
-      <finally>
-        <echo>In &lt;finally&gt;.</echo>
-      </finally>
-    </trycatch>
-
-    <echo>As property: ${foo}</echo>
-    <property name="baz" refid="bar" />
-    <echo>From reference: ${baz}</echo>
+<echo>As property: ${foo}</echo>
+<property name="baz" refid="bar" />
+<echo>From reference: ${baz}</echo>
+```
 
 results in
 
-      [trycatch] Caught exception: Tada!
-          [echo] In <catch>.
-          [echo] In <finally>.
-          [echo] As property: Tada!
-          [echo] From reference: Tada!
-
-
+```
+[trycatch] Caught exception: Tada!
+    [echo] In <catch>.
+    [echo] In <finally>.
+    [echo] As property: Tada!
+    [echo] From reference: Tada!
+```

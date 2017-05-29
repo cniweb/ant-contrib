@@ -11,8 +11,8 @@ Parameters
 
 | Attribute       | Description                                | Required               |
 |-----------------|--------------------------------------------|------------------------|
-| value           | The value to switch on.                    | Yes.                   |
-| caseinsensitive | Should we do case insensitive comparisons? | No, default is "false" |
+| `value`           | The value to switch on.                    | Yes.                   |
+| `caseinsensitive` | Should we do case insensitive comparisons? | No, default is `false` |
 
 Parameters specified as nested elements
 ---------------------------------------
@@ -27,7 +27,7 @@ An individual case to consider, if the value that is being switched on matches t
 
 | Attribute | Description                                           | Required |
 |-----------|-------------------------------------------------------|----------|
-| value     | The value to match against the tasks value attribute. | Yes.     |
+| `value`     | The value to match against the tasks value attribute. | Yes.     |
 
 ### default
 
@@ -36,18 +36,16 @@ The default case for when no match is found. Must not appear more than once per 
 Example
 -------
 
-    <switch value="${foo}">
-      <case value="bar">
-        <echo message="The value of property foo is bar" />
-      </case>
-      <case value="baz">
-        <echo message="The value of property foo is baz" />
-      </case>
-      <default>
-        <echo message="The value of property foo is not sensible" />
-      </default>
-    </switch>
-
-------------------------------------------------------------------------
-
-Copyright © 2002 Ant-Contrib Project. All rights Reserved.
+```xml
+<switch value="${foo}">
+  <case value="bar">
+    <echo message="The value of property foo is bar" />
+  </case>
+  <case value="baz">
+    <echo message="The value of property foo is baz" />
+  </case>
+  <default>
+    <echo message="The value of property foo is not sensible" />
+  </default>
+</switch>
+```

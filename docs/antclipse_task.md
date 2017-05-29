@@ -5,7 +5,7 @@ layout: home
 
 Creator: Adrian Spinei (<aspinei@myrealbox.com>)
 
-### Description
+## Description
 
 UNSTABLE CODE, some parameters are supposed to change
 
@@ -15,7 +15,7 @@ Classpath creation is simple, it just produces a classpath that you can subseque
 
 If you have two source directories, called src and test, you'll be provided with two filesets, with refids like **antclipse-src **and** antclipse-test**. However, you don't have to code manually the path since some properties are created as a "byproduct" each time you execute the task. Their name is "**idref**" postfixed by "**outpath**" and "**srcpath**" (in the case of the source, you'll find the location of the first source directory).
 
-### Parameters
+## Parameters
 
 |                 |                                                                                                                                                                                                                        |          |
 |-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
@@ -29,54 +29,54 @@ If you have two source directories, called src and test, you'll be provided with
 | *includes*      | A regexp for files to include. It is taken into account only when producing a classpath, doesn't work on source or output files. It is a real regexp, not a "\*" expression.                                           | No       |
 | *excludes*      | A regexp for files to exclude. It is taken into account only when producing a classpath, doesn't work on source or output files. It is a real regexp, not a "\*" expression.                                           | No       |
 
-### Parameters specified as nested elements
+## Parameters specified as nested elements
 
 None at the moment.
 
-### TODOS
+## TODOS
 
 -   make "includes" and "excludes" to work on the source and output filesets
 -   maybe find an elegant solution to this multiple fileset/directories issues
 -   work with files referenced in other projects
 
-### Example
+## Example
 
 This is a pretty self-explanatory Ant script, just follow the comments.
 
-    <?xml version="1.0"?>
-    <project default="compile" name="test" basedir=".">
-    <taskdef name="antclipse" classname="net.sf.antcontrib.antclipse.ClassPathTask"/>
-    <target name="make.fs.output">
-        <!-- creates a fileset including all the files from the output directory, called ecl1-bin if your binary directory is bin/ -->
-        <antclipse produce="fileset" idcontainer="ecl1" includeoutput="true" includesource="false"
-        includelibs="false" verbose="true"/>
-    </target>
-    <target name="make.fs.sources">
-        <!-- creates a fileset for each source directory, called ecl2-*source-dir-name*/ -->
-        <antclipse produce="fileset" idcontainer="ecl2" includeoutput="false" includesource="true"
-        includelibs="false" verbose="true"/>
-    </target>
-    <target name="make.fs.libs">
-        <!-- creates a fileset sontaining all your project libs called ecl3/ -->
-        <antclipse produce="fileset" idcontainer="ecl3" verbose="true"/>
-    </target>
-    <target name="make.cp">
-        <!-- creates a fileset sontaining all your project libs called ecl3/ -->
-        <antclipse produce="classpath" idcontainer="eclp" verbose="true" includeoutput="true"/>
-    </target>
-    <target name="compile" depends="make.fs.libs, make.fs.output, make.fs.sources, make.cp">
-        <echo message="The output path is ${ecl1outpath}"/>
-        <echo message="The source path is ${ecl2srcpath}"/>
-        <!-- makes a jar file with the content of the output directory -->
-        <zip destfile="out.jar"><fileset refid="ecl1-${ecl1outpath}"/></zip>
-        <!-- makes a zip file with all your sources (supposing you have only source directory) -->
-         <zip destfile="src.zip"><fileset refid="ecl2-${ecl2srcpath}"/></zip>
-        <!-- makes a big zip file with all your project libraries -->
-         <zip destfile="libs.zip"><fileset refid="ecl3"/></zip>
-         <!-- imports the classpath into a property then echoes the property -->
-         <property name="cpcontent" refid="eclp"/>
-        <echo>The newly created classpath is ${cpcontent}</echo>
-    </target>
-    </project>
-
-
+```xml
+<?xml version="1.0"?>
+<project default="compile" name="test" basedir=".">
+<taskdef name="antclipse" classname="net.sf.antcontrib.antclipse.ClassPathTask"/>
+<target name="make.fs.output">
+    <!-- creates a fileset including all the files from the output directory, called ecl1-bin if your binary directory is bin/ -->
+    <antclipse produce="fileset" idcontainer="ecl1" includeoutput="true" includesource="false"
+    includelibs="false" verbose="true"/>
+</target>
+<target name="make.fs.sources">
+    <!-- creates a fileset for each source directory, called ecl2-*source-dir-name*/ -->
+    <antclipse produce="fileset" idcontainer="ecl2" includeoutput="false" includesource="true"
+    includelibs="false" verbose="true"/>
+</target>
+<target name="make.fs.libs">
+    <!-- creates a fileset sontaining all your project libs called ecl3/ -->
+    <antclipse produce="fileset" idcontainer="ecl3" verbose="true"/>
+</target>
+<target name="make.cp">
+    <!-- creates a fileset sontaining all your project libs called ecl3/ -->
+    <antclipse produce="classpath" idcontainer="eclp" verbose="true" includeoutput="true"/>
+</target>
+<target name="compile" depends="make.fs.libs, make.fs.output, make.fs.sources, make.cp">
+    <echo message="The output path is ${ecl1outpath}"/>
+    <echo message="The source path is ${ecl2srcpath}"/>
+    <!-- makes a jar file with the content of the output directory -->
+    <zip destfile="out.jar"><fileset refid="ecl1-${ecl1outpath}"/></zip>
+    <!-- makes a zip file with all your sources (supposing you have only source directory) -->
+        <zip destfile="src.zip"><fileset refid="ecl2-${ecl2srcpath}"/></zip>
+    <!-- makes a big zip file with all your project libraries -->
+        <zip destfile="libs.zip"><fileset refid="ecl3"/></zip>
+        <!-- imports the classpath into a property then echoes the property -->
+        <property name="cpcontent" refid="eclp"/>
+    <echo>The newly created classpath is ${cpcontent}</echo>
+</target>
+</project>
+```

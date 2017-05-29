@@ -22,33 +22,33 @@ The `<elseif>` behaves exactly like an `<if>` except that it cannot contain the 
 Example
 -------
 
-    <if>
-     <equals arg1="${foo}" arg2="bar" />
-     <then>
-       <echo message="The value of property foo is bar" />
-     </then>
-     <else>
-       <echo message="The value of property foo is not bar" />
-     </else>
-    </if>
+```xml
+<if>
+  <equals arg1="${foo}" arg2="bar" />
+  <then>
+    <echo message="The value of property foo is bar" />
+  </then>
+  <else>
+    <echo message="The value of property foo is not bar" />
+  </else>
+</if>
 
-    <if>
-     <equals arg1="${foo}" arg2="bar" />
-     <then>
-       <echo message="The value of property foo is 'bar'" />
-     </then>
+<if>
+  <equals arg1="${foo}" arg2="bar" />
+  <then>
+    <echo message="The value of property foo is 'bar'" />
+  </then>
 
-     <elseif>
-      <equals arg1="${foo}" arg2="foo" />
-      <then>
-       <echo message="The value of property foo is 'foo'" />
-      </then>
-     </elseif>
-
-
-     <else>
-       <echo message="The value of property foo is not 'foo' or 'bar'" />
-     </else>
-    </if>
+  <elseif>
+  <equals arg1="${foo}" arg2="foo" />
+  <then>
+    <echo message="The value of property foo is 'foo'" />
+  </then>
+  </elseif>
 
 
+  <else>
+    <echo message="The value of property foo is not 'foo' or 'bar'" />
+  </else>
+</if>
+```
