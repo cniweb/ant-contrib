@@ -13,7 +13,7 @@ Parameters
 |-------------------|----------------------------------------------------------------------------------------------------------------|------------------------------------------|
 | `property`  | The name of the property to set.                                                                               | Yes.                                     |
 | `override`  | If the property is already set, should we change it's value. Can be `true` or `false`                          | No. Defaults to `false`                  |
-| name *Deprecated* | The name of the property to set.                                                                               | No. Use the `property` attribute instead |
+| `name` *Deprecated* | The name of the property to set.                                                                               | No. Use the `property` attribute instead |
 | `from`  | The name of the property you wish to copy the value from.                                                      | Yes.                                     |
 | `silent`  | Do you want to suppress the error if the "from" property does not exist, and just not set the property "name". | No, default is "false".                  |
 
