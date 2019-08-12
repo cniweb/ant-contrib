@@ -1,0 +1,25 @@
+---
+---
+
+@import "minima";
+
+table {
+  border-collapse: collapse;
+  td, th {
+    border: solid 1px black;
+    padding: 3px;
+    vertical-align: top;
+  }
+}
+
+.page-heading {
+  display: none;
+}
+
+.rss-subscribe {
+  display: none;
+}
+
+.footer-col-wrapper {
+  display: none
+}
