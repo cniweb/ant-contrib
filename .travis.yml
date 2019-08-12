@@ -4,4 +4,4 @@ jdk:
   - openjdk12
 script:
   - cd ant-contrib && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  - cd cpptasks && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - cd ../cpptasks && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
