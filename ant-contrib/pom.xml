@@ -109,14 +109,11 @@
 						<id>pre-site</id>
 						<configuration>
 							<tasks>
-								<mkdir dir="target/taskdocs-classes" />
-								<javac srcdir="src/taskdocs/java" destdir="target/taskdocs-classes"
-									debug="true" />
-								<mkdir dir="src/site/xdoc/antdocs" />
-								<javadoc sourcepath="src/main/java"
-									doclet="net.sf.antcontrib.taskdocs.TaskDoclet" docletPath="target/taskdocs-classes"
-									classpath="${user.home}/.m2/repository/ant/ant/1.6.5/ant-1.6.5.jar">
-									<fileset dir="src/main/java" includes="**/*.java" />
+								<mkdir dir="target/taskdocs-classes"/>
+								<javac srcdir="src/taskdocs/java" destdir="target/taskdocs-classes" debug="true"/>
+								<mkdir dir="src/site/xdoc/antdocs"/>
+								<javadoc sourcepath="src/main/java" doclet="net.sf.antcontrib.taskdocs.TaskDoclet" docletPath="target/taskdocs-classes" classpath="${user.home}/.m2/repository/ant/ant/1.6.5/ant-1.6.5.jar">
+									<fileset dir="src/main/java" includes="**/*.java"/>
 								</javadoc>
 							</tasks>
 						</configuration>
@@ -129,10 +126,8 @@
 						<id>untag-site</id>
 						<configuration>
 							<tasks>
-								<taskdef name="replaceregexp"
-									classname="org.apache.tools.ant.taskdefs.optional.ReplaceRegExp" />
-								<replaceregexp file="target/site/source-repository.html"
-									match="/tags/[^ ]*" replace="/trunk" flags="g" />
+								<taskdef name="replaceregexp" classname="org.apache.tools.ant.taskdefs.optional.ReplaceRegExp"/>
+								<replaceregexp file="target/site/source-repository.html" match="/tags/[^ ]*" replace="/trunk" flags="g"/>
 							</tasks>
 						</configuration>
 						<goals>
@@ -219,7 +214,7 @@
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
-			<version>2.11.0</version>
+			<version>2.12.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
